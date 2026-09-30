@@ -2,7 +2,7 @@
 
 ## 1. Read this first
 
-**Fictional tabletop exercise, not an OpenAI announcement.** The user plays a programme manager at OpenAI; this is not an employment claim. “Connect your own on-premises data directly on ChatGPT” is a hypothetical feature label, not a real product capability. Nothing here describes OpenAI’s actual operating processes, launch coverage, security guarantees or legal position.
+**Fictional tabletop exercise, not a MiMa LTD announcement.** The user plays a programme manager at MiMa LTD; this is not an employment claim. “Connect your own on-premises data directly on ChatGPT” is a hypothetical feature label, not a real product capability. Nothing here describes MiMa LTD’s actual operating processes, launch coverage, security guarantees or legal position.
 
 **Provenance:** the mandate and audience-change problem come from the user. Fixture IDs, market selection, staffing, effort inputs, operational definitions, workflow gates, example copy, event names, experiment choices and deadlines are **assistant-proposed simulation assumptions, not user-supplied measurements or customer-validated facts**. “Low producers” is mapped to *low adoption* solely for this fictional SaaS example. No web research or external evidence is used.
 
