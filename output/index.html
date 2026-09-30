@@ -424,20 +424,31 @@
     /* Node Cards */
     .tb-graph-node {
       cursor: pointer;
-      transition: transform 0.2s ease, filter 0.2s ease;
-    }
-    .tb-graph-node:hover {
-      transform: scale(1.02);
-      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.12));
     }
     .tb-node-rect {
       fill: #ffffff;
       stroke: var(--line-dark);
       stroke-width: 1.2px;
-      transition: all 0.2s ease;
+      transition: stroke 0.15s ease, stroke-width 0.15s ease, fill 0.15s ease, filter 0.15s ease;
+    }
+    .tb-graph-node:hover .tb-node-rect {
+      stroke-width: 2.2px !important;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.16)) !important;
     }
     .tb-node-stripe {
-      fill: var(--line-dark);
+      pointer-events: none;
+    }
+    .tb-node-team {
+      font-size: 8px;
+      font-weight: 700;
+      fill: #64748b;
+      letter-spacing: 0.5px;
+      pointer-events: none;
+    }
+    .tb-node-tag {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
       pointer-events: none;
     }
     .tb-node-title {
@@ -447,45 +458,37 @@
       pointer-events: none;
     }
     .tb-node-subtitle {
-      font-size: 9px;
+      font-size: 9.5px;
       font-weight: 500;
       fill: #64748b;
-      pointer-events: none;
-    }
-    .tb-node-tag {
-      font-size: 7.5px;
-      font-weight: 700;
-      letter-spacing: 0.4px;
       pointer-events: none;
     }
 
     /* Node Archetypes */
     .tb-node-root .tb-node-rect { fill: #0f172a; stroke: #0f172a; }
     .tb-node-root .tb-node-stripe { fill: #6366f1; }
-    .tb-node-root .tb-node-title { fill: #ffffff; font-size: 11.5px; }
-    .tb-node-root .tb-node-subtitle { fill: #94a3b8; }
-    .tb-node-root .tb-node-tag { fill: #a5b4fc; }
 
     .tb-node-filter .tb-node-rect { fill: #f8fafc; stroke: #cbd5e1; }
     .tb-node-filter .tb-node-stripe { fill: #475569; }
     .tb-node-filter .tb-node-title { fill: #1e293b; }
     .tb-node-filter .tb-node-subtitle { fill: #64748b; }
-    .tb-node-filter .tb-node-tag { fill: #64748b; }
+    .tb-node-filter .tb-node-tag { fill: #475569; }
 
     .tb-node-must .tb-node-rect { fill: #fff8f8; stroke: #fca5a5; }
     .tb-node-must .tb-node-stripe { fill: #dc2626; }
+    .tb-node-must .tb-node-tag { fill: #dc2626; }
     .tb-node-must .tb-node-title { fill: #991b1b; }
     .tb-node-must .tb-node-subtitle { fill: #b91c1c; }
-    .tb-node-must .tb-node-tag { fill: #dc2626; }
 
     .tb-node-review .tb-node-rect { fill: #fffdf5; stroke: #fcd34d; }
     .tb-node-review .tb-node-stripe { fill: #d97706; }
+    .tb-node-review .tb-node-tag { fill: #d97706; }
     .tb-node-review .tb-node-title { fill: #92400e; }
     .tb-node-review .tb-node-subtitle { fill: #b45309; }
-    .tb-node-review .tb-node-tag { fill: #d97706; }
 
     .tb-node-no .tb-node-rect { fill: #f7fef9; stroke: #86efac; }
     .tb-node-no .tb-node-stripe { fill: #16a34a; }
+    .tb-node-no .tb-node-tag { fill: #15803d; }
     .tb-node-no .tb-node-title { fill: #166534; }
     .tb-node-no .tb-node-subtitle { fill: #15803d; }
     .tb-node-no .tb-node-tag { fill: #15803d; }
@@ -1745,36 +1748,36 @@
   function getGraphData(analysis) {
     // Generate clean layered DAG nodes structured into 4 clear enterprise swimlanes
     const nodes = [
-      // Level 0: Business Change Trigger
-      { id: 'CHANGE', label: 'BUSINESS CHANGE TRIGGER', subtitle: 'Launch narrowing requested', type: 'root', status: 'change', level: 0, x: 490, y: 35, width: 250, height: 42 },
+      // Level 0: Business Change Trigger (Command Banner)
+      { id: 'CHANGE', label: 'BUSINESS CHANGE TRIGGER', subtitle: 'Launch narrowing requested (Audience + FR)', type: 'root', status: 'change', level: 0, x: 490, y: 35, width: 280, height: 46 },
 
       // Level 1: Scope Mutations
-      { id: 'AUDIENCE_NODE', label: 'Audience Filter', subtitle: 'Low adoption only (<20%)', type: 'filter', status: 'must', level: 1, x: 240, y: 100, width: 190, height: 38 },
-      { id: 'INACTIVITY_NODE', label: 'Inactivity Rule', subtitle: 'Exclude ≥90d inactive', type: 'filter', status: 'must', level: 1, x: 490, y: 100, width: 190, height: 38 },
-      { id: 'MARKET_NODE', label: 'Market Scope', subtitle: 'Remove France (FR)', type: 'filter', status: 'must', level: 1, x: 740, y: 100, width: 190, height: 38 },
+      { id: 'AUDIENCE_NODE', label: 'Audience Filter', subtitle: 'Low adoption only (<20%)', type: 'filter', status: 'must', level: 1, x: 240, y: 100, width: 196, height: 46 },
+      { id: 'INACTIVITY_NODE', label: 'Inactivity Rule', subtitle: 'Exclude ≥90d inactive', type: 'filter', status: 'must', level: 1, x: 490, y: 100, width: 196, height: 46 },
+      { id: 'MARKET_NODE', label: 'Market Scope', subtitle: 'Remove France (FR)', type: 'filter', status: 'must', level: 1, x: 740, y: 100, width: 196, height: 46 },
 
       // Lane 1: Analytics & Insights (x = 135)
-      { id: 'A1', label: 'A1 Audience Definition', subtitle: '96 ➔ 24 Accounts', team: 'Analytics', status: 'must', level: 2, x: 135, y: 205, width: 180, height: 48 },
-      { id: 'A2', label: 'A2 Measurement Plan', subtitle: 'Sample power review', team: 'Analytics', status: 'review', level: 3, x: 135, y: 305, width: 180, height: 48 },
-      { id: 'A4', label: 'A4 Reporting Spec', subtitle: 'v2 Funnel dashboard', team: 'Analytics', status: 'must', level: 4, x: 135, y: 405, width: 180, height: 48 },
+      { id: 'A1', label: 'A1 Audience Definition', subtitle: '96 ➔ 24 Accounts', team: 'Analytics', status: 'must', level: 2, x: 135, y: 205, width: 196, height: 54 },
+      { id: 'A2', label: 'A2 Measurement Plan', subtitle: 'Sample power review', team: 'Analytics', status: 'review', level: 3, x: 135, y: 305, width: 196, height: 54 },
+      { id: 'A4', label: 'A4 Reporting Spec', subtitle: 'v2 Funnel dashboard', team: 'Analytics', status: 'must', level: 4, x: 135, y: 405, width: 196, height: 54 },
       
       // Lane 2: GTM Strategy & Messaging (x = 370)
-      { id: 'G1', label: 'G1 Segmentation Plan', subtitle: 'Barrier re-engagement', team: 'GTM', status: 'review', level: 2, x: 370, y: 205, width: 180, height: 48 },
-      { id: 'G2', label: 'G2 Master Messaging', subtitle: 'Value proposition v2', team: 'GTM', status: 'review', level: 3, x: 370, y: 305, width: 180, height: 48 },
-      { id: 'G3', label: 'G3 Campaign Manifest', subtitle: 'Suppress 72 accounts', team: 'GTM', status: 'must', level: 4, x: 370, y: 405, width: 180, height: 48 },
+      { id: 'G1', label: 'G1 Segmentation Plan', subtitle: 'Barrier re-engagement', team: 'GTM', status: 'review', level: 2, x: 370, y: 205, width: 196, height: 54 },
+      { id: 'G2', label: 'G2 Master Messaging', subtitle: 'Value proposition v2', team: 'GTM', status: 'review', level: 3, x: 370, y: 305, width: 196, height: 54 },
+      { id: 'G3', label: 'G3 Campaign Manifest', subtitle: 'Suppress 72 accounts', team: 'GTM', status: 'must', level: 4, x: 370, y: 405, width: 196, height: 54 },
 
       // Lane 3: Field Enablement (x = 605)
-      { id: 'E1', label: 'E1 Training Curriculum', subtitle: 'Target qualification', team: 'Enablement', status: 'must', level: 2, x: 605, y: 205, width: 180, height: 48 },
-      { id: 'E2', label: 'E2 Rep Call Guide', subtitle: 'Discovery script update', team: 'Enablement', status: 'review', level: 3, x: 605, y: 305, width: 180, height: 48 },
-      { id: 'E3', label: 'E3 Agent Roster', subtitle: '34 Reps stale / reassess', team: 'Enablement', status: 'must', level: 4, x: 605, y: 405, width: 180, height: 48 },
+      { id: 'E1', label: 'E1 Training Curriculum', subtitle: 'Target qualification', team: 'Enablement', status: 'must', level: 2, x: 605, y: 205, width: 196, height: 54 },
+      { id: 'E2', label: 'E2 Rep Call Guide', subtitle: 'Discovery script update', team: 'Enablement', status: 'review', level: 3, x: 605, y: 305, width: 196, height: 54 },
+      { id: 'E3', label: 'E3 Agent Roster', subtitle: '34 Reps stale / reassess', team: 'Enablement', status: 'must', level: 4, x: 605, y: 405, width: 196, height: 54 },
 
       // Lane 4: Localization & Markets (x = 840)
-      { id: 'L-FR', label: 'L-FR France Pack', subtitle: 'Retire & cancel 8 reps', team: 'Localization', status: 'must', level: 2, x: 840, y: 205, width: 180, height: 48 },
-      { id: 'L-RETAINED', label: 'Retained Packs', subtitle: 'US / UK / DE alignment', team: 'Localization', status: 'review', level: 3, x: 840, y: 305, width: 180, height: 48 },
+      { id: 'L-FR', label: 'L-FR France Pack', subtitle: 'Retire & cancel 8 reps', team: 'Localization', status: 'must', level: 2, x: 840, y: 205, width: 196, height: 54 },
+      { id: 'L-RETAINED', label: 'Retained Packs', subtitle: 'US / UK / DE alignment', team: 'Localization', status: 'review', level: 3, x: 840, y: 305, width: 196, height: 54 },
 
       // Level 5: Release Gates & Independent Prerequisite
-      { id: 'P1', label: 'P1 Launch Readiness Gate', subtitle: 'Reopened · Approvals invalidated', team: 'Programme', status: 'must', level: 5, x: 440, y: 535, width: 260, height: 50 },
-      { id: 'P2', label: 'P2 Product & Safety Contract', subtitle: 'Unaffected prerequisite boundary', team: 'Programme', status: 'no', level: 5, x: 770, y: 535, width: 240, height: 50 }
+      { id: 'P1', label: 'P1 Launch Readiness Gate', subtitle: 'Reopened · Approvals invalidated', team: 'Programme', status: 'must', level: 5, x: 440, y: 535, width: 280, height: 54 },
+      { id: 'P2', label: 'P2 Product & Safety Contract', subtitle: 'Unaffected prerequisite boundary', team: 'Programme', status: 'no', level: 5, x: 770, y: 535, width: 250, height: 54 }
     ];
 
     const edges = [
@@ -2225,8 +2228,8 @@
                                   isMust ? 'tb-node-must' :
                                   isReview ? 'tb-node-review' : 'tb-node-no';
 
-                const w = n.width || 180;
-                const h = n.height || 48;
+                const w = n.width || 196;
+                const h = n.height || 54;
                 const halfW = w / 2;
                 const halfH = h / 2;
 
@@ -2235,14 +2238,48 @@
                                   isMust ? 'MUST CHANGE' :
                                   isReview ? 'REVIEW' : 'UNAFFECTED';
 
+                const teamTag = isRoot ? 'BUSINESS INTENT' :
+                                isFilter ? 'POLICY FILTER' :
+                                (n.team || 'STRATEGY').toUpperCase();
+
+                if (isRoot) {
+                  return `
+                    <g class="tb-graph-node ${nodeClass}" data-node-id="${n.id}" transform="translate(${n.x}, ${n.y})">
+                      <rect x="${-halfW}" y="${-halfH}" width="${w}" height="${h}" rx="8" class="tb-node-rect" filter="url(#nodeShadow)" />
+                      <rect x="${-halfW}" y="${-halfH}" width="5" height="${h}" rx="2" class="tb-node-stripe" />
+                      <text x="0" y="-7" text-anchor="middle" class="tb-node-title" style="fill:#ffffff; font-size:11.5px; font-weight:700;">⚡ ${esc(n.label)}</text>
+                      <text x="0" y="11" text-anchor="middle" class="tb-node-subtitle" style="fill:#94a3b8; font-size:9.5px;">${esc(n.subtitle)}</text>
+                    </g>
+                  `;
+                }
+
+                if (isFilter) {
+                  return `
+                    <g class="tb-graph-node ${nodeClass}" data-node-id="${n.id}" transform="translate(${n.x}, ${n.y})">
+                      <rect x="${-halfW}" y="${-halfH}" width="${w}" height="${h}" rx="8" class="tb-node-rect" filter="url(#nodeShadow)" />
+                      <rect x="${-halfW}" y="${-halfH}" width="5" height="${h}" rx="2" class="tb-node-stripe" />
+                      <text x="${-halfW + 12}" y="-7" class="tb-node-title" style="font-size:11px; font-weight:700;">${esc(n.label)}</text>
+                      <text x="${halfW - 10}" y="-7" text-anchor="end" class="tb-node-tag">${statusTag}</text>
+                      <text x="${-halfW + 12}" y="11" class="tb-node-subtitle" style="font-size:9.5px;">${esc(n.subtitle)}</text>
+                    </g>
+                  `;
+                }
+
+                // Standard 3-line Deliverable Card: Line 1 (Team & Tag), Line 2 (Title), Line 3 (Subtitle)
                 return `
                   <g class="tb-graph-node ${nodeClass}" data-node-id="${n.id}" transform="translate(${n.x}, ${n.y})">
                     <rect x="${-halfW}" y="${-halfH}" width="${w}" height="${h}" rx="8" class="tb-node-rect" filter="url(#nodeShadow)" />
                     <rect x="${-halfW}" y="${-halfH}" width="5" height="${h}" rx="2" class="tb-node-stripe" />
                     
-                    <text x="${-halfW + 12}" y="${-halfH + 19}" class="tb-node-title">${esc(n.label)}</text>
-                    <text x="${-halfW + 12}" y="${-halfH + 34}" class="tb-node-subtitle">${esc(n.subtitle || n.team || '')}</text>
-                    <text x="${halfW - 8}" y="${-halfH + 18}" text-anchor="end" class="tb-node-tag">${statusTag}</text>
+                    <!-- Line 1: Department Tag (Left) and Status Tag (Right) -->
+                    <text x="${-halfW + 12}" y="-12" class="tb-node-team">${esc(teamTag)}</text>
+                    <text x="${halfW - 10}" y="-12" text-anchor="end" class="tb-node-tag">${statusTag}</text>
+                    
+                    <!-- Line 2: Deliverable Title (Dedicated Line, Full Width) -->
+                    <text x="${-halfW + 12}" y="4" class="tb-node-title">${esc(n.label)}</text>
+                    
+                    <!-- Line 3: Metric / Subtitle (Dedicated Line, Full Width) -->
+                    <text x="${-halfW + 12}" y="18" class="tb-node-subtitle">${esc(n.subtitle || '')}</text>
                   </g>
                 `;
               }).join('')}

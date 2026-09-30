@@ -390,8 +390,8 @@
                                   isMust ? 'tb-node-must' :
                                   isReview ? 'tb-node-review' : 'tb-node-no';
 
-                const w = n.width || 180;
-                const h = n.height || 48;
+                const w = n.width || 196;
+                const h = n.height || 54;
                 const halfW = w / 2;
                 const halfH = h / 2;
 
@@ -400,14 +400,48 @@
                                   isMust ? 'MUST CHANGE' :
                                   isReview ? 'REVIEW' : 'UNAFFECTED';
 
+                const teamTag = isRoot ? 'BUSINESS INTENT' :
+                                isFilter ? 'POLICY FILTER' :
+                                (n.team || 'STRATEGY').toUpperCase();
+
+                if (isRoot) {
+                  return `
+                    <g class="tb-graph-node ${nodeClass}" data-node-id="${n.id}" transform="translate(${n.x}, ${n.y})">
+                      <rect x="${-halfW}" y="${-halfH}" width="${w}" height="${h}" rx="8" class="tb-node-rect" filter="url(#nodeShadow)" />
+                      <rect x="${-halfW}" y="${-halfH}" width="5" height="${h}" rx="2" class="tb-node-stripe" />
+                      <text x="0" y="-7" text-anchor="middle" class="tb-node-title" style="fill:#ffffff; font-size:11.5px; font-weight:700;">⚡ ${esc(n.label)}</text>
+                      <text x="0" y="11" text-anchor="middle" class="tb-node-subtitle" style="fill:#94a3b8; font-size:9.5px;">${esc(n.subtitle)}</text>
+                    </g>
+                  `;
+                }
+
+                if (isFilter) {
+                  return `
+                    <g class="tb-graph-node ${nodeClass}" data-node-id="${n.id}" transform="translate(${n.x}, ${n.y})">
+                      <rect x="${-halfW}" y="${-halfH}" width="${w}" height="${h}" rx="8" class="tb-node-rect" filter="url(#nodeShadow)" />
+                      <rect x="${-halfW}" y="${-halfH}" width="5" height="${h}" rx="2" class="tb-node-stripe" />
+                      <text x="${-halfW + 12}" y="-7" class="tb-node-title" style="font-size:11px; font-weight:700;">${esc(n.label)}</text>
+                      <text x="${halfW - 10}" y="-7" text-anchor="end" class="tb-node-tag">${statusTag}</text>
+                      <text x="${-halfW + 12}" y="11" class="tb-node-subtitle" style="font-size:9.5px;">${esc(n.subtitle)}</text>
+                    </g>
+                  `;
+                }
+
+                // Standard 3-line Deliverable Card: Line 1 (Team & Tag), Line 2 (Title), Line 3 (Subtitle)
                 return `
                   <g class="tb-graph-node ${nodeClass}" data-node-id="${n.id}" transform="translate(${n.x}, ${n.y})">
                     <rect x="${-halfW}" y="${-halfH}" width="${w}" height="${h}" rx="8" class="tb-node-rect" filter="url(#nodeShadow)" />
                     <rect x="${-halfW}" y="${-halfH}" width="5" height="${h}" rx="2" class="tb-node-stripe" />
                     
-                    <text x="${-halfW + 12}" y="${-halfH + 19}" class="tb-node-title">${esc(n.label)}</text>
-                    <text x="${-halfW + 12}" y="${-halfH + 34}" class="tb-node-subtitle">${esc(n.subtitle || n.team || '')}</text>
-                    <text x="${halfW - 8}" y="${-halfH + 18}" text-anchor="end" class="tb-node-tag">${statusTag}</text>
+                    <!-- Line 1: Department Tag (Left) and Status Tag (Right) -->
+                    <text x="${-halfW + 12}" y="-12" class="tb-node-team">${esc(teamTag)}</text>
+                    <text x="${halfW - 10}" y="-12" text-anchor="end" class="tb-node-tag">${statusTag}</text>
+                    
+                    <!-- Line 2: Deliverable Title (Dedicated Line, Full Width) -->
+                    <text x="${-halfW + 12}" y="4" class="tb-node-title">${esc(n.label)}</text>
+                    
+                    <!-- Line 3: Metric / Subtitle (Dedicated Line, Full Width) -->
+                    <text x="${-halfW + 12}" y="18" class="tb-node-subtitle">${esc(n.subtitle || '')}</text>
                   </g>
                 `;
               }).join('')}
