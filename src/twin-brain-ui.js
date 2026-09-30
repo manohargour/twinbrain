@@ -581,6 +581,230 @@
     `;
   }
 
+  // --- 0. STEP 0: GTM MOTION IDENTIFICATION & ALIGNMENT ---
+  function renderGtmMotionTab(state) {
+    const motions = g.GTM_MOTIONS || [];
+    const selectedId = state.selectedMotion || 'hybrid_sales_assist';
+    const m = motions.find(opt => opt.id === selectedId) || motions[0] || {};
+    const c = state.current || g.BASE;
+    const n = g.counts(c);
+
+    return `
+      <section class="tb-panel">
+        <div class="tb-row spread" style="margin-bottom: 8px;">
+          <div>
+            <div class="tb-eyebrow">Step 0 · Strategic GTM Foundation</div>
+            <h2 style="margin: 4px 0 6px; font-size: 24px; color: var(--ink);">GTM Motion Identification &amp; Alignment</h2>
+            <p class="tb-muted" style="margin: 0;">
+              Identify the commercial motion, structure core operational inputs, and define tangible business outcomes before starting execution workflows.
+            </p>
+          </div>
+          <button type="button" class="tb-btn tb-btn-primary" data-switch-tab="intelligence">
+            Proceed to Step 1 · AI Change Intelligence →
+          </button>
+        </div>
+      </section>
+
+      <!-- Motion Selection Cards -->
+      <section class="tb-panel">
+        <div class="tb-row spread" style="margin-bottom: 12px;">
+          <h3 style="margin: 0; font-size: 17px;">Select or Compare GTM Motions</h3>
+          <span class="tb-badge ${m.id === 'hybrid_sales_assist' ? 'tb-badge-no' : 'tb-badge-review'}">${esc(m.badge || '')}</span>
+        </div>
+        <p class="tb-muted" style="font-size: 13.5px; margin-bottom: 14px;">
+          Choose a commercial motion profile to see how target inputs, operating mechanics, and business outcomes align across the organisation:
+        </p>
+
+        <div class="tb-motion-cards">
+          ${motions.map(opt => `
+            <div class="tb-motion-card ${opt.id === m.id ? 'active' : ''}" data-select-motion="${esc(opt.id)}">
+              <div class="tb-row spread" style="margin-bottom: 6px;">
+                <strong style="color: var(--ink); font-size: 14.5px;">${esc(opt.name)}</strong>
+                <span class="tb-badge ${opt.id === 'hybrid_sales_assist' ? 'tb-badge-no' : 'tb-badge-review'}">${esc(opt.tag)}</span>
+              </div>
+              <p style="font-size: 13px; line-height: 1.45; margin-bottom: 8px; color: var(--muted);">${esc(opt.summary)}</p>
+              <small class="tb-muted" style="font-size: 12px;"><strong>Best fit:</strong> ${esc(opt.bestFor)}</small>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="tb-alert tb-alert-good" style="margin-top: 14px; background: #eef6f2; border: 1px solid #c2e0cf; border-radius: 6px; padding: 14px 18px;">
+          <strong style="color: #12604d; font-size: 14.5px;">Active Motion Profile: ${esc(m.name)}</strong> — ${esc(m.summary)}
+          <div style="margin-top: 8px; font-size: 13px; color: #1e3a32; line-height: 1.6;">
+            <div><strong>Primary Buyer Persona:</strong> ${esc(m.buyerPersona || '')}</div>
+            <div><strong>Engagement Touchpoints:</strong> ${esc(m.touchpoints || '')}</div>
+            <div><strong>Cadence &amp; Rules:</strong> ${esc(m.cadence || '')}</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Key Operational Inputs -->
+      <section class="tb-panel">
+        <div class="tb-row spread" style="margin-bottom: 12px;">
+          <div>
+            <h3 style="margin: 0; font-size: 17px;">Key Operational Inputs</h3>
+            <p class="tb-muted" style="margin: 2px 0 0; font-size: 13px;">Structured baseline inputs required by business functions (Sales, RevOps, Product, Legal) to activate this motion.</p>
+          </div>
+          <span class="tb-badge">Input Configuration</span>
+        </div>
+
+        <div class="tb-inputs-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 14px;">
+          <div class="tb-input-box" style="background: white; border: 1px solid var(--line); border-radius: 6px; padding: 16px;">
+            <h4 style="margin: 0 0 8px; color: #12604d; font-size: 14.5px;">1 · Account Universe &amp; ICP</h4>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Baseline Universe:</strong> 96 active paying accounts across 4 markets (US, UK, DE, FR).</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Target Adoption Tier:</strong> Low-adoption accounts (&lt; 20% active seat ratio in 28d) = <strong>${n.eligible} accounts</strong>.</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Inactivity Filter:</strong> Exclude 90+ days inactive accounts to preserve sales capacity.</p>
+            <p style="margin: 0; font-size: 13px;"><strong>Target Stakeholders:</strong> Workspace Admin (technical credential holder) + Business Line Sponsor (value owner).</p>
+          </div>
+
+          <div class="tb-input-box" style="background: white; border: 1px solid var(--line); border-radius: 6px; padding: 16px;">
+            <h4 style="margin: 0 0 8px; color: #12604d; font-size: 14.5px;">2 · Channel &amp; Delivery Architecture</h4>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>First-Touch Channel:</strong> Owned email invitation (<code class="mono">owned_email</code>) with explicit consent check.</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Second-Touch Channel:</strong> Trained Account Executive / Solutions Architect qualification call (<code class="mono">account_team</code>).</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Contact Permission Guard:</strong> Independent permission flag required (<strong>${n.contactable}</strong> of ${n.eligible} accounts contactable).</p>
+            <p style="margin: 0; font-size: 13px;"><strong>Suppression Cadence:</strong> Max 2 touches / 30 days. Holdout accounts (<strong>${n.holdout}</strong>) suppressed from all outreach.</p>
+          </div>
+
+          <div class="tb-input-box" style="background: white; border: 1px solid var(--line); border-radius: 6px; padding: 16px;">
+            <h4 style="margin: 0 0 8px; color: #12604d; font-size: 14.5px;">3 · Technical &amp; Governance Prereqs</h4>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>On-Premises Readiness:</strong> Customer network firewall &amp; SSO connector verified (<strong>${n.ready}</strong> accounts ready).</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Product Safety Contract (P2):</strong> Experimental scenario only. Zero unauthorized data residency or security claims.</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Measurement Stratification:</strong> 80% outreach arm (<strong>${n.outreach}</strong> accounts) vs 20% clean holdout arm (<strong>${n.holdout}</strong> accounts).</p>
+            <p style="margin: 0; font-size: 13px;"><strong>Trial-Ready Accounts:</strong> <strong>${n.trialReady} accounts</strong> currently satisfy contact permission, outreach arm, and technical readiness.</p>
+          </div>
+
+          <div class="tb-input-box" style="background: white; border: 1px solid var(--line); border-radius: 6px; padding: 16px;">
+            <h4 style="margin: 0 0 8px; color: #12604d; font-size: 14.5px;">4 · Field Enablement &amp; Localization</h4>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Field Capacity:</strong> 34 assigned agents across 4 active markets (US: 12, UK: 6, DE: 8, FR: 8).</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Readiness Standard:</strong> 100% agent completion of versioned module + call guide + scored role-play assessment.</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Market Adaptation:</strong> 4 native-language packs (L-US, L-UK, L-DE, L-FR) with localized strategy and escalation paths.</p>
+            <p style="margin: 0; font-size: 13px;"><strong>Illustrative Labour Assumption:</strong> £60/hr blended cost; 0.5h retraining per agent on version change.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Target Business Outcomes -->
+      <section class="tb-panel">
+        <div class="tb-row spread" style="margin-bottom: 12px;">
+          <div>
+            <h3 style="margin: 0; font-size: 17px;">Target Business Outcomes</h3>
+            <p class="tb-muted" style="margin: 2px 0 0; font-size: 13px;">Measurable success criteria and non-negotiable boundaries defined in language familiar to executive leadership.</p>
+          </div>
+          <span class="tb-badge">Success Criteria</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 14px;">
+          <div class="tb-outcome-col" style="background: white; border: 1px solid var(--line); border-radius: 6px; padding: 16px;">
+            <h4 style="margin: 0 0 12px; color: #12604d; font-size: 14.5px;">Value Creation Outcomes (Topline &amp; Retention)</h4>
+            ${(m.outcomes?.primary || []).map(o => `
+              <div class="tb-outcome-item" style="border-left: 3px solid #12604d; padding: 8px 12px; background: #fcfdfc; margin-bottom: 10px; border-radius: 0 4px 4px 0; border-top: 1px solid #f0f4f1; border-right: 1px solid #f0f4f1; border-bottom: 1px solid #f0f4f1;">
+                <strong style="display: block; font-size: 13.5px; color: var(--ink);">${esc(o.metric)}</strong>
+                <div style="font-weight: 600; font-size: 12px; color: #12604d; margin-top: 2px;">Target: ${esc(o.target)}</div>
+                <p style="margin: 4px 0 0; font-size: 12px; color: var(--muted);">${esc(o.desc)}</p>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="tb-outcome-col" style="background: white; border: 1px solid var(--line); border-radius: 6px; padding: 16px;">
+            <h4 style="margin: 0 0 12px; color: #b45309; font-size: 14.5px;">Operational Velocity &amp; Efficiency</h4>
+            ${(m.outcomes?.operational || []).map(o => `
+              <div class="tb-outcome-item" style="border-left: 3px solid #b45309; padding: 8px 12px; background: #fffcf5; margin-bottom: 10px; border-radius: 0 4px 4px 0; border-top: 1px solid #fef3c7; border-right: 1px solid #fef3c7; border-bottom: 1px solid #fef3c7;">
+                <strong style="display: block; font-size: 13.5px; color: var(--ink);">${esc(o.metric)}</strong>
+                <div style="font-weight: 600; font-size: 12px; color: #b45309; margin-top: 2px;">Target: ${esc(o.target)}</div>
+                <p style="margin: 4px 0 0; font-size: 12px; color: var(--muted);">${esc(o.desc)}</p>
+              </div>
+            `).join('')}
+
+            <h4 style="margin: 16px 0 12px; color: #b91c1c; font-size: 14.5px;">Non-Negotiable Guardrails (Risk &amp; Trust)</h4>
+            ${(m.outcomes?.guardrails || []).map(o => `
+              <div class="tb-outcome-item" style="border-left: 3px solid #b91c1c; padding: 8px 12px; background: #fef8f8; margin-bottom: 10px; border-radius: 0 4px 4px 0; border-top: 1px solid #fee2e2; border-right: 1px solid #fee2e2; border-bottom: 1px solid #fee2e2;">
+                <strong style="display: block; font-size: 13.5px; color: var(--ink);">${esc(o.metric)}</strong>
+                <div style="font-weight: 600; font-size: 12px; color: #b91c1c; margin-top: 2px;">Target: ${esc(o.target)}</div>
+                <p style="margin: 4px 0 0; font-size: 12px; color: var(--muted);">${esc(o.desc)}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+
+      <!-- Workflow Alignment Matrix -->
+      <section class="tb-panel">
+        <div class="tb-row spread" style="margin-bottom: 12px;">
+          <div>
+            <h3 style="margin: 0; font-size: 17px;">Workflow Alignment: How Step 0 Drives the End-to-End System</h3>
+            <p class="tb-muted" style="margin: 2px 0 0; font-size: 13px;">Click any step below to navigate directly to its deliverables, operational constraints, and live governance controls:</p>
+          </div>
+          <span class="tb-badge">Interactive Workflow Navigator</span>
+        </div>
+
+        <div style="display: grid; gap: 10px; margin-top: 14px;">
+          <div class="tb-align-step active" data-switch-tab="motion" style="display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 2px solid #12604d; border-radius: 6px; background: #eef6f2; cursor: pointer;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #12604d; color: white; font-weight: bold; display: grid; place-items: center; flex-shrink: 0; font-size: 13px;">0</div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 2px; font-size: 14px; color: var(--ink);">Step 0 · GTM Motion &amp; Alignment (Current Screen)</h4>
+              <p style="margin: 0; font-size: 13px; color: var(--muted);">Sets the commercial paradigm (<strong>${esc(m.name)}</strong>), target personas (Admin + Business Sponsor), and key business outcomes.</p>
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: #12604d; white-space: nowrap;">Current Screen · Selected Motion ✓</div>
+          </div>
+
+          <div class="tb-align-step" data-switch-tab="intelligence" style="display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px; background: white; cursor: pointer;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #2563eb; color: white; font-weight: bold; display: grid; place-items: center; flex-shrink: 0; font-size: 13px;">1</div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 2px; font-size: 14px; color: var(--ink);">Step 1 · AI Change Intelligence (Natural Language Blast Radius)</h4>
+              <p style="margin: 0; font-size: 13px; color: var(--muted);">Express upstream policy shifts in natural language. Gemini extracts structured intent and computes the exact cross-functional blast radius.</p>
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: #2563eb; white-space: nowrap;">Navigate to Step 1 →</div>
+          </div>
+
+          <div class="tb-align-step" data-switch-tab="charter" style="display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px; background: white; cursor: pointer;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #0284c7; color: white; font-weight: bold; display: grid; place-items: center; flex-shrink: 0; font-size: 13px;">2</div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 2px; font-size: 14px; color: var(--ink);">Step 2 · Programme Charter</h4>
+              <p style="margin: 0; font-size: 13px; color: var(--muted);">Codifies the GTM motion into the master brief (<code class="mono">brief_version=1</code>), frozen audience contract, and 4-market rollout matrix.</p>
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: #0284c7; white-space: nowrap;">Navigate to Step 2 →</div>
+          </div>
+
+          <div class="tb-align-step" data-switch-tab="workstreams" style="display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px; background: white; cursor: pointer;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #4f46e5; color: white; font-weight: bold; display: grid; place-items: center; flex-shrink: 0; font-size: 13px;">3</div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 2px; font-size: 14px; color: var(--ink);">Step 3 · Team Work Breakdown</h4>
+              <p style="margin: 0; font-size: 13px; color: var(--muted);">Decomposes the GTM motion inputs into 12 living operational artifacts owned by Analytics (A1–A4), GTM (G1–G3), Enablement (E1–E3), and Programme (P1–P2).</p>
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: #4f46e5; white-space: nowrap;">Navigate to Step 3 →</div>
+          </div>
+
+          <div class="tb-align-step" data-switch-tab="readiness" style="display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px; background: white; cursor: pointer;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #059669; color: white; font-weight: bold; display: grid; place-items: center; flex-shrink: 0; font-size: 13px;">4</div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 2px; font-size: 14px; color: var(--ink);">Step 4 · Version-Specific Readiness</h4>
+              <p style="margin: 0; font-size: 13px; color: var(--muted);">Enforces multi-gate approval (PM acceptance, workstream review, local language QA, agent certification, and technical safety contract) before activating the motion.</p>
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: #059669; white-space: nowrap;">Navigate to Step 4 →</div>
+          </div>
+
+          <div class="tb-align-step" data-switch-tab="history" style="display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px; background: white; cursor: pointer;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #64748b; color: white; font-weight: bold; display: grid; place-items: center; flex-shrink: 0; font-size: 13px;">5</div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 2px; font-size: 14px; color: var(--ink);">Step 5 · History &amp; Audit Trail</h4>
+              <p style="margin: 0; font-size: 13px; color: var(--muted);">Exports an immutable record of all version iterations, ensuring the rationale for every GTM policy shift remains transparent and reproducible.</p>
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: #64748b; white-space: nowrap;">Navigate to Step 5 →</div>
+          </div>
+        </div>
+
+        <div class="tb-row" style="margin-top: 20px; gap: 12px;">
+          <button type="button" class="tb-btn tb-btn-primary" data-switch-tab="intelligence">
+            ⚡ Proceed to Step 1 · AI Change Intelligence →
+          </button>
+          <a href="GTM-Change-Lab.html" class="tb-btn" style="text-decoration: none; color: inherit; display: inline-flex; align-items: center; gap: 6px;">
+            🔬 Open Interactive GTM Change Lab
+          </a>
+        </div>
+      </section>
+    `;
+  }
+
   // --- 9. HACKATHON PRESENTATION TOUR BAR ---
   function renderTourBar(stepIdx, totalSteps, stepData) {
     if (!stepData) return '';
@@ -618,6 +842,7 @@
 
   // Export UI library
   global.TWIN_BRAIN_UI = {
+    renderGtmMotionTab,
     renderHeroNLP,
     renderAmbiguityAlert,
     renderInterpretationUnderstood,
@@ -630,3 +855,4 @@
   };
 
 })(typeof window !== 'undefined' ? window : global);
+

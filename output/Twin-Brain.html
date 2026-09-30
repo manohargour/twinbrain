@@ -203,6 +203,43 @@
     .tb-grid-2 { grid-template-columns: 1fr 1fr; }
     .tb-grid-3 { grid-template-columns: repeat(3, 1fr); }
 
+    /* Step 0 GTM Motion Styles */
+    .tb-motion-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .tb-motion-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+    .tb-motion-card:hover {
+      border-color: var(--green);
+      background: var(--pale);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .tb-motion-card.active {
+      border-color: var(--green);
+      border-width: 2px;
+      background: #eef6f2;
+      box-shadow: 0 0 0 1px var(--green);
+    }
+    .tb-align-step {
+      transition: all 0.15s ease;
+    }
+    .tb-align-step:hover {
+      border-color: var(--green) !important;
+      background: #f4faf6 !important;
+      transform: translateY(-1px);
+    }
+
     /* Hero NLP Section */
     .tb-hero {
       border: 1px solid #c7d2fe;
@@ -762,12 +799,14 @@
       </div>
       <div class="tb-row" style="gap: 10px;">
         <span class="tb-badge tb-badge-no">Google Hackathon Prototype</span>
+        <a href="GTM-Change-Lab.html" class="tb-btn tb-btn-sm" style="text-decoration: none; color: inherit; display: inline-flex; align-items: center; gap: 6px;">🔬 Open GTM Change Lab</a>
         <button type="button" class="tb-btn tb-btn-sm" id="tbTourBtn" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border: none; font-weight: 700; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35); display: inline-flex; align-items: center; gap: 6px;">🎯 2-Min Demo Tour</button>
         <button type="button" class="tb-btn tb-btn-sm" id="tbSettingsBtn">⚙️ AI Settings</button>
       </div>
     </div>
     <nav aria-label="Main Navigation">
-      <button type="button" data-tab="intelligence" class="active">🧠 1 · Change Intelligence</button>
+      <button type="button" data-tab="motion" class="active">🚢 0 · GTM Motion</button>
+      <button type="button" data-tab="intelligence">🧠 1 · Change Intelligence</button>
       <button type="button" data-tab="charter">📋 2 · Programme Charter</button>
       <button type="button" data-tab="workstreams">👥 3 · Team Workstreams</button>
       <button type="button" data-tab="readiness">🚦 4 · Readiness Gates</button>
@@ -838,6 +877,140 @@
         trialReady: p.filter(a => a.contact_permitted && a.assigned_arm === 'outreach' && a.technical_ready).length
       };
     }
+
+    const GTM_MOTIONS = [
+      {
+        id: 'hybrid_sales_assist',
+        name: 'Sales-Assisted Hybrid',
+        badge: 'Baseline Motion · Recommended',
+        tag: 'Recommended',
+        summary: 'Central marketing automation triggers owned email invitations to qualified accounts, followed by account team outreach for adoption discovery and technical qualification.',
+        bestFor: 'Mid-to-high touch accounts, complex data connectivity, high ARR preservation.',
+        buyerPersona: 'Workspace Admin + Business Sponsor',
+        touchpoints: 'Owned email invite + AE/Solutions Architect call + Slack connect channel',
+        cadence: 'Email day 0; human call day 3; follow-up day 7',
+        inputs: {
+          accountScope: '96 synthetic paying accounts in US, UK, DE, FR',
+          channelArch: 'Owned email + human account team follow-up',
+          governance: 'PM acceptance + workstream review + local language QA + agent readiness + independent security prerequisite',
+          fieldStaffing: '34 assigned agents across 4 markets'
+        },
+        outcomes: {
+          primary: [
+            { metric: 'Meaningful Activation Rate', target: '≥ 35% of eligible accounts', desc: 'Account authorizes connection and records first meaningful query within 14 days of assignment.' },
+            { metric: 'Active Seat Utilization Lift', target: '+15% active seats / licensed seats', desc: 'Dormant or low-adoption accounts reach healthy active usage thresholds within 60 days.' },
+            { metric: 'High-Tier ARR Expansion Velocity', target: '45 days from first use to expansion', desc: 'Accelerates time to expansion discussion for accounts adopting advanced enterprise capabilities.' }
+          ],
+          operational: [
+            { metric: 'Field Agent Certification Rate', target: '100% before outreach', desc: 'All 34 field agents must complete module, call guide review, and role-play assessment.' },
+            { metric: 'First-Response Technical SLA', target: '< 4 business hours', desc: 'Fast resolution for customer firewall, proxy, and SSO connectivity blockers.' }
+          ],
+          guardrails: [
+            { metric: 'Zero Unapproved Product Claims', target: '0 defects', desc: 'No unauthorized claims regarding security, data residency, or instant setup.' },
+            { metric: 'Clean Holdout Suppression', target: '0 leakages', desc: 'Strict zero outreach to designated experimental holdout accounts.' },
+            { metric: 'Opt-out & Complaint Rate', target: '< 0.5% of outreach', desc: 'Strict adherence to contact limits and immediate suppression on opt-out.' }
+          ]
+        }
+      },
+      {
+        id: 'plg_self_serve',
+        name: 'Product-Led Growth (PLG) / Self-Serve',
+        badge: 'Alternative Motion',
+        tag: 'Alternative',
+        summary: 'In-product discovery prompts, self-guided setup wizards, and automated telemetry triggers drive user-led adoption with minimal human touch.',
+        bestFor: 'Standardized enterprise environments, developer-heavy teams, rapid time-to-value.',
+        buyerPersona: 'End User / Team Lead / Technical Administrator',
+        touchpoints: 'In-app banner + setup checklist + automated onboarding email sequence',
+        cadence: 'In-app prompt day 0; automated tip day 2; re-engagement day 5',
+        inputs: {
+          accountScope: 'Self-serve eligible tier; automated permission verification',
+          channelArch: 'In-app notifications + automated drip sequence',
+          governance: 'Automated entitlement check + in-app consent telemetry',
+          fieldStaffing: '0 dedicated agents; automated self-service documentation'
+        },
+        outcomes: {
+          primary: [
+            { metric: 'Self-Serve Setup Completion', target: '≥ 50% start-to-finish', desc: 'Users complete connector authentication without opening a support ticket.' },
+            { metric: 'Time to First Connection', target: '< 15 minutes', desc: 'Median time from invitation click to active data source connection.' },
+            { metric: 'Organic Team Viral Spread', target: '≥ 3 invitations per account', desc: 'Users share connector workflows with peer team members within 14 days.' }
+          ],
+          operational: [
+            { metric: 'Onboarding Funnel Drop-off', target: '< 25% at auth step', desc: 'Streamlined authentication and permission consent UX.' },
+            { metric: 'Automated Help Center Deflection', target: '≥ 80%', desc: 'Self-serve documentation resolves common setup questions without human tickets.' }
+          ],
+          guardrails: [
+            { metric: 'Zero Misconfigured Connections', target: '0 security leaks', desc: 'Automated token validation and permission boundary enforcement.' },
+            { metric: 'Accidental Public Share Prevention', target: '100% blocked', desc: 'Prevent accidental sharing of private connectors beyond authorized domains.' }
+          ]
+        }
+      },
+      {
+        id: 'enterprise_abm',
+        name: 'Enterprise Account-Based Marketing (ABM)',
+        badge: 'Alternative Motion',
+        tag: 'Alternative',
+        summary: 'Hyper-personalized executive briefings, joint architecture design sessions, and dedicated solutions engineering for strategic high-value accounts.',
+        bestFor: 'Fortune 500 accounts, highly regulated industries, complex on-prem topologies.',
+        buyerPersona: 'Chief Information Security Officer (CISO) + Chief Technology Officer (CTO)',
+        touchpoints: 'Executive sponsor letter + bespoke security dossier + on-site architecture workshop',
+        cadence: 'Bespoke white-glove cadence agreed with account team',
+        inputs: {
+          accountScope: 'Top-tier strategic accounts; custom security clearance',
+          channelArch: 'Executive briefing + dedicated solutions engineering pod',
+          governance: 'Formal security audit + bespoke DPAs + multi-party NDA',
+          fieldStaffing: 'Dedicated solutions architects and enterprise account executives'
+        },
+        outcomes: {
+          primary: [
+            { metric: 'Executive Sponsor Alignment', target: '100% of target accounts', desc: 'Signed security and architecture sign-off from VP/C-level stakeholder.' },
+            { metric: 'Enterprise Pilot Conversion', target: '≥ 70% pilot-to-production', desc: 'Conversion from POC trial to multi-year enterprise license commitment.' },
+            { metric: 'Net Retention Lift', target: '+25% NRR', desc: 'Deep integration increases switching costs and long-term account value.' }
+          ],
+          operational: [
+            { metric: 'Architecture Workshop Completion', target: '14 days from briefing', desc: 'Complete joint technical discovery within target timeframe.' },
+            { metric: 'Custom Security Addendum Turnaround', target: '< 10 business days', desc: 'Fast-track legal and compliance review cycles.' }
+          ],
+          guardrails: [
+            { metric: 'Zero Unilateral Customer Commitments', target: '0 breaches', desc: 'No unauthorized commitments to custom engineering features.' },
+            { metric: 'Formal Governance Sign-Off', target: '100% compliant', desc: 'Full audit trail of all architectural decisions and access grants.' }
+          ]
+        }
+      },
+      {
+        id: 'partner_cosell',
+        name: 'Partner / System Integrator Co-Sell',
+        badge: 'Alternative Motion',
+        tag: 'Alternative',
+        summary: 'Global system integrators (GSIs) and certified implementation partners lead customer engagement, installation, and change management.',
+        bestFor: 'Complex legacy migrations, multi-cloud architectures, specialized domain consulting.',
+        buyerPersona: 'Head of Enterprise Architecture + SI Practice Lead',
+        touchpoints: 'Partner portal enablement + joint customer pipeline reviews + SI delivery teams',
+        cadence: 'Weekly partner pipeline synchronization and joint customer calls',
+        inputs: {
+          accountScope: 'Partner-registered opportunities and joint customer accounts',
+          channelArch: 'Partner portal + co-branded collateral + certified SI delivery',
+          governance: 'Partner certification requirements + joint delivery SLA standards',
+          fieldStaffing: 'Partner practice leads + vendor alliance managers'
+        },
+        outcomes: {
+          primary: [
+            { metric: 'Partner-Sourced Pipeline', target: '≥ 40% of total pipeline', desc: 'Value of qualified opportunities originated or co-sold through certified partners.' },
+            { metric: 'Joint Implementation Velocity', target: '< 30 days deployment', desc: 'Time required for certified SI to complete customer deployment.' },
+            { metric: 'Services Attach Ratio', target: '2x software ARR', desc: 'Partner consulting and services revenue generated around the integration.' }
+          ],
+          operational: [
+            { metric: 'Certified Partner Consultants', target: '≥ 50 certified individuals', desc: 'Number of partner engineers completing full technical certification.' },
+            { metric: 'Joint Account Planning Cadence', target: '100% of top 20 partners', desc: 'Quarterly business reviews and shared revenue targets.' }
+          ],
+          guardrails: [
+            { metric: 'Partner Brand & Claims Compliance', target: '0 misleading claims', desc: 'Audit partner collateral against approved product positioning standards.' },
+            { metric: 'Customer Satisfaction (CSAT)', target: '≥ 90% positive', desc: 'Partner-delivered engagements meet vendor quality and reliability bars.' }
+          ]
+        }
+      }
+    ];
+
+    const getMotion = id => GTM_MOTIONS.find(m => m.id === id) || GTM_MOTIONS[0];
 
     const ARTIFACTS = [
       { id: 'A1', team: 'Analytics', title: 'Audience policy & membership', owner: 'Analytics lead', deps: ['audience', 'markets'], task: 'Translate the approved population into reproducible rules; deduplicate accounts, validate source freshness, inspect excluded records and snapshot account membership.', accept: 'PM signs the business rule; analytics tests boundaries, overlap, nulls and exclusions; account list carries programme_version and audience_snapshot_id.' },
@@ -969,6 +1142,8 @@
       ACCOUNTS,
       BASE,
       ARTIFACTS,
+      GTM_MOTIONS,
+      getMotion,
       policyText,
       population,
       counts,
@@ -2419,6 +2594,230 @@
     `;
   }
 
+  // --- 0. STEP 0: GTM MOTION IDENTIFICATION & ALIGNMENT ---
+  function renderGtmMotionTab(state) {
+    const motions = g.GTM_MOTIONS || [];
+    const selectedId = state.selectedMotion || 'hybrid_sales_assist';
+    const m = motions.find(opt => opt.id === selectedId) || motions[0] || {};
+    const c = state.current || g.BASE;
+    const n = g.counts(c);
+
+    return `
+      <section class="tb-panel">
+        <div class="tb-row spread" style="margin-bottom: 8px;">
+          <div>
+            <div class="tb-eyebrow">Step 0 · Strategic GTM Foundation</div>
+            <h2 style="margin: 4px 0 6px; font-size: 24px; color: var(--ink);">GTM Motion Identification &amp; Alignment</h2>
+            <p class="tb-muted" style="margin: 0;">
+              Identify the commercial motion, structure core operational inputs, and define tangible business outcomes before starting execution workflows.
+            </p>
+          </div>
+          <button type="button" class="tb-btn tb-btn-primary" data-switch-tab="intelligence">
+            Proceed to Step 1 · AI Change Intelligence →
+          </button>
+        </div>
+      </section>
+
+      <!-- Motion Selection Cards -->
+      <section class="tb-panel">
+        <div class="tb-row spread" style="margin-bottom: 12px;">
+          <h3 style="margin: 0; font-size: 17px;">Select or Compare GTM Motions</h3>
+          <span class="tb-badge ${m.id === 'hybrid_sales_assist' ? 'tb-badge-no' : 'tb-badge-review'}">${esc(m.badge || '')}</span>
+        </div>
+        <p class="tb-muted" style="font-size: 13.5px; margin-bottom: 14px;">
+          Choose a commercial motion profile to see how target inputs, operating mechanics, and business outcomes align across the organisation:
+        </p>
+
+        <div class="tb-motion-cards">
+          ${motions.map(opt => `
+            <div class="tb-motion-card ${opt.id === m.id ? 'active' : ''}" data-select-motion="${esc(opt.id)}">
+              <div class="tb-row spread" style="margin-bottom: 6px;">
+                <strong style="color: var(--ink); font-size: 14.5px;">${esc(opt.name)}</strong>
+                <span class="tb-badge ${opt.id === 'hybrid_sales_assist' ? 'tb-badge-no' : 'tb-badge-review'}">${esc(opt.tag)}</span>
+              </div>
+              <p style="font-size: 13px; line-height: 1.45; margin-bottom: 8px; color: var(--muted);">${esc(opt.summary)}</p>
+              <small class="tb-muted" style="font-size: 12px;"><strong>Best fit:</strong> ${esc(opt.bestFor)}</small>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="tb-alert tb-alert-good" style="margin-top: 14px; background: #eef6f2; border: 1px solid #c2e0cf; border-radius: 6px; padding: 14px 18px;">
+          <strong style="color: #12604d; font-size: 14.5px;">Active Motion Profile: ${esc(m.name)}</strong> — ${esc(m.summary)}
+          <div style="margin-top: 8px; font-size: 13px; color: #1e3a32; line-height: 1.6;">
+            <div><strong>Primary Buyer Persona:</strong> ${esc(m.buyerPersona || '')}</div>
+            <div><strong>Engagement Touchpoints:</strong> ${esc(m.touchpoints || '')}</div>
+            <div><strong>Cadence &amp; Rules:</strong> ${esc(m.cadence || '')}</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Key Operational Inputs -->
+      <section class="tb-panel">
+        <div class="tb-row spread" style="margin-bottom: 12px;">
+          <div>
+            <h3 style="margin: 0; font-size: 17px;">Key Operational Inputs</h3>
+            <p class="tb-muted" style="margin: 2px 0 0; font-size: 13px;">Structured baseline inputs required by business functions (Sales, RevOps, Product, Legal) to activate this motion.</p>
+          </div>
+          <span class="tb-badge">Input Configuration</span>
+        </div>
+
+        <div class="tb-inputs-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 14px;">
+          <div class="tb-input-box" style="background: white; border: 1px solid var(--line); border-radius: 6px; padding: 16px;">
+            <h4 style="margin: 0 0 8px; color: #12604d; font-size: 14.5px;">1 · Account Universe &amp; ICP</h4>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Baseline Universe:</strong> 96 active paying accounts across 4 markets (US, UK, DE, FR).</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Target Adoption Tier:</strong> Low-adoption accounts (&lt; 20% active seat ratio in 28d) = <strong>${n.eligible} accounts</strong>.</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Inactivity Filter:</strong> Exclude 90+ days inactive accounts to preserve sales capacity.</p>
+            <p style="margin: 0; font-size: 13px;"><strong>Target Stakeholders:</strong> Workspace Admin (technical credential holder) + Business Line Sponsor (value owner).</p>
+          </div>
+
+          <div class="tb-input-box" style="background: white; border: 1px solid var(--line); border-radius: 6px; padding: 16px;">
+            <h4 style="margin: 0 0 8px; color: #12604d; font-size: 14.5px;">2 · Channel &amp; Delivery Architecture</h4>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>First-Touch Channel:</strong> Owned email invitation (<code class="mono">owned_email</code>) with explicit consent check.</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Second-Touch Channel:</strong> Trained Account Executive / Solutions Architect qualification call (<code class="mono">account_team</code>).</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Contact Permission Guard:</strong> Independent permission flag required (<strong>${n.contactable}</strong> of ${n.eligible} accounts contactable).</p>
+            <p style="margin: 0; font-size: 13px;"><strong>Suppression Cadence:</strong> Max 2 touches / 30 days. Holdout accounts (<strong>${n.holdout}</strong>) suppressed from all outreach.</p>
+          </div>
+
+          <div class="tb-input-box" style="background: white; border: 1px solid var(--line); border-radius: 6px; padding: 16px;">
+            <h4 style="margin: 0 0 8px; color: #12604d; font-size: 14.5px;">3 · Technical &amp; Governance Prereqs</h4>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>On-Premises Readiness:</strong> Customer network firewall &amp; SSO connector verified (<strong>${n.ready}</strong> accounts ready).</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Product Safety Contract (P2):</strong> Experimental scenario only. Zero unauthorized data residency or security claims.</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Measurement Stratification:</strong> 80% outreach arm (<strong>${n.outreach}</strong> accounts) vs 20% clean holdout arm (<strong>${n.holdout}</strong> accounts).</p>
+            <p style="margin: 0; font-size: 13px;"><strong>Trial-Ready Accounts:</strong> <strong>${n.trialReady} accounts</strong> currently satisfy contact permission, outreach arm, and technical readiness.</p>
+          </div>
+
+          <div class="tb-input-box" style="background: white; border: 1px solid var(--line); border-radius: 6px; padding: 16px;">
+            <h4 style="margin: 0 0 8px; color: #12604d; font-size: 14.5px;">4 · Field Enablement &amp; Localization</h4>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Field Capacity:</strong> 34 assigned agents across 4 active markets (US: 12, UK: 6, DE: 8, FR: 8).</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Readiness Standard:</strong> 100% agent completion of versioned module + call guide + scored role-play assessment.</p>
+            <p style="margin: 0 0 6px; font-size: 13px;"><strong>Market Adaptation:</strong> 4 native-language packs (L-US, L-UK, L-DE, L-FR) with localized strategy and escalation paths.</p>
+            <p style="margin: 0; font-size: 13px;"><strong>Illustrative Labour Assumption:</strong> £60/hr blended cost; 0.5h retraining per agent on version change.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Target Business Outcomes -->
+      <section class="tb-panel">
+        <div class="tb-row spread" style="margin-bottom: 12px;">
+          <div>
+            <h3 style="margin: 0; font-size: 17px;">Target Business Outcomes</h3>
+            <p class="tb-muted" style="margin: 2px 0 0; font-size: 13px;">Measurable success criteria and non-negotiable boundaries defined in language familiar to executive leadership.</p>
+          </div>
+          <span class="tb-badge">Success Criteria</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 14px;">
+          <div class="tb-outcome-col" style="background: white; border: 1px solid var(--line); border-radius: 6px; padding: 16px;">
+            <h4 style="margin: 0 0 12px; color: #12604d; font-size: 14.5px;">Value Creation Outcomes (Topline &amp; Retention)</h4>
+            ${(m.outcomes?.primary || []).map(o => `
+              <div class="tb-outcome-item" style="border-left: 3px solid #12604d; padding: 8px 12px; background: #fcfdfc; margin-bottom: 10px; border-radius: 0 4px 4px 0; border-top: 1px solid #f0f4f1; border-right: 1px solid #f0f4f1; border-bottom: 1px solid #f0f4f1;">
+                <strong style="display: block; font-size: 13.5px; color: var(--ink);">${esc(o.metric)}</strong>
+                <div style="font-weight: 600; font-size: 12px; color: #12604d; margin-top: 2px;">Target: ${esc(o.target)}</div>
+                <p style="margin: 4px 0 0; font-size: 12px; color: var(--muted);">${esc(o.desc)}</p>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="tb-outcome-col" style="background: white; border: 1px solid var(--line); border-radius: 6px; padding: 16px;">
+            <h4 style="margin: 0 0 12px; color: #b45309; font-size: 14.5px;">Operational Velocity &amp; Efficiency</h4>
+            ${(m.outcomes?.operational || []).map(o => `
+              <div class="tb-outcome-item" style="border-left: 3px solid #b45309; padding: 8px 12px; background: #fffcf5; margin-bottom: 10px; border-radius: 0 4px 4px 0; border-top: 1px solid #fef3c7; border-right: 1px solid #fef3c7; border-bottom: 1px solid #fef3c7;">
+                <strong style="display: block; font-size: 13.5px; color: var(--ink);">${esc(o.metric)}</strong>
+                <div style="font-weight: 600; font-size: 12px; color: #b45309; margin-top: 2px;">Target: ${esc(o.target)}</div>
+                <p style="margin: 4px 0 0; font-size: 12px; color: var(--muted);">${esc(o.desc)}</p>
+              </div>
+            `).join('')}
+
+            <h4 style="margin: 16px 0 12px; color: #b91c1c; font-size: 14.5px;">Non-Negotiable Guardrails (Risk &amp; Trust)</h4>
+            ${(m.outcomes?.guardrails || []).map(o => `
+              <div class="tb-outcome-item" style="border-left: 3px solid #b91c1c; padding: 8px 12px; background: #fef8f8; margin-bottom: 10px; border-radius: 0 4px 4px 0; border-top: 1px solid #fee2e2; border-right: 1px solid #fee2e2; border-bottom: 1px solid #fee2e2;">
+                <strong style="display: block; font-size: 13.5px; color: var(--ink);">${esc(o.metric)}</strong>
+                <div style="font-weight: 600; font-size: 12px; color: #b91c1c; margin-top: 2px;">Target: ${esc(o.target)}</div>
+                <p style="margin: 4px 0 0; font-size: 12px; color: var(--muted);">${esc(o.desc)}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+
+      <!-- Workflow Alignment Matrix -->
+      <section class="tb-panel">
+        <div class="tb-row spread" style="margin-bottom: 12px;">
+          <div>
+            <h3 style="margin: 0; font-size: 17px;">Workflow Alignment: How Step 0 Drives the End-to-End System</h3>
+            <p class="tb-muted" style="margin: 2px 0 0; font-size: 13px;">Click any step below to navigate directly to its deliverables, operational constraints, and live governance controls:</p>
+          </div>
+          <span class="tb-badge">Interactive Workflow Navigator</span>
+        </div>
+
+        <div style="display: grid; gap: 10px; margin-top: 14px;">
+          <div class="tb-align-step active" data-switch-tab="motion" style="display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 2px solid #12604d; border-radius: 6px; background: #eef6f2; cursor: pointer;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #12604d; color: white; font-weight: bold; display: grid; place-items: center; flex-shrink: 0; font-size: 13px;">0</div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 2px; font-size: 14px; color: var(--ink);">Step 0 · GTM Motion &amp; Alignment (Current Screen)</h4>
+              <p style="margin: 0; font-size: 13px; color: var(--muted);">Sets the commercial paradigm (<strong>${esc(m.name)}</strong>), target personas (Admin + Business Sponsor), and key business outcomes.</p>
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: #12604d; white-space: nowrap;">Current Screen · Selected Motion ✓</div>
+          </div>
+
+          <div class="tb-align-step" data-switch-tab="intelligence" style="display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px; background: white; cursor: pointer;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #2563eb; color: white; font-weight: bold; display: grid; place-items: center; flex-shrink: 0; font-size: 13px;">1</div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 2px; font-size: 14px; color: var(--ink);">Step 1 · AI Change Intelligence (Natural Language Blast Radius)</h4>
+              <p style="margin: 0; font-size: 13px; color: var(--muted);">Express upstream policy shifts in natural language. Gemini extracts structured intent and computes the exact cross-functional blast radius.</p>
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: #2563eb; white-space: nowrap;">Navigate to Step 1 →</div>
+          </div>
+
+          <div class="tb-align-step" data-switch-tab="charter" style="display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px; background: white; cursor: pointer;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #0284c7; color: white; font-weight: bold; display: grid; place-items: center; flex-shrink: 0; font-size: 13px;">2</div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 2px; font-size: 14px; color: var(--ink);">Step 2 · Programme Charter</h4>
+              <p style="margin: 0; font-size: 13px; color: var(--muted);">Codifies the GTM motion into the master brief (<code class="mono">brief_version=1</code>), frozen audience contract, and 4-market rollout matrix.</p>
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: #0284c7; white-space: nowrap;">Navigate to Step 2 →</div>
+          </div>
+
+          <div class="tb-align-step" data-switch-tab="workstreams" style="display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px; background: white; cursor: pointer;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #4f46e5; color: white; font-weight: bold; display: grid; place-items: center; flex-shrink: 0; font-size: 13px;">3</div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 2px; font-size: 14px; color: var(--ink);">Step 3 · Team Work Breakdown</h4>
+              <p style="margin: 0; font-size: 13px; color: var(--muted);">Decomposes the GTM motion inputs into 12 living operational artifacts owned by Analytics (A1–A4), GTM (G1–G3), Enablement (E1–E3), and Programme (P1–P2).</p>
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: #4f46e5; white-space: nowrap;">Navigate to Step 3 →</div>
+          </div>
+
+          <div class="tb-align-step" data-switch-tab="readiness" style="display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px; background: white; cursor: pointer;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #059669; color: white; font-weight: bold; display: grid; place-items: center; flex-shrink: 0; font-size: 13px;">4</div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 2px; font-size: 14px; color: var(--ink);">Step 4 · Version-Specific Readiness</h4>
+              <p style="margin: 0; font-size: 13px; color: var(--muted);">Enforces multi-gate approval (PM acceptance, workstream review, local language QA, agent certification, and technical safety contract) before activating the motion.</p>
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: #059669; white-space: nowrap;">Navigate to Step 4 →</div>
+          </div>
+
+          <div class="tb-align-step" data-switch-tab="history" style="display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px; background: white; cursor: pointer;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #64748b; color: white; font-weight: bold; display: grid; place-items: center; flex-shrink: 0; font-size: 13px;">5</div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 2px; font-size: 14px; color: var(--ink);">Step 5 · History &amp; Audit Trail</h4>
+              <p style="margin: 0; font-size: 13px; color: var(--muted);">Exports an immutable record of all version iterations, ensuring the rationale for every GTM policy shift remains transparent and reproducible.</p>
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: #64748b; white-space: nowrap;">Navigate to Step 5 →</div>
+          </div>
+        </div>
+
+        <div class="tb-row" style="margin-top: 20px; gap: 12px;">
+          <button type="button" class="tb-btn tb-btn-primary" data-switch-tab="intelligence">
+            ⚡ Proceed to Step 1 · AI Change Intelligence →
+          </button>
+          <a href="GTM-Change-Lab.html" class="tb-btn" style="text-decoration: none; color: inherit; display: inline-flex; align-items: center; gap: 6px;">
+            🔬 Open Interactive GTM Change Lab
+          </a>
+        </div>
+      </section>
+    `;
+  }
+
   // --- 9. HACKATHON PRESENTATION TOUR BAR ---
   function renderTourBar(stepIdx, totalSteps, stepData) {
     if (!stepData) return '';
@@ -2456,6 +2855,7 @@
 
   // Export UI library
   global.TWIN_BRAIN_UI = {
+    renderGtmMotionTab,
     renderHeroNLP,
     renderAmbiguityAlert,
     renderInterpretationUnderstood,
@@ -2469,6 +2869,7 @@
 
 })(typeof window !== 'undefined' ? window : global);
 
+
 </script>
 <!-- TWIN_BRAIN_UI_END -->
 
@@ -2480,7 +2881,8 @@
     const tui = window.TWIN_BRAIN_UI;
 
     let appState = {
-      tab: 'intelligence',
+      tab: 'motion',
+      selectedMotion: 'hybrid_sales_assist',
       current: JSON.parse(JSON.stringify(g.BASE)),
       version: 1,
       nlpInput: 'We are narrowing the initial launch to low-adoption enterprise customers. Exclude accounts inactive for 90 days and remove France from the first rollout.',
@@ -2661,11 +3063,23 @@
     // --- HACKATHON GUIDED DEMO TOUR ---
     const TOUR_STEPS = [
       {
+        title: 'Step 0: Align on Commercial GTM Motion & Strategic Outcomes',
+        script: 'Before evaluating any changes, cross-functional teams must agree on the commercial GTM motion. Here we see our baseline "Sales-Assisted Hybrid" motion, its 4 core operational input pillars, and measurable business guardrails.',
+        nextLabel: 'Simulate an Upstream Change',
+        setup: () => {
+          appState.tab = 'motion';
+          renderApp();
+          document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === 'motion'));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      },
+      {
         title: 'Step 1: The Business Problem ("What Changed?")',
         script: 'In enterprise GTM and product launches, a single scope change usually triggers an email thread storm and weeks of forgotten downstream chaos. Twin Brain solves this: Change something once. Know everything it impacts.',
         nextLabel: 'Test Ambiguity Restraint',
         setup: () => {
           appState.tab = 'intelligence';
+          document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === 'intelligence'));
           appState.nlpInput = 'We are narrowing the initial launch to low-adoption enterprise customers. Exclude accounts inactive for 90 days and remove France from the first rollout.';
           executeAnalysis(appState.nlpInput, false);
           renderApp();
@@ -2797,6 +3211,9 @@
     function renderApp() {
       const container = document.getElementById('appMain');
       switch (appState.tab) {
+        case 'motion':
+          container.innerHTML = tui.renderGtmMotionTab(appState);
+          break;
         case 'intelligence':
           container.innerHTML = renderIntelligenceTab();
           break;
@@ -3141,6 +3558,14 @@
         btn.onclick = () => {
           const tab = btn.dataset.switchTab;
           document.querySelector(`nav button[data-tab="${tab}"]`).click();
+        };
+      });
+
+      // Motion selection in Step 0
+      document.querySelectorAll('[data-select-motion]').forEach(el => {
+        el.onclick = () => {
+          appState.selectedMotion = el.dataset.selectMotion;
+          renderApp();
         };
       });
 

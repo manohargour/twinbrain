@@ -7,17 +7,18 @@ let simHtml = fs.readFileSync(simPath, 'utf8');
 
 const core = fs.readFileSync(path.join(root, 'src/twin-brain-core.js'), 'utf8');
 
-const startMarker = '// --- TWIN BRAIN INTELLIGENCE MODULE ---';
-const endMarker = '</script>';
+const startMarker = '<!-- TWIN_BRAIN_MODULE_START -->';
+const endMarker = '<!-- TWIN_BRAIN_MODULE_END -->';
 
 if (simHtml.includes(startMarker)) {
-  const before = simHtml.substring(0, simHtml.indexOf(startMarker));
-  const after = simHtml.substring(simHtml.indexOf(endMarker, simHtml.indexOf(startMarker)));
-  simHtml = `${before}${startMarker}\n${core}\n${after}`;
+  const p1 = simHtml.indexOf(startMarker) + startMarker.length;
+  const p2 = simHtml.indexOf(endMarker);
+  simHtml = simHtml.substring(0, p1) + `\n<script>\n${core}\n</script>\n` + simHtml.substring(p2);
 } else {
-  const engineRegex = /(<script id="engine">[\s\S]*?window\.GTM=\{[\s\S]*?\};)([\s\S]*?)(<\/script>)/;
-  simHtml = simHtml.replace(engineRegex, `$1\n\n${startMarker}\n${core}\n$3`);
+  // Append right before </body>
+  const insertion = `\n${startMarker}\n<script id="twin-brain-core">\n${core}\n</script>\n${endMarker}\n</body>`;
+  simHtml = simHtml.replace('</body>', insertion);
 }
 
 fs.writeFileSync(simPath, simHtml, 'utf8');
-console.log('Successfully refreshed TWIN_BRAIN in output/gtm-change-simulator.html');
+console.log('Successfully refreshed TWIN_BRAIN in output/gtm-change-simulator.html without modifying engine script');
