@@ -1,0 +1,14 @@
+{
+  "name": "antler_google_sprint",
+  "version": "1.0.0",
+  "description": "## Open the prototype",
+  "main": "index.js",
+  "scripts": {
+    "test": "node scripts/test-engine.cjs && node scripts/test-twin-brain.cjs && node scripts/verify-twin-brain-html.cjs",
+    "build": "node scripts/bundle-twin-brain.cjs && node scripts/update-simulator.cjs && node scripts/build-portable.cjs",
+    "bundle": "node scripts/bundle-twin-brain.cjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

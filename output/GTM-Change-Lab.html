@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GTM Change Lab · Programme simulator</title>
+<style>
+:root{--ink:#192b2a;--muted:#526663;--line:#d4ddd8;--paper:#f5f6f1;--white:#fff;--green:#12604d;--pale:#e4f0e9;--amber:#83580c;--amberbg:#fff1d4;--red:#963c31;--redbg:#fceae5}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 'Avenir Next','Segoe UI',sans-serif}button,input,select{font:inherit}button{min-height:44px;cursor:pointer;border:1px solid var(--line);background:white;color:var(--ink);border-radius:5px;padding:9px 14px;font-weight:600}button:hover{border-color:var(--green);background:var(--pale)}button:disabled{opacity:.45;cursor:not-allowed}button.primary{background:var(--green);color:white;border-color:var(--green)}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #ac6a15;outline-offset:3px}input,select{border:1px solid #9caaa4;border-radius:4px;padding:8px;max-width:100%;background:white;color:var(--ink)}input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);vertical-align:middle}h1,h2,h3,p{margin:0 0 12px}h1{font-size:27px;letter-spacing:-.7px}h2{font-size:22px}h3{font-size:17px}a{color:var(--green)}header{background:var(--white);border-bottom:1px solid var(--line);padding:22px 30px 16px}.topline{display:flex;align-items:center;justify-content:space-between;gap:16px}.eyebrow{font:12px/1.5 'SFMono-Regular',Consolas,monospace;text-transform:uppercase;letter-spacing:1.3px;color:var(--green);margin-bottom:8px}.badge{font-size:12px;display:inline-block;padding:4px 8px;border-radius:4px;background:var(--pale);color:var(--green);font-weight:600}.badge.must{color:var(--red);background:var(--redbg)}.badge.review{color:var(--amber);background:var(--amberbg)}.badge.no{background:#edf0ed;color:var(--muted)}.muted,small{color:var(--muted)}small{font-size:12px}.notice{background:#fff5dd;padding:12px 16px;border:1px solid #e7d8b4;border-radius:4px}.notice.good{background:var(--pale);border-color:#c0d9ca}.notice p:last-child{margin-bottom:0}nav{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}nav button{border-color:transparent;background:transparent}nav button.active{background:var(--ink);color:white}.shell{max-width:1460px;margin:0 auto;padding:24px 30px 50px}.bar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px}.panel{background:white;border:1px solid var(--line);padding:22px;border-radius:6px;margin-bottom:18px}.grid{display:grid;grid-template-columns:minmax(280px,340px) minmax(0,1fr);gap:22px}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.stats{display:flex;flex-wrap:wrap;border:1px solid var(--line);background:white;margin-bottom:18px}.stat{padding:16px 20px;flex:1;min-width:135px;border-right:1px solid var(--line)}.stat:last-child{border:0}.stat strong{font-size:25px;font-variant-numeric:tabular-nums;display:block;letter-spacing:-.5px}.stat span{font-size:12px;color:var(--muted)}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}td p:last-child{margin-bottom:0}.scroll{overflow:auto}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.row.spread{justify-content:space-between}.simcontrols{align-self:start}.stack>*{margin-bottom:14px}.field{display:block;margin-bottom:18px}.field>span{display:block;font-size:13px;font-weight:600;margin-bottom:6px}.field select,.field input[type=number]{width:100%}.checks{display:grid;grid-template-columns:1fr 1fr;gap:10px}.check{display:flex;align-items:center;gap:8px;min-height:38px}details{border-bottom:1px solid var(--line);padding:14px 0}summary{cursor:pointer;font-weight:600;min-height:30px}details p,details ul{margin:12px 0}.mono,code{font:12px/1.6 'SFMono-Regular',Consolas,monospace}code{background:#eef1ed;padding:2px 4px}.diff{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}.diff>div{padding:12px;background:#f3f5f1;border:1px solid var(--line);white-space:pre-wrap}.diff>div:last-child{background:#edf5ef}.impact{padding:18px 0;border-bottom:1px solid var(--line)}.impact:last-child{border:0}.impact h3{margin:8px 0}.impact .reason{margin:8px 0}.steps{counter-reset:step}.step{display:flex;gap:18px;padding:16px 0;border-bottom:1px solid var(--line)}.step:before{counter-increment:step;content:counter(step);font:16px 'SFMono-Regular',monospace;color:var(--green);background:var(--pale);width:30px;height:30px;display:grid;place-items:center;flex-shrink:0}.flow{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:15px 0}.flow span{padding:9px 12px;background:#edf2ed;border:1px solid var(--line)}.error{color:var(--red);font-weight:600}.empty{padding:35px 10px;color:var(--muted)}.hidden{display:none!important}footer{font-size:12px;color:var(--muted);padding-top:20px}.scope{max-width:940px}.mini{padding:5px 9px;min-height:36px;font-size:12px}.selected{border-color:var(--green);background:var(--pale)}.legend{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.market{padding:16px 0;border-bottom:1px solid var(--line)}.number{font-variant-numeric:tabular-nums}.completion{font-weight:600;color:var(--green)}@media(max-width:850px){.grid,.two,.diff{grid-template-columns:1fr}.shell{padding:18px 14px}header{padding:18px 14px}.topline,.bar{align-items:flex-start;flex-direction:column}.panel{padding:16px}h1{font-size:24px}.stat{min-width:45%}.checks{grid-template-columns:1fr 1fr}}@media print{nav,button,.simcontrols{display:none}.shell{padding:0}header{padding:12px 0}.panel{break-inside:avoid}.grid,.two{display:block}body{font-size:12pt}}
+</style></head><body>
+<header><div class="topline"><div><div class="eyebrow">Twin Brain / GTM Change Lab</div><h1>One programme. Many teams. One approved version.</h1><p class="muted">Fictional business-feature launch · Programme manager operating console</p><div style="margin-top: 6px;"><a href="Twin-Brain.html" style="display:inline-flex; align-items:center; gap:6px; background:#0f172a; color:#38bdf8; padding:6px 14px; border-radius:20px; font-weight:700; font-size:12px; text-decoration:none;">⚡ Open Twin Brain AI Intelligence Interface ➔</a></div></div><div><span class="badge">Offline simulation</span><br><small>No APIs · No real customer data · No model calls</small></div></div>
+<div class="notice scope"><strong>Scenario, not an OpenAI product announcement.</strong> “Connect your own on-premises data directly on ChatGPT” is a hypothetical feature. Markets, account records, content, staffing and approvals are invented for this exercise. Security, connectivity, data residency and availability are <strong>not verified capabilities</strong>.</div>
+<nav aria-label="Programme sections"><button data-tab="programme" class="active">1 · Programme</button><button data-tab="work">2 · Team work</button><button data-tab="simulate">3 · Simulate change</button><button data-tab="readiness">4 · Readiness</button><button data-tab="history">5 · History & export</button></nav></header>
+<main class="shell" id="app"><section class="notice"><strong>Preview mode:</strong> the full programme and team work are readable below. For the change simulator, download this HTML file and open it in Chrome or Safari. Interactive controls require JavaScript; state resets on reload unless exported.</section><div class="bar"><div><div class="eyebrow">Approved planning scope · v1</div><h2>From an all-business brief to a controlled rollout</h2></div><button class="primary" data-go="simulate">Simulate audience change</button></div><div class="stats"><div class="stat"><strong>96</strong><span>In target population</span></div><div class="stat"><strong>80</strong><span>Contact permission</span></div><div class="stat"><strong>64</strong><span>Permitted outreach arm</span></div><div class="stat"><strong>76</strong><span>Technical-ready flag</span></div></div><div class="two"><section class="panel"><h3>The programme charter</h3><p><strong>PM objective:</strong> help eligible business accounts evaluate and adopt a hypothetical new feature safely, with a measurable and supportable path to first value.</p><p><strong>Initial mandate:</strong> consider all existing paying business accounts using ChatGPT. Do not conflate broad targeting with product entitlement, lawful contact, technical readiness or market availability.</p><p><strong>Feature placeholder:</strong> connect your own on-premises data directly on ChatGPT.</p><p><strong>Proposed success event:</strong> an authorized connection plus a meaningful first use, evaluated within 14 days of assignment. Both definition and window need product/analytics approval.</p><div class="notice"><strong>Not a feature specification.</strong> Product/security/legal must define what can actually be promised and supported before any real outreach.</div></section><section class="panel"><h3>Current audience contract</h3><p class="mono">All existing paying business accounts. No churn-like exclusion. Markets: US, UK, DE, FR.</p><p>For this SaaS scenario, “low producer” becomes <strong>low adoption</strong>. This is a proposed mapping, not a known OpenAI segment.</p><ul><li>Low adoption: active seats / licensed seats during the last 28 days, below a confirmed threshold.</li><li>Churn-like: no usage for 90+ days despite an active paying contract. This is not actual contractual churn.</li><li>When enabled, churn-like exclusion overrides low-adoption inclusion.</li><li>Unknown values must go to review in a real dataset, not silently enter the audience.</li></ul><p class="muted">Counts are calculated from a fixed synthetic fixture. None is a market estimate.</p></section></div><section class="panel"><h3>Operating sequence & ownership</h3><div class="flow"><span>PM charter</span>→<span>Product constraints</span>→<span>Audience + measurement</span>→<span>GTM + enablement</span>→<span>Local market review</span>→<span>Readiness gate</span>→<span>Launch + learn</span></div><p>Analytics, GTM and enablement co-design the operating plan rather than receiving isolated tickets. PM owns integration and change decisions. Each local lead owns adaptation and readiness, with product/security/legal providing independent constraints.</p><div class="row"><button data-go="work">Inspect team deliverables</button><button id="downloadAccounts">Download synthetic accounts CSV</button></div></section><section class="panel"><h3>Proposed market matrix</h3><div class="scroll"><table><thead><tr><th>Market / language</th><th>Local strategy decisions</th><th>Localization work</th><th>Fixture agents</th></tr></thead><tbody><tr><td><strong>United States</strong><br>en-US</td><td>Confirm account/partner coverage, outreach permissions, channel fit, support coverage and local launch timing. No assumed country preference.</td><td>Adapt invitation, terminology, call guide and training; local reviewer approves meaning and product claims. English markets need review too.</td><td>12</td></tr><tr><td><strong>United Kingdom</strong><br>en-GB</td><td>Confirm account/partner coverage, outreach permissions, channel fit, support coverage and local launch timing. No assumed country preference.</td><td>Adapt invitation, terminology, call guide and training; local reviewer approves meaning and product claims. English markets need review too.</td><td>6</td></tr><tr><td><strong>Germany</strong><br>de-DE</td><td>Confirm account/partner coverage, outreach permissions, channel fit, support coverage and local launch timing. No assumed country preference.</td><td>Adapt invitation, terminology, call guide and training; local reviewer approves meaning and product claims. English markets need review too.</td><td>8</td></tr><tr><td><strong>France</strong><br>fr-FR</td><td>Confirm account/partner coverage, outreach permissions, channel fit, support coverage and local launch timing. No assumed country preference.</td><td>Adapt invitation, terminology, call guide and training; local reviewer approves meaning and product claims. English markets need review too.</td><td>8</td></tr></tbody></table></div></section><section class="panel"><h3>A measurement plan, not just a dashboard</h3><p><strong>Hypothesis:</strong> coordinated outreach increases meaningful feature activation versus an eligible holdout, subject to an appropriate and approved experiment.</p><p><strong>Denominators:</strong> assignment-arm population for an intention-to-treat outcome; contact-permitted outreach-arm population for reach; setup starters for setup-completion diagnostics. Do not swap these when the audience changes.</p><p><strong>Fixture allocation:</strong> a stable deterministic holdout flag demonstrates suppression, not randomized evidence or sufficient statistical power. No observed outcomes or lift are fabricated.</p><p><strong>Guardrails:</strong> unauthorized access incidents, connection failures, support load, complaints and opt-outs. Definitions, thresholds and stop authority remain owner decisions.</p></section><div class="bar"><div><div class="eyebrow">Work breakdown</div><h2>What each team must actually deliver</h2></div><span class="badge">Artifacts are linked to the programme contract</span></div><div class="notice"><strong>Workflow fixtures.</strong> The short source texts below intentionally contain some audience-dependent material. They are starter artifacts for the simulation, not production-ready plans or approved product copy.</div><section class="panel" style="margin-top:18px"><h2>Analytics</h2><details><summary><span class="mono">A1</span> · Audience policy & membership <small> / Analytics lead</small></summary><p><strong>Work:</strong> Translate the approved population into reproducible rules; deduplicate accounts, validate source freshness, inspect excluded records and snapshot account membership.</p><p><strong>Acceptance:</strong> PM signs the business rule; analytics tests boundaries, overlap, nulls and exclusions; account list carries programme_version and audience_snapshot_id.</p><p><strong>Depends on:</strong> audience, markets</p><div class="panel"><small>SOURCE FIXTURE · A1 · v1</small><p>All existing paying business accounts. No churn-like exclusion. Markets: US, UK, DE, FR. Eligibility is a targeting rule, not technical readiness or permission to contact.</p></div></details><details><summary><span class="mono">A2</span> · Measurement plan <small> / Measurement lead</small></summary><p><strong>Work:</strong> Define the hypothesis, account-level unit, outcome window, primary outcome, guardrails and treatment/holdout design. Check power and contamination before claiming lift.</p><p><strong>Acceptance:</strong> Named denominator and baseline; stable assignment; approved handling of non-response, segment differences and any in-flight change. Descriptive metrics separated from causal estimates.</p><p><strong>Depends on:</strong> audience, markets</p><div class="panel"><small>SOURCE FIXTURE · A2 · v1</small><p>Population: All existing paying business accounts. No churn-like exclusion. Markets: US, UK, DE, FR. Primary outcome: account completes an authorized connection and meaningful first use within 14 days of assignment (design assumption). Compare outreach vs stable holdout only after feasibility/power approval. Denominator: all eligible accounts assigned to each arm, not only respondents. Proposed fixture cohort: 96 accounts.</p></div></details><details><summary><span class="mono">A3</span> · Event contract <small> / Analytics + engineering</small></summary><p><strong>Work:</strong> Instrument exposure, outreach, setup start, authorized connection success and meaningful first use. Define deduplication, test traffic exclusion, event ownership and failure states.</p><p><strong>Acceptance:</strong> Events carry pseudonymous account ID, programme_version, audience_snapshot_id, assignment_arm, market and timestamp. Do not record customer source content or secrets.</p><p><strong>Depends on:</strong> product/event semantics, not target selection alone</p><div class="panel"><small>SOURCE FIXTURE · A3 · v1</small><p>Events: programme_assigned; outreach_delivered; setup_started; connection_authorized; first_meaningful_use. Required fields: account_id, programme_version, audience_snapshot_id, assignment_arm, market, timestamp, deduplication_key. No customer data payloads. Schema already supports programme versioning.</p></div></details><details><summary><span class="mono">A4</span> · Reporting specification <small> / BI owner</small></summary><p><strong>Work:</strong> Build funnel, segment and market views with explicit denominators, data freshness, coverage and quality flags. Preserve cohort history.</p><p><strong>Acceptance:</strong> Dashboard filters reconcile to audience snapshots. Reach, activation and outcome rates use named denominators. No pooled old/new population disguised as a trend.</p><p><strong>Depends on:</strong> audience, markets</p><div class="panel"><small>SOURCE FIXTURE · A4 · v1</small><p>Scope: All existing paying business accounts. No churn-like exclusion. Markets: US, UK, DE, FR. Report eligible (96), contact-permitted (80), outreach-arm and contact-permitted (64), and technically ready (76) as separate counts. Slice by market and immutable version; never overwrite prior cohort denominators.</p></div></details></section><section class="panel" style="margin-top:18px"><h2>GTM</h2><details><summary><span class="mono">G1</span> · Segmentation & channel plan <small> / GTM lead</small></summary><p><strong>Work:</strong> Distinguish account eligibility from buyer role and channel eligibility. Define administrator vs business sponsor journey, sales vs partner ownership, contact caps and handoffs.</p><p><strong>Acceptance:</strong> Each segment has a named need, route, owner, contact permission and fallback. Market strategy is confirmed locally, not inferred from country stereotypes.</p><p><strong>Depends on:</strong> audience, markets</p><div class="panel"><small>SOURCE FIXTURE · G1 · v1</small><p>Markets: US, UK, DE, FR. Use separate discovery paths for low, established and high-adoption accounts, with a re-engagement path where appropriate. Hybrid motion: permitted email invitation then routed human follow-up; sales or partner ownership must be explicit. Local owner validates channel and staffing.</p></div></details><details><summary><span class="mono">G2</span> · Master messaging & offer <small> / Product marketing</small></summary><p><strong>Work:</strong> Create value proposition, demo invitation, email, discovery questions and approved objections. Separate verified claims from product questions.</p><p><strong>Acceptance:</strong> All claims trace to P2. CTA is a readiness discussion in this fixture, not a claim of production availability. Low-adoption copy does not assume technical readiness.</p><p><strong>Depends on:</strong> audience</p><div class="panel"><small>SOURCE FIXTURE · G2 · v1</small><p>Draft invitation: Explore whether this proposed feature fits your business workflows. Book a readiness discussion with your account team. No claim that setup is instant, data never leaves premises, or the feature is available now.</p></div></details><details><summary><span class="mono">G3</span> · Assignment & suppression <small> / Sales / partner operations</small></summary><p><strong>Work:</strong> Deduplicate across sales and partners; preserve account ownership, consent and holdout suppression. Define routing, escalation and already-contacted exceptions.</p><p><strong>Acceptance:</strong> No excluded or holdout account enters new outreach. Cutover policy for assigned or contacted accounts is explicitly approved. No live outreach in this prototype.</p><p><strong>Depends on:</strong> audience, markets</p><div class="panel"><small>SOURCE FIXTURE · G3 · v1</small><p>New outreach must satisfy (All existing paying business accounts. No churn-like exclusion. Markets: US, UK, DE, FR.) AND contact_permitted AND assignment_arm=outreach. Preserve account owner and contact caps. Existing assignments and completed interactions require a separate cutover decision.</p></div></details></section><section class="panel" style="margin-top:18px"><h2>Enablement</h2><details><summary><span class="mono">E1</span> · Training curriculum <small> / Enablement lead</small></summary><p><strong>Work:</strong> Create role-specific modules for target recognition, value proposition, discovery, demo readiness, objections, escalation and privacy boundaries.</p><p><strong>Acceptance:</strong> Update affected modules rather than retraining everything. Product safety foundations remain intact. Learning goals and knowledge checks map to the new version.</p><p><strong>Depends on:</strong> audience, markets</p><div class="panel"><small>SOURCE FIXTURE · E1 · v1</small><p>Modules: audience qualification (All existing paying business accounts. No churn-like exclusion. Markets: US, UK, DE, FR.); discovery paths across adoption levels; technical handoff; approved claims; support escalation. Modify affected targeting and discovery modules only.</p></div></details><details><summary><span class="mono">E2</span> · Call guide & quality rubric <small> / Field enablement</small></summary><p><strong>Work:</strong> Build discovery and routing script, qualifying questions, prohibited claims, handling of excluded accounts, next steps and QA scoring.</p><p><strong>Acceptance:</strong> Script and rubric match the approved audience. Agent never asks for passwords or customer data in a call; technical setup follows an approved product workflow.</p><p><strong>Depends on:</strong> audience</p><div class="panel"><small>SOURCE FIXTURE · E2 · v1</small><p>Opening: Where does your team currently use ChatGPT, and what is missing? Validate account eligibility and identify administrator. Offer approved readiness assessment, not guaranteed connection. Escalate security and architecture questions.</p></div></details><details><summary><span class="mono">E3</span> · Agent readiness roster <small> / Operations manager</small></summary><p><strong>Work:</strong> Assign agents to markets, publish versioned material, deliver update training, assess competency and record completion before changed outreach.</p><p><strong>Acceptance:</strong> Document publication is not training completion. Each assigned agent must acknowledge the version and pass the required assessment; staffing and coaching gaps remain visible.</p><p><strong>Depends on:</strong> audience, markets</p><div class="panel"><small>SOURCE FIXTURE · E3 · v1</small><p>Market roster: US, UK, DE, FR. Each human agent needs material-version acknowledgment and required assessment recorded before new-version outreach. Published slides alone do not establish readiness.</p></div></details></section><section class="panel" style="margin-top:18px"><h2>Programme</h2><details><summary><span class="mono">P1</span> · Launch & cutover gate <small> / Programme manager</small></summary><p><strong>Work:</strong> Own objective, scope, milestones, accountable leads, change decisions, market gates, exceptions and rollback. Decide whether to accept, defer or narrow a change.</p><p><strong>Acceptance:</strong> Global approvals plus market QA and agent readiness must pass. Product/legal/security approval is an independent prerequisite, never inferred from an audience change.</p><p><strong>Depends on:</strong> audience, markets</p><div class="panel"><small>SOURCE FIXTURE · P1 · v1</small><p>Release scope: All existing paying business accounts. No churn-like exclusion. Markets: US, UK, DE, FR. Need analytics, GTM and enablement review; local content QA; agent readiness; assignment/suppression cutover. Product/security/legal prerequisite remains independent.</p></div></details><details><summary><span class="mono">P2</span> · Product claims & safety contract <small> / Product + security + legal</small></summary><p><strong>Work:</strong> Confirm actual architecture, supported environments, entitlements, data handling, access controls, reliability, market availability, support and approved claims before launch.</p><p><strong>Acceptance:</strong> Currently a fictional precondition, not verified. An unchanged targeting rule must not rewrite security claims. Real deployment is blocked until these facts are independently confirmed.</p><p><strong>Depends on:</strong> product/event semantics, not target selection alone</p><div class="panel"><small>SOURCE FIXTURE · P2 · v1</small><p>UNVERIFIED FICTIONAL FEATURE: architecture, supported on-premises systems, network path, entitlement, security, data handling, residency, reliability and market availability require product/security/legal confirmation. No deployment or external promises allowed from this simulation.</p></div></details></section><section class="panel"><h2>Localization is a branch of the operating plan</h2><p>Each <code>L-market</code> pack references the master programme version, source-copy version, locale, local strategy, reviewer and training version. A master scope change makes those links stale until the local owner reviews them.</p><div class="steps"><div class="step"><div><strong>Adapt the strategy first</strong><p>Check local account eligibility, partner coverage, channels, operational hours, permitted claims and support. A translation cannot solve a missing local delivery team.</p></div></div><div class="step"><div><strong>Localize controlled source material</strong><p>Keep technical names, placeholders and qualifying conditions consistent. Review translated audience exclusions and disclaimers. A German or French phrase below is illustrative draft copy, not certified translation.</p></div></div><div class="step"><div><strong>Train and test</strong><p>Use the local call guide in a role play. Assess routing, exclusions and escalation, not just whether agents opened the slides.</p></div></div><div class="step"><div><strong>Release market by market</strong><p>Readiness belongs to a specific market and version. Excluding a market requires suppression and retirement, not deleting its prior reporting.</p></div></div></div></section></main>
+<footer class="shell">Design assumptions, not customer evidence. Rule-based dependency simulation; drafts and sign-offs are demonstrations only. State lives in this browser session until reset or page reload. Export a JSON snapshot to retain a session.</footer>
+<script id="engine">
+'use strict';
+const MARKETS=[{id:'US',name:'United States',locale:'en-US',agents:12},{id:'UK',name:'United Kingdom',locale:'en-GB',agents:6},{id:'DE',name:'Germany',locale:'de-DE',agents:8},{id:'FR',name:'France',locale:'fr-FR',agents:8}];
+const ACCOUNTS=MARKETS.flatMap((m,mi)=>Array.from({length:24},(_,j)=>{const seats=50+j*10;return{id:`SYN-${m.id}-${String(j+1).padStart(3,'0')}`,market:m.id,licensed_seats:seats,seats_active_28d:Math.floor(seats*[0,.1,.4,.8][j%4]),days_since_activity:j%4===0?100:4+j%7,technical_ready:j%5!==0,contact_permitted:j%6!==0,assigned_arm:j%5===4?'holdout':'outreach',previously_contacted:j%7===0,contract:'active-paying'};}));
+const BASE={audience:'all',threshold:20,excludeChurn:false,markets:['US','UK','DE','FR']};
+const clone=x=>JSON.parse(JSON.stringify(x));
+const same=(a,b)=>JSON.stringify({...a,markets:[...a.markets].sort()})===JSON.stringify({...b,markets:[...b.markets].sort()});
+function policyText(c){return`${c.audience==='all'?'All existing paying business accounts':`Low adoption only: active seats / licensed seats over 28 days < ${c.threshold}%`}. ${c.excludeChurn?'Exclude accounts with no activity for 90+ days; this exclusion takes precedence.':'No churn-like exclusion.'} Markets: ${c.markets.join(', ')}.`;}
+function population(c){return ACCOUNTS.filter(a=>c.markets.includes(a.market)&&(c.audience==='all'||a.seats_active_28d/a.licensed_seats<c.threshold/100)&&(!c.excludeChurn||a.days_since_activity<90));}
+function counts(c){const p=population(c);return{eligible:p.length,contactable:p.filter(a=>a.contact_permitted).length,ready:p.filter(a=>a.technical_ready).length,outreach:p.filter(a=>a.contact_permitted&&a.assigned_arm==='outreach').length,holdout:p.filter(a=>a.assigned_arm==='holdout').length,trialReady:p.filter(a=>a.contact_permitted&&a.assigned_arm==='outreach'&&a.technical_ready).length};}
+const ARTIFACTS=[
+{id:'A1',team:'Analytics',title:'Audience policy & membership',owner:'Analytics lead',deps:['audience','markets'],task:'Translate the approved population into reproducible rules; deduplicate accounts, validate source freshness, inspect excluded records and snapshot account membership.',accept:'PM signs the business rule; analytics tests boundaries, overlap, nulls and exclusions; account list carries programme_version and audience_snapshot_id.'},
+{id:'A2',team:'Analytics',title:'Measurement plan',owner:'Measurement lead',deps:['audience','markets'],task:'Define the hypothesis, account-level unit, outcome window, primary outcome, guardrails and treatment/holdout design. Check power and contamination before claiming lift.',accept:'Named denominator and baseline; stable assignment; approved handling of non-response, segment differences and any in-flight change. Descriptive metrics separated from causal estimates.'},
+{id:'A3',team:'Analytics',title:'Event contract',owner:'Analytics + engineering',deps:[],task:'Instrument exposure, outreach, setup start, authorized connection success and meaningful first use. Define deduplication, test traffic exclusion, event ownership and failure states.',accept:'Events carry pseudonymous account ID, programme_version, audience_snapshot_id, assignment_arm, market and timestamp. Do not record customer source content or secrets.'},
+{id:'A4',team:'Analytics',title:'Reporting specification',owner:'BI owner',deps:['audience','markets'],task:'Build funnel, segment and market views with explicit denominators, data freshness, coverage and quality flags. Preserve cohort history.',accept:'Dashboard filters reconcile to audience snapshots. Reach, activation and outcome rates use named denominators. No pooled old/new population disguised as a trend.'},
+{id:'G1',team:'GTM',title:'Segmentation & channel plan',owner:'GTM lead',deps:['audience','markets'],task:'Distinguish account eligibility from buyer role and channel eligibility. Define administrator vs business sponsor journey, sales vs partner ownership, contact caps and handoffs.',accept:'Each segment has a named need, route, owner, contact permission and fallback. Market strategy is confirmed locally, not inferred from country stereotypes.'},
+{id:'G2',team:'GTM',title:'Master messaging & offer',owner:'Product marketing',deps:['audience'],task:'Create value proposition, demo invitation, email, discovery questions and approved objections. Separate verified claims from product questions.',accept:'All claims trace to P2. CTA is a readiness discussion in this fixture, not a claim of production availability. Low-adoption copy does not assume technical readiness.'},
+{id:'G3',team:'GTM',title:'Assignment & suppression',owner:'Sales / partner operations',deps:['audience','markets'],task:'Deduplicate across sales and partners; preserve account ownership, consent and holdout suppression. Define routing, escalation and already-contacted exceptions.',accept:'No excluded or holdout account enters new outreach. Cutover policy for assigned or contacted accounts is explicitly approved. No live outreach in this prototype.'},
+{id:'E1',team:'Enablement',title:'Training curriculum',owner:'Enablement lead',deps:['audience','markets'],task:'Create role-specific modules for target recognition, value proposition, discovery, demo readiness, objections, escalation and privacy boundaries.',accept:'Update affected modules rather than retraining everything. Product safety foundations remain intact. Learning goals and knowledge checks map to the new version.'},
+{id:'E2',team:'Enablement',title:'Call guide & quality rubric',owner:'Field enablement',deps:['audience'],task:'Build discovery and routing script, qualifying questions, prohibited claims, handling of excluded accounts, next steps and QA scoring.',accept:'Script and rubric match the approved audience. Agent never asks for passwords or customer data in a call; technical setup follows an approved product workflow.'},
+{id:'E3',team:'Enablement',title:'Agent readiness roster',owner:'Operations manager',deps:['audience','markets'],task:'Assign agents to markets, publish versioned material, deliver update training, assess competency and record completion before changed outreach.',accept:'Document publication is not training completion. Each assigned agent must acknowledge the version and pass the required assessment; staffing and coaching gaps remain visible.'},
+{id:'P1',team:'Programme',title:'Launch & cutover gate',owner:'Programme manager',deps:['audience','markets'],task:'Own objective, scope, milestones, accountable leads, change decisions, market gates, exceptions and rollback. Decide whether to accept, defer or narrow a change.',accept:'Global approvals plus market QA and agent readiness must pass. Product/legal/security approval is an independent prerequisite, never inferred from an audience change.'},
+{id:'P2',team:'Programme',title:'Product claims & safety contract',owner:'Product + security + legal',deps:[],task:'Confirm actual architecture, supported environments, entitlements, data handling, access controls, reliability, market availability, support and approved claims before launch.',accept:'Currently a fictional precondition, not verified. An unchanged targeting rule must not rewrite security claims. Real deployment is blocked until these facts are independently confirmed.'}
+];
+function content(id,c){const names=c.markets.join(', '),n=counts(c);const scope=policyText(c);const low=c.audience==='low';const texts={
+A1:scope+' Eligibility is a targeting rule, not technical readiness or permission to contact.',
+A2:`Population: ${scope} Primary outcome: account completes an authorized connection and meaningful first use within 14 days of assignment (design assumption). Compare outreach vs stable holdout only after feasibility/power approval. Denominator: all eligible accounts assigned to each arm, not only respondents. Proposed fixture cohort: ${n.eligible} accounts.`,
+A3:'Events: programme_assigned; outreach_delivered; setup_started; connection_authorized; first_meaningful_use. Required fields: account_id, programme_version, audience_snapshot_id, assignment_arm, market, timestamp, deduplication_key. No customer data payloads. Schema already supports programme versioning.',
+A4:`Scope: ${scope} Report eligible (${n.eligible}), contact-permitted (${n.contactable}), outreach-arm and contact-permitted (${n.outreach}), and technically ready (${n.ready}) as separate counts. Slice by market and immutable version; never overwrite prior cohort denominators.`,
+G1:`Markets: ${names}. ${low?'Prioritize low-adoption administrators and an adoption-readiness conversation.':'Use separate discovery paths for low, established and high-adoption accounts, with a re-engagement path where appropriate.'} Hybrid motion: permitted email invitation then routed human follow-up; sales or partner ownership must be explicit. Local owner validates channel and staffing.`,
+G2:`Draft invitation: ${low?'Explore whether this proposed feature could support a first useful team workflow.':'Explore whether this proposed feature fits your business workflows.'} Book a readiness discussion with your account team. No claim that setup is instant, data never leaves premises, or the feature is available now.`,
+G3:`New outreach must satisfy (${scope}) AND contact_permitted AND assignment_arm=outreach. Preserve account owner and contact caps. Existing assignments and completed interactions require a separate cutover decision.`,
+E1:`Modules: audience qualification (${scope}); ${low?'first-use discovery for low-adoption teams':'discovery paths across adoption levels'}; technical handoff; approved claims; support escalation. Modify affected targeting and discovery modules only.`,
+E2:`Opening: ${low?'What has prevented your team from getting to a useful first workflow?':'Where does your team currently use ChatGPT, and what is missing?'} Validate account eligibility and identify administrator. Offer approved readiness assessment, not guaranteed connection. Escalate security and architecture questions.`,
+E3:`Market roster: ${names}. Each human agent needs material-version acknowledgment and required assessment recorded before new-version outreach. Published slides alone do not establish readiness.`,
+P1:`Release scope: ${scope} Need analytics, GTM and enablement review; local content QA; agent readiness; assignment/suppression cutover. Product/security/legal prerequisite remains independent.`,
+P2:'UNVERIFIED FICTIONAL FEATURE: architecture, supported on-premises systems, network path, entitlement, security, data handling, residency, reliability and market availability require product/security/legal confirmation. No deployment or external promises allowed from this simulation.'};return texts[id];}
+function makeImpact(old,c,phase){const audience=old.audience!==c.audience||old.threshold!==c.threshold||old.excludeChurn!==c.excludeChurn;const markets=old.markets.join('|')!==c.markets.join('|');const before=population(old),after=population(c),nextIds=new Set(after.map(a=>a.id));const removed=before.filter(a=>!nextIds.has(a.id));const prevIds=new Set(before.map(a=>a.id));const added=after.filter(a=>!prevIds.has(a.id));const changed=!same(old,c);const items=ARTIFACTS.map(a=>{const impacted=changed&&((audience&&a.deps.includes('audience'))||(markets&&a.deps.includes('markets')));const must=impacted&&['A1','A4','G3','E3','P1'].includes(a.id);return{...a,status:impacted?(must?'must':'review'):'no',before:content(a.id,old),after:content(a.id,c),reason:!impacted?(a.id==='A3'?'Audience-only change does not change event semantics; existing version fields support it. Validate instrumentation in integration, not a schema rewrite.':a.id==='P2'?'Audience change supplies no evidence for new product/security claims. Keep this independent prerequisite unchanged.':'No linked field changed in this fixture.'):a.id==='A2'?'Changing eligibility changes the estimand, cohort mix and feasible sample. Re-evaluate power and interpretation; do not mechanically rewrite the experiment.':a.id==='E3'?'A changed pack invalidates prior readiness for affected work. Publishing it does not train the agents.':a.id==='G3'?'New assignments must follow the new audience and preserve consent, ownership and holdout suppression.':a.id==='G2'?'Check whether the promise and CTA still fit the new audience; revise only where justified.':`This artifact explicitly depends on ${[audience&&a.deps.includes('audience')?'audience policy':'',markets&&a.deps.includes('markets')?'market coverage':''].filter(Boolean).join(' and ')}.`};});const localeIds=[...new Set([...old.markets,...c.markets])];const locales=localeIds.map(id=>{const removedMarket=!c.markets.includes(id);const addedMarket=!old.markets.includes(id);return{...MARKETS.find(m=>m.id===id),status:!changed?'no':removedMarket?'retire':addedMarket?'new':'review',reason:!changed?'Existing localized pack unchanged.':removedMarket?'Retire active outreach assets; suppress new assignments; preserve historical reporting and existing customer commitments.':'New master scope invalidates local audience references, message fit, script and training readiness. Review local strategy before language QA.'};});return{changed,items,locales,removed,added,previouslyContactedRemoved:removed.filter(a=>a.previously_contacted),phase};}
+function budget(c,impact,rate,hours){if(!impact.changed)return{central:0,local:0,training:0,total:0,cost:0,agents:0};const active=MARKETS.filter(m=>c.markets.includes(m.id));const central=10;const local=active.length*2;const agents=active.reduce((s,m)=>s+m.agents,0);const training=agents*hours;const total=central+local+training;return{central,local,training,total,cost:total*rate,agents};}
+function readiness(p){if(!p)return{ready:false,missing:['Simulate and accept a proposed change first.']};const missing=[];if(!p.config||population(p.config).length===0)missing.push('Target population is empty; revise or cancel rather than release.');if(!p.accepted)missing.push('PM has not accepted this proposed version.');for(const [k,v]of Object.entries(p.reviews))if(!v)missing.push(k+' review not recorded.');for(const m of p.impact.locales){const s=p.marketChecks[m.id];if(m.status==='retire'){if(!s.retired)missing.push(m.id+': suppression / retirement not confirmed.');}else if(m.status!=='no'){if(!s.local)missing.push(m.id+': local strategy and language QA not confirmed.');if(!s.trained)missing.push(m.id+': agent assessment completion not confirmed.');}}if(p.phase==='inflight'&&!p.cutover)missing.push('Existing assignments, cohort treatment and cutover require approval.');if(!p.prerequisite)missing.push('Product/security/legal prerequisite not marked as simulated confirmation.');return{ready:missing.length===0,missing};}
+window.GTM={MARKETS,ACCOUNTS,BASE,ARTIFACTS,policyText,population,counts,content,makeImpact,budget,readiness,same};
+
+// --- TWIN BRAIN INTELLIGENCE MODULE ---
+// Twin Brain — Organisational Change Intelligence
+// Core Semantic Engine, Unified Context, and Explainability Causal Graph
+'use strict';
+
+(function(global) {
+  const g = global.GTM;
+  if (!g) {
+    console.error('Twin Brain core requires window.GTM');
+    return;
+  }
+
+  // --- 1. UNIFIED PROJECT CONTEXT (Prompt Section 7) ---
+  const OWNERS = [
+    { id: 'analytics-lead', name: 'Analytics Lead', team: 'Analytics', role: 'Audience definition & identity rules' },
+    { id: 'measurement-lead', name: 'Measurement Lead', team: 'Analytics', role: 'Experimentation & causal lift' },
+    { id: 'bi-owner', name: 'BI Owner', team: 'Analytics', role: 'Reporting specifications & dashboards' },
+    { id: 'gtm-lead', name: 'GTM Lead', team: 'GTM', role: 'Segmentation, channels & capacity' },
+    { id: 'product-marketing', name: 'Product Marketing', team: 'GTM', role: 'Master messaging, positioning & CTA' },
+    { id: 'sales-partner-ops', name: 'Sales / Partner Operations', team: 'GTM', role: 'Account assignment, routing & suppression' },
+    { id: 'enablement-lead', name: 'Enablement Lead', team: 'Enablement', role: 'Training curriculum & methodology' },
+    { id: 'field-enablement', name: 'Field Enablement', team: 'Enablement', role: 'Call guide, objections & QA rubric' },
+    { id: 'operations-manager', name: 'Operations Manager', team: 'Enablement', role: 'Agent readiness roster & certifications' },
+    { id: 'programme-manager', name: 'Programme Manager', team: 'Programme', role: 'Launch gates, scope decisions & cutover' },
+    { id: 'product-security-legal', name: 'Product + Security + Legal', team: 'Programme', role: 'Technical claims, architecture & safety boundaries' },
+    { id: 'local-lead-us', name: 'US Market Lead', team: 'Localization', role: 'US local strategy & motion QA' },
+    { id: 'local-lead-uk', name: 'UK Market Lead', team: 'Localization', role: 'UK local strategy & motion QA' },
+    { id: 'local-lead-de', name: 'Germany Market Lead', team: 'Localization', role: 'DE language QA & local delivery' },
+    { id: 'local-lead-fr', name: 'France Market Lead', team: 'Localization', role: 'FR language QA & local delivery' }
+  ];
+
+  const DEPENDENCIES = [
+    // Upstream Business Change links
+    { from: 'CHANGE_PROPOSAL', to: 'AUDIENCE_FILTER', relationship: 'defines', strength: 'hard', source: 'declared' },
+    { from: 'CHANGE_PROPOSAL', to: 'MARKET_SCOPE', relationship: 'defines', strength: 'hard', source: 'declared' },
+    { from: 'CHANGE_PROPOSAL', to: 'INACTIVITY_RULE', relationship: 'defines', strength: 'hard', source: 'declared' },
+
+    // Audience & Inactivity dependencies
+    { from: 'AUDIENCE_FILTER', to: 'A1', relationship: 'governs audience policy', strength: 'hard', source: 'declared' },
+    { from: 'INACTIVITY_RULE', to: 'A1', relationship: 'governs inactivity filter', strength: 'hard', source: 'declared' },
+    { from: 'A1', to: 'A4', relationship: 'supplies cohort denominator', strength: 'hard', source: 'declared' },
+    { from: 'A1', to: 'A2', relationship: 'supplies population & estimand', strength: 'hard', source: 'declared' },
+    { from: 'A1', to: 'G1', relationship: 'defines target accounts', strength: 'hard', source: 'declared' },
+    { from: 'A1', to: 'G3', relationship: 'supplies account manifests', strength: 'hard', source: 'declared' },
+    { from: 'A1', to: 'E1', relationship: 'defines customer profile to train', strength: 'soft', source: 'declared' },
+
+    // GTM & Enablement flow
+    { from: 'G1', to: 'G2', relationship: 'defines segment value propositions', strength: 'hard', source: 'declared' },
+    { from: 'G2', to: 'E2', relationship: 'informs call guide scripts', strength: 'hard', source: 'declared' },
+    { from: 'E1', to: 'E3', relationship: 'curriculum needed for roster certification', strength: 'hard', source: 'declared' },
+    { from: 'E2', to: 'E3', relationship: 'rubric required for agent assessment', strength: 'hard', source: 'declared' },
+
+    // Market & Localization flow
+    { from: 'MARKET_SCOPE', to: 'L-US', relationship: 'authorizes US rollout', strength: 'hard', source: 'declared' },
+    { from: 'MARKET_SCOPE', to: 'L-UK', relationship: 'authorizes UK rollout', strength: 'hard', source: 'declared' },
+    { from: 'MARKET_SCOPE', to: 'L-DE', relationship: 'authorizes Germany rollout', strength: 'hard', source: 'declared' },
+    { from: 'MARKET_SCOPE', to: 'L-FR', relationship: 'authorizes France rollout', strength: 'hard', source: 'declared' },
+    { from: 'L-US', to: 'E3', relationship: 'supplies US agent readiness', strength: 'hard', source: 'declared' },
+    { from: 'L-UK', to: 'E3', relationship: 'supplies UK agent readiness', strength: 'hard', source: 'declared' },
+    { from: 'L-DE', to: 'E3', relationship: 'supplies Germany agent readiness', strength: 'hard', source: 'declared' },
+    { from: 'L-FR', to: 'E3', relationship: 'supplies France agent readiness', strength: 'hard', source: 'declared' },
+
+    // Launch readiness gate dependencies
+    { from: 'A1', to: 'P1', relationship: 'requires signed policy', strength: 'hard', source: 'declared' },
+    { from: 'A2', to: 'P1', relationship: 'requires measurement sign-off', strength: 'hard', source: 'declared' },
+    { from: 'G3', to: 'P1', relationship: 'requires suppression manifest', strength: 'hard', source: 'declared' },
+    { from: 'E3', to: 'P1', relationship: 'requires certified agents', strength: 'hard', source: 'declared' },
+    { from: 'L-US', to: 'P1', relationship: 'requires local US sign-off', strength: 'hard', source: 'declared' },
+    { from: 'L-UK', to: 'P1', relationship: 'requires local UK sign-off', strength: 'hard', source: 'declared' },
+    { from: 'L-DE', to: 'P1', relationship: 'requires local Germany sign-off', strength: 'hard', source: 'declared' },
+    { from: 'L-FR', to: 'P1', relationship: 'requires local France sign-off or suppression', strength: 'hard', source: 'declared' },
+
+    // Independent prerequisite
+    { from: 'P2', to: 'P1', relationship: 'independent prerequisite check', strength: 'hard', source: 'declared' }
+  ];
+
+  function getProgramContext(config, version) {
+    const activeConfig = config || g.BASE;
+    const currentVer = version || 1;
+
+    const baseArtifacts = g.ARTIFACTS.map(a => ({
+      id: a.id,
+      name: a.title,
+      team: a.team,
+      owner: a.owner,
+      version: `v${currentVer}`,
+      content: g.content(a.id, activeConfig),
+      dependencies: a.deps,
+      approvalStatus: currentVer > 1 ? 'PENDING_REVIEW' : 'BASELINE_APPROVED',
+      source: {
+        type: 'fixture',
+        id: `SRC-${a.id}-v${currentVer}`,
+        url: `gtm://artifacts/${a.id}/v${currentVer}`
+      }
+    }));
+
+    // Add local packs
+    const localPacks = g.MARKETS.map(m => ({
+      id: `L-${m.id}`,
+      name: `${m.name} Local Enablement Pack`,
+      team: 'Localization',
+      owner: `${m.id} Market Lead`,
+      version: `v${currentVer}`,
+      content: `Locale: ${m.locale}. Agents: ${m.agents}. Strategy: Source-linked to v${currentVer}.`,
+      dependencies: ['audience', 'markets'],
+      approvalStatus: activeConfig.markets.includes(m.id) ? 'PENDING_QA' : 'RETIRED',
+      source: {
+        type: 'fixture',
+        id: `SRC-LOCALE-${m.id}-v${currentVer}`,
+        url: `gtm://locales/${m.id}/v${currentVer}`
+      }
+    }));
+
+    return {
+      program: {
+        id: 'PROG-CONNECT-DATA',
+        name: 'Connect on-premises data directly on ChatGPT',
+        version: currentVer,
+        objective: 'Help eligible business accounts evaluate and adopt on-premises data connectivity safely, with a measurable and supportable path to first value.',
+        currentAudience: activeConfig
+      },
+      artifacts: [...baseArtifacts, ...localPacks],
+      markets: g.MARKETS,
+      owners: OWNERS,
+      dependencies: DEPENDENCIES,
+      approvals: [
+        { id: 'app-analytics', name: 'Analytics Workstream Review', required: true, status: 'pending' },
+        { id: 'app-gtm', name: 'GTM Workstream Review', required: true, status: 'pending' },
+        { id: 'app-enablement', name: 'Enablement Workstream Review', required: true, status: 'pending' },
+        { id: 'app-pm', name: 'PM Acceptance Gate', required: true, status: 'pending' }
+      ],
+      readiness: [
+        { id: 'gate-pm', name: 'PM Scope Decision', status: 'pending' },
+        { id: 'gate-central', name: 'Central Workstream Reviews', status: 'pending' },
+        { id: 'gate-local', name: 'Local Strategy & Language QA', status: 'pending' },
+        { id: 'gate-training', name: 'Agent Assessment Completion', status: 'pending' },
+        { id: 'gate-suppress', name: 'Market Retirement & Suppression', status: 'pending' },
+        { id: 'gate-prereq', name: 'Independent Product / Security Prerequisite', status: 'pending' }
+      ],
+      versions: [
+        { version: 1, type: 'Seeded baseline', config: g.BASE }
+      ]
+    };
+  }
+
+  // --- 2. GEMINI INTERPRETATION STAGE (Prompt Sections 4 & 5) ---
+  function interpretChange(promptText) {
+    if (!promptText || typeof promptText !== 'string') {
+      return {
+        change_summary: 'Empty change request',
+        changes: [],
+        ambiguities: [],
+        requires_confirmation: false
+      };
+    }
+
+    const text = promptText.trim();
+    const lower = text.toLowerCase();
+    const changes = [];
+    const ambiguities = [];
+
+    // Ambiguity Check 1: "Low producers"
+    if (lower.includes('low producer') || lower.includes('low-producer')) {
+      ambiguities.push({
+        term: 'Low producers',
+        issue: '“Low producers” is not defined in the current programme charter.',
+        potential_definition: 'active seats / licensed seats < 20% during the previous 30 days (Low adoption)',
+        resolution: 'Map to low-adoption audience filter (< 20% threshold)',
+        resolvedConfig: { audience: 'low', threshold: 20 }
+      });
+    }
+
+    // Ambiguity Check 2: "Inactive users" without days
+    if ((lower.includes('inactive') || lower.includes('inactivity')) && 
+        !lower.includes('90') && !lower.includes('days') && !lower.includes('month') && !lower.includes('exclude')) {
+      ambiguities.push({
+        term: 'Inactive users',
+        issue: '“Inactive users” does not specify an inactivity day threshold.',
+        potential_definition: 'Exclude accounts with no activity for 90+ days (Churn-like behavioral proxy)',
+        resolution: 'Exclude accounts with days_since_activity >= 90',
+        resolvedConfig: { excludeChurn: true }
+      });
+    }
+
+    // 1. Audience Filter
+    const isLowAdoption = lower.includes('low-adoption') || 
+                          lower.includes('low adoption') || 
+                          lower.includes('narrowing the initial launch') || 
+                          lower.includes('narrow to low') ||
+                          lower.includes('low producer');
+    
+    const isAllAudience = lower.includes('all customers') || 
+                          lower.includes('all paying') || 
+                          lower.includes('all business accounts') || 
+                          lower.includes('expand to all') ||
+                          lower.includes('broad audience');
+
+    if (isLowAdoption) {
+      // Check for explicit threshold like "30%", "40%"
+      let threshold = 20;
+      const threshMatch = lower.match(/(\d{1,2})\s*%/);
+      if (threshMatch) {
+        threshold = parseInt(threshMatch[1], 10);
+      }
+      changes.push({
+        type: 'audience_filter',
+        field: 'adoption',
+        operation: 'low_adoption_only',
+        value: true,
+        threshold: threshold,
+        confidence: 0.97
+      });
+    } else if (isAllAudience) {
+      changes.push({
+        type: 'audience_filter',
+        field: 'adoption',
+        operation: 'all_paying_accounts',
+        value: true,
+        confidence: 0.98
+      });
+    }
+
+    // 2. Inactivity Exclusion
+    const hasInactive = lower.includes('inactive') || 
+                        lower.includes('inactivity') || 
+                        lower.includes('churn') || 
+                        lower.includes('no usage');
+    
+    if (hasInactive) {
+      let days = 90;
+      const daysMatch = lower.match(/(\d+)\s*(days|day)/);
+      if (daysMatch) {
+        days = parseInt(daysMatch[1], 10);
+      }
+      changes.push({
+        type: 'audience_filter',
+        field: 'inactive_days',
+        operation: 'exclude_greater_than_or_equal',
+        value: days,
+        confidence: 0.94
+      });
+    }
+
+    // 3. Market Scope Changes
+    // France removal
+    if (lower.includes('remove france') || 
+        lower.includes('drop france') || 
+        lower.includes('exclude france') || 
+        lower.includes('without france') ||
+        lower.includes('no france')) {
+      changes.push({
+        type: 'market_scope',
+        operation: 'remove',
+        value: 'FR',
+        confidence: 0.99
+      });
+    }
+
+    // Germany removal
+    if (lower.includes('remove germany') || 
+        lower.includes('drop germany') || 
+        lower.includes('exclude germany') || 
+        lower.includes('without germany')) {
+      changes.push({
+        type: 'market_scope',
+        operation: 'remove',
+        value: 'DE',
+        confidence: 0.99
+      });
+    }
+
+    // UK removal
+    if (lower.includes('remove uk') || lower.includes('drop uk') || lower.includes('exclude uk')) {
+      changes.push({
+        type: 'market_scope',
+        operation: 'remove',
+        value: 'UK',
+        confidence: 0.99
+      });
+    }
+
+    // US removal
+    if (lower.includes('remove us') || lower.includes('drop us') || lower.includes('exclude us')) {
+      changes.push({
+        type: 'market_scope',
+        operation: 'remove',
+        value: 'US',
+        confidence: 0.99
+      });
+    }
+
+    // Phase: In-flight vs Pre-launch
+    let phase = 'prelaunch';
+    if (lower.includes('in flight') || lower.includes('in-flight') || lower.includes('already launched') || lower.includes('already contacted')) {
+      phase = 'inflight';
+    }
+
+    // Summary synthesis
+    let summaryParts = [];
+    if (isLowAdoption) summaryParts.push('Narrow audience to low-adoption accounts');
+    if (hasInactive) summaryParts.push('Exclude inactive accounts (90+ days)');
+    const removedMarkets = changes.filter(c => c.type === 'market_scope' && c.operation === 'remove').map(c => c.value);
+    if (removedMarkets.length > 0) summaryParts.push(`Remove ${removedMarkets.join(', ')} from launch scope`);
+    if (isAllAudience) summaryParts.push('Expand audience to all paying accounts');
+
+    const change_summary = summaryParts.length > 0 
+      ? summaryParts.join(', ')
+      : 'Review proposed programme scope parameters';
+
+    return {
+      change_summary,
+      changes,
+      ambiguities,
+      requires_confirmation: true,
+      phase
+    };
+  }
+
+  function mapToConfig(parsed, currentConfig) {
+    const base = currentConfig ? JSON.parse(JSON.stringify(currentConfig)) : JSON.parse(JSON.stringify(g.BASE));
+    let next = { ...base };
+
+    // Apply audience changes
+    const adoptionChange = parsed.changes.find(c => c.type === 'audience_filter' && c.field === 'adoption');
+    if (adoptionChange) {
+      if (adoptionChange.operation === 'low_adoption_only') {
+        next.audience = 'low';
+        next.threshold = adoptionChange.threshold || 20;
+      } else if (adoptionChange.operation === 'all_paying_accounts') {
+        next.audience = 'all';
+      }
+    }
+
+    // Apply inactivity exclusion
+    const inactivityChange = parsed.changes.find(c => c.type === 'audience_filter' && c.field === 'inactive_days');
+    if (inactivityChange) {
+      next.excludeChurn = true;
+    }
+
+    // Apply market changes
+    const marketRemovals = parsed.changes.filter(c => c.type === 'market_scope' && c.operation === 'remove');
+    if (marketRemovals.length > 0) {
+      const toRemove = new Set(marketRemovals.map(c => c.value));
+      next.markets = next.markets.filter(m => !toRemove.has(m));
+    }
+
+    // Handle ambiguities auto-applied if user confirmed
+    if (parsed.ambiguities && parsed.ambiguities.length > 0 && parsed.confirmedAmbiguities) {
+      for (const amb of parsed.ambiguities) {
+        if (amb.resolvedConfig) {
+          next = { ...next, ...amb.resolvedConfig };
+        }
+      }
+    }
+
+    return next;
+  }
+
+  // --- 3. IMPACT CATEGORIZATION & REASONING (Prompt Sections 8, 9, 10, 11) ---
+  function analyzeImpact(oldConfig, newConfig, phase = 'prelaunch') {
+    const rawImpact = g.makeImpact(oldConfig, newConfig, phase);
+    const oldPop = g.population(oldConfig);
+    const newPop = g.population(newConfig);
+    const oldCounts = g.counts(oldConfig);
+    const newCounts = g.counts(newConfig);
+
+    const audienceChanged = oldConfig.audience !== newConfig.audience || 
+                            oldConfig.threshold !== newConfig.threshold || 
+                            oldConfig.excludeChurn !== newConfig.excludeChurn;
+    const marketsChanged = oldConfig.markets.join(',') !== newConfig.markets.join(',');
+
+    const items = [];
+
+    // Process central artifacts
+    for (const a of rawImpact.items) {
+      let category = 'UNAFFECTED';
+      let action = 'No change required.';
+      let reason = a.reason;
+
+      if (a.status === 'must') {
+        category = 'MUST_CHANGE';
+      } else if (a.status === 'review') {
+        category = 'OWNER_REVIEW';
+      } else {
+        category = 'UNAFFECTED';
+      }
+
+      // Semantic Action & Reason enrichment
+      if (a.id === 'A1') {
+        category = 'MUST_CHANGE';
+        reason = `Current audience definition includes all retained accounts (${oldCounts.eligible}). The proposed change restricts this to low-adoption accounts (${newCounts.eligible}) and excludes 90+ day inactive accounts.`;
+        action = 'Create audience definition v2 and validate boundary conditions against synthetic accounts.';
+      } else if (a.id === 'A2') {
+        category = 'OWNER_REVIEW';
+        reason = `Existing assumptions were developed against a population of ${oldCounts.eligible} accounts. The proposed cohort contains ${newCounts.eligible} accounts.`;
+        action = 'Analytics owner must review sample size, statistical power, strata, and denominator assumptions. [Restraint: Twin Brain does not claim the experiment is invalid].';
+      } else if (a.id === 'A3') {
+        category = 'UNAFFECTED';
+        reason = 'Audience narrowing does not change event semantics or telemetry contracts. Existing schema already supports programme_version and audience_snapshot_id.';
+        action = 'No change required. Validate event schema in integration, not a rewrite.';
+      } else if (a.id === 'A4') {
+        category = 'MUST_CHANGE';
+        reason = `Dashboards track v1 baseline (${oldCounts.eligible} accounts). Reporting must slice by immutable version and preserve separate denominators for reach and activation.`;
+        action = 'Build v2 funnel dashboard slices; ensure prior cohort denominators are retained and not overwritten.';
+      } else if (a.id === 'G1') {
+        category = 'OWNER_REVIEW';
+        reason = 'Audience narrowing concentrates outreach on low-adoption administrators. Channel capacity, sales vs partner routing, and touchpoint volume require adjustment.';
+        action = 'GTM lead must review buyer role discovery paths and align channel ownership for concentrated cohort.';
+      } else if (a.id === 'G2') {
+        category = 'OWNER_REVIEW';
+        reason = 'Current value proposition was drafted for general enterprise evaluation. Low-adoption accounts require a specific adoption-readiness discovery CTA.';
+        action = 'Review copy fit for low-adoption teams; ensure draft CTA invites readiness discussion without over-promising production availability.';
+      } else if (a.id === 'G3') {
+        category = 'MUST_CHANGE';
+        reason = `Existing campaign manifest references audience v1 containing ${oldCounts.eligible} accounts. Proposed cohort reduces population to ${newCounts.eligible} accounts.`;
+        action = `Generate a v2 audience manifest (${newCounts.eligible} accounts) and suppress excluded accounts from new dispatch.`;
+      } else if (a.id === 'E1') {
+        category = 'MUST_CHANGE';
+        reason = 'Enablement modules currently teach broad feature discovery. Must retrain agents on diagnosing low-adoption obstacles and objection handling.';
+        action = 'Update targeting and discovery modules; align knowledge checks to low-adoption rubric.';
+      } else if (a.id === 'E2') {
+        category = 'OWNER_REVIEW';
+        reason = 'Call guide script currently uses generic opening questions. Opening questions should probe what prevented team usage.';
+        action = 'Field enablement must review call guide scripts and update the QA scoring rubric for low-adoption discovery.';
+      } else if (a.id === 'E3') {
+        category = 'MUST_CHANGE';
+        reason = 'Prior agent certifications are invalid for the revised audience scope and updated curriculum.';
+        action = 'Invalidate prior certifications; record completion of v2 assessment across all assigned agents.';
+      } else if (a.id === 'P1') {
+        category = 'MUST_CHANGE';
+        reason = 'All previous baseline sign-offs were bound to v1 scope. Boundary change automatically re-opens the launch gate.';
+        action = 'PM must accept v2 change for preparation and coordinate sign-offs across leads before activation.';
+      } else if (a.id === 'P2') {
+        category = 'UNAFFECTED';
+        reason = 'Audience narrowing does not change the technical capability or security guarantees offered by the product.';
+        action = 'No change required. Product/security boundary remains an independent prerequisite.';
+      }
+
+      items.push({
+        id: a.id,
+        name: a.title,
+        team: a.team,
+        owner: a.owner,
+        category,
+        reason,
+        action,
+        beforeContent: a.before,
+        afterContent: a.after,
+        deps: a.deps,
+        populationDelta: ['A1', 'A2', 'A4', 'G3'].includes(a.id) 
+          ? { before: oldCounts.eligible, after: newCounts.eligible } 
+          : null
+      });
+    }
+
+    // Process market / localization packs
+    for (const m of rawImpact.locales) {
+      if (m.status === 'retire') {
+        items.push({
+          id: `L-${m.id}`,
+          name: `${m.name} Enablement Pack`,
+          team: 'Localization',
+          owner: `${m.id} Market Lead`,
+          category: 'MUST_CHANGE',
+          reason: `${m.name} has been removed from launch scope but currently has active rollout content and ${m.agents} assigned agents.`,
+          action: 'Retire future distribution and cancel pending enablement while retaining historical evidence and customer audit trail.',
+          marketId: m.id,
+          agents: m.agents,
+          status: m.status
+        });
+      } else if (m.status === 'new') {
+        items.push({
+          id: `L-${m.id}`,
+          name: `${m.name} Enablement Pack (${m.locale})`,
+          team: 'Localization',
+          owner: `${m.id} Market Lead`,
+          category: 'MUST_CHANGE',
+          reason: `${m.name} is newly added to launch scope.`,
+          action: 'Create new local enablement pack, conduct language QA, and onboard local agents.',
+          marketId: m.id,
+          agents: m.agents,
+          status: m.status
+        });
+      }
+    }
+
+    // Compute Executive Summary counts (Prompt Section 8)
+    const mustChangeCount = items.filter(i => i.category === 'MUST_CHANGE').length;
+    const ownerReviewCount = items.filter(i => i.category === 'OWNER_REVIEW').length;
+    const unaffectedCount = items.filter(i => i.category === 'UNAFFECTED').length;
+    const totalImpacts = mustChangeCount + ownerReviewCount;
+
+    return {
+      rawImpact,
+      items,
+      summary: {
+        totalImpacts,
+        mustChangeCount,
+        ownerReviewCount,
+        unaffectedCount,
+        headline: `${totalImpacts} downstream impacts detected`,
+        subline: `${mustChangeCount} Must change · ${ownerReviewCount} Need owner review · ${unaffectedCount} Unaffected`
+      },
+      counts: {
+        old: oldCounts,
+        new: newCounts,
+        removedAccounts: rawImpact.removed.length,
+        addedAccounts: rawImpact.added.length
+      },
+      budget: g.budget(newConfig, rawImpact, 60, 0.5)
+    };
+  }
+
+  // --- 4. PLAN → REALITY MATRIX (Prompt Section 12) ---
+  function computePlanRealityMatrix(oldConfig, newConfig) {
+    const oldCounts = g.counts(oldConfig);
+    const newCounts = g.counts(newConfig);
+    const rawImpact = g.makeImpact(oldConfig, newConfig, 'prelaunch');
+    const budget = g.budget(newConfig, rawImpact, 60, 0.5);
+
+    const oldMarketsStr = oldConfig.markets.join(' ');
+    const newMarketsStr = newConfig.markets.join(' ');
+
+    const rows = [
+      {
+        metric: 'Audience Population',
+        before: `${oldCounts.eligible} accounts`,
+        after: `${newCounts.eligible} accounts`,
+        delta: newCounts.eligible < oldCounts.eligible 
+          ? `-${oldCounts.eligible - newCounts.eligible} accounts (-${Math.round((1 - newCounts.eligible/oldCounts.eligible)*100)}%)` 
+          : 'No change',
+        status: newCounts.eligible !== oldCounts.eligible ? 'must' : 'no'
+      },
+      {
+        metric: 'Markets in Scope',
+        before: oldMarketsStr,
+        after: newMarketsStr,
+        delta: oldMarketsStr !== newMarketsStr ? 'Scope modified' : 'Unchanged',
+        status: oldMarketsStr !== newMarketsStr ? 'must' : 'no'
+      },
+      {
+        metric: 'France Rollout Status',
+        before: oldConfig.markets.includes('FR') ? 'Active' : 'Not in scope',
+        after: newConfig.markets.includes('FR') ? 'Active' : 'Retire / Suppress',
+        delta: (oldConfig.markets.includes('FR') && !newConfig.markets.includes('FR')) ? 'Retire & suppress' : 'Unchanged',
+        status: (oldConfig.markets.includes('FR') && !newConfig.markets.includes('FR')) ? 'must' : 'no'
+      },
+      {
+        metric: 'Experiment Assumptions',
+        before: `v1 (${oldCounts.eligible} accounts)`,
+        after: newCounts.eligible !== oldCounts.eligible ? 'Review required' : 'v1 valid',
+        delta: newCounts.eligible !== oldCounts.eligible ? 'Sample power & strata affected' : 'Unchanged',
+        status: newCounts.eligible !== oldCounts.eligible ? 'review' : 'no'
+      },
+      {
+        metric: 'GTM Campaign Manifest',
+        before: `v1 (${oldCounts.eligible} accounts)`,
+        after: newCounts.eligible !== oldCounts.eligible ? 'Regenerate manifest (v2)' : 'v1 valid',
+        delta: newCounts.eligible !== oldCounts.eligible ? `${newCounts.eligible} active / ${rawImpact.removed.length} suppressed` : 'Unchanged',
+        status: newCounts.eligible !== oldCounts.eligible ? 'must' : 'no'
+      },
+      {
+        metric: 'Agent Training & Roster',
+        before: 'Current (34 agents certified)',
+        after: rawImpact.changed ? `Partially stale (${budget.agents} agents affected)` : 'Current',
+        delta: rawImpact.changed ? `${budget.training}h retraining required` : 'Unchanged',
+        status: rawImpact.changed ? 'must' : 'no'
+      },
+      {
+        metric: 'Programme Readiness Gate',
+        before: 'Pending initial checks',
+        after: rawImpact.changed ? 'Reopened (Pending demo gates)' : 'Pending',
+        delta: rawImpact.changed ? 'All prior sign-offs invalidated' : 'Unchanged',
+        status: rawImpact.changed ? 'must' : 'no'
+      },
+      {
+        metric: 'Illustrative Rework Labour',
+        before: '0 hours (£0)',
+        after: rawImpact.changed ? `${budget.total} hours (£${budget.cost.toLocaleString('en-GB')})` : '0 hours (£0)',
+        delta: rawImpact.changed ? `${budget.central}h central + ${budget.local}h local + ${budget.training}h training` : '£0',
+        status: rawImpact.changed ? 'review' : 'no'
+      }
+    ];
+
+    return rows;
+  }
+
+  // --- 5. EXPLAINABILITY: "SHOW WHY" CAUSAL GRAPH (Prompt Section 14) ---
+  function explainWhy(itemId, analysis) {
+    const item = analysis.items.find(i => i.id === itemId);
+    if (!item) {
+      return {
+        id: itemId,
+        title: itemId,
+        category: 'UNKNOWN',
+        chain: ['Unknown artifact ID'],
+        rationale: 'No explanation available.'
+      };
+    }
+
+    let chain = [];
+    let rationale = '';
+
+    switch (itemId) {
+      case 'L-FR':
+        chain = [
+          'Master Brief v1 (Initial Mandate includes FR)',
+          'Market Scope Decision: Remove France from rollout',
+          'France Localized Pack (L-FR) marked for retirement',
+          'Suppression gate required for 8 assigned French agents',
+          'Historical audit trail preserved, outreach blocked'
+        ];
+        rationale = 'France was removed from the launch scope in the proposed change. Existing localized assets and queued communications must be retired and suppressed to prevent outreach to French accounts, while maintaining historical audit records.';
+        break;
+
+      case 'A1':
+        chain = [
+          'Natural Language Change Request: Narrow audience',
+          'Adoption & Inactivity Boundary Rules Extracted',
+          'A1 Audience Definition & Membership Policy v2',
+          'Synthetic Account Population Snapshot (96 → 24 accounts)'
+        ];
+        rationale = 'The proposed change alters core targeting rules by restricting eligibility to accounts with < 20% seat adoption and excluding those inactive for 90+ days. A1 is the single source of truth for audience policy.';
+        break;
+
+      case 'A2':
+        chain = [
+          'A1 Audience Definition Policy v2',
+          'Target Population reduced from 96 to 24 accounts',
+          'Statistical Power & Minimum Detectable Effect compromised',
+          'A2 Measurement Plan Assumptions require owner review'
+        ];
+        rationale = 'The original measurement plan assumed 96 accounts to achieve statistical power for causal lift. Narrowing to 24 accounts (18 in active markets) substantially alters the sample size, power, and strata. The measurement owner must review assumptions rather than Twin Brain automatically invalidating the test.';
+        break;
+
+      case 'A3':
+        chain = [
+          'Audience Targeting Boundary Filter',
+          'Commercial Eligibility Layer',
+          'A3 Telemetry Contract (Independent Architecture)'
+        ];
+        rationale = 'Audience narrowing does not alter event semantics, telemetry payloads, or connection success definitions. The existing telemetry schema already includes programme_version and audience_snapshot_id fields, requiring no schema rewrite.';
+        break;
+
+      case 'A4':
+        chain = [
+          'A1 Audience Definition Snapshot v2',
+          'Denominator Change (96 → 24 eligible accounts)',
+          'A4 Reporting Specification & Funnel Dashboard'
+        ];
+        rationale = 'Reporting dashboards must use immutable denominators per version. Overwriting baseline counts would corrupt historical conversion metrics; a v2 funnel view must be created.';
+        break;
+
+      case 'G1':
+        chain = [
+          'A1 Audience Policy (Low adoption only)',
+          'Account Needs: Focus on adoption blockers vs general evaluation',
+          'G1 Segmentation & Channel Plan'
+        ];
+        rationale = 'Narrowing audience shifts the commercial conversation from broad exploration to re-engagement and barrier diagnosis. Sales and partner capacity must be rebalanced.';
+        break;
+
+      case 'G2':
+        chain = [
+          'G1 Segmentation Plan',
+          'Customer Value Proposition & Email Invitations',
+          'G2 Master Messaging & Offer'
+        ];
+        rationale = 'The draft CTA and value proposition were designed for general business workflows. They need owner review to verify whether the copy effectively addresses low-adoption accounts.';
+        break;
+
+      case 'G3':
+        chain = [
+          'A1 Audience Snapshot v2',
+          '72 Accounts Excluded from Outreach Universe',
+          'G3 Assignment & Suppression Manifest'
+        ];
+        rationale = 'The live outreach manifest currently contains 96 accounts. 72 excluded accounts must be actively suppressed to prevent sales outreach to disqualified customers.';
+        break;
+
+      case 'E1':
+        chain = [
+          'G2 Master Messaging & Low-Adoption Discovery',
+          'Curriculum Modules for Target Recognition',
+          'E1 Training Curriculum'
+        ];
+        rationale = 'Curriculum must be updated to train customer-facing reps on qualifying low-adoption accounts, uncovering workflow bottlenecks, and handling specific objections.';
+        break;
+
+      case 'E2':
+        chain = [
+          'E1 Training Curriculum',
+          'Discovery Questions & QA Rubric',
+          'E2 Call Guide & Quality Rubric'
+        ];
+        rationale = 'Rep scripts and coaching rubrics must reflect the new qualifying criteria. Reps should probe why usage stalled rather than pitching generic features.';
+        break;
+
+      case 'E3':
+        chain = [
+          'E1 Curriculum & E2 Script Updates',
+          'Prior Agent Certifications Marked Stale',
+          'E3 Agent Readiness Roster'
+        ];
+        rationale = 'Publishing updated materials does not train reps. Prior certifications are invalidated and reps must be reassessed on v2 materials before outreach can begin.';
+        break;
+
+      case 'P1':
+        chain = [
+          'Programmatic Scope Mutation (v1 → v2)',
+          'Invalidation of Central & Local Readiness Sign-offs',
+          'P1 Launch & Cutover Gate Reopened'
+        ];
+        rationale = 'All baseline readiness approvals were granted for v1. Changing audience boundaries and market coverage invalidates prior gates; PM must coordinate re-approval.';
+        break;
+
+      case 'P2':
+        chain = [
+          'Target Audience Selection',
+          'Commercial Outreach Scope',
+          'P2 Product Claims & Security Contract (Independent Boundary)'
+        ];
+        rationale = 'Audience narrowing does not alter product architecture, supported environments, encryption, or security claims. Product capability remains an independent prerequisite.';
+        break;
+
+      case 'L-US':
+      case 'L-UK':
+      case 'L-DE':
+        chain = [
+          'Master Brief v2 Scope Change',
+          'Source Copy Updates (G2, E2)',
+          `${item.name} (${item.marketId || ''}) Stale Link`,
+          'Local Strategy & Language QA Re-verification'
+        ];
+        rationale = `Master scope changes invalidate the source-version parity of the ${item.name}. Local lead must review the updated discovery questions and retrain assigned agents.`;
+        break;
+
+      default:
+        chain = [
+          'Master Scope Change',
+          `Direct dependency on ${item.deps ? item.deps.join(' and ') : 'programme policy'}`,
+          item.name
+        ];
+        rationale = item.reason;
+    }
+
+    return {
+      id: itemId,
+      title: item.name,
+      team: item.team,
+      owner: item.owner,
+      category: item.category,
+      chain,
+      rationale,
+      action: item.action
+    };
+  }
+
+  // --- 6. DEPENDENCY GRAPH DATA (Prompt Section 13) ---
+  function getGraphData(analysis) {
+    // Generate clean layered DAG nodes
+    const nodes = [
+      { id: 'CHANGE', label: 'BUSINESS CHANGE', type: 'root', status: 'change', level: 0, x: 400, y: 30 },
+
+      { id: 'AUDIENCE_NODE', label: 'Audience Filter', type: 'filter', status: 'must', level: 1, x: 200, y: 120 },
+      { id: 'INACTIVITY_NODE', label: 'Inactivity Rule (90d)', type: 'filter', status: 'must', level: 1, x: 400, y: 120 },
+      { id: 'MARKET_NODE', label: 'Market Scope (Remove FR)', type: 'filter', status: 'must', level: 1, x: 600, y: 120 },
+
+      { id: 'A1', label: 'A1 Audience Definition', team: 'Analytics', status: 'must', level: 2, x: 120, y: 220 },
+      { id: 'A2', label: 'A2 Measurement Plan', team: 'Analytics', status: 'review', level: 2, x: 260, y: 220 },
+      { id: 'A4', label: 'A4 Reporting Spec', team: 'Analytics', status: 'must', level: 2, x: 120, y: 310 },
+      
+      { id: 'G1', label: 'G1 Segmentation Plan', team: 'GTM', status: 'review', level: 2, x: 380, y: 220 },
+      { id: 'G2', label: 'G2 Master Messaging', team: 'GTM', status: 'review', level: 2, x: 380, y: 310 },
+      { id: 'G3', label: 'G3 Manifest & Suppress', team: 'GTM', status: 'must', level: 2, x: 260, y: 310 },
+
+      { id: 'E1', label: 'E1 Curriculum', team: 'Enablement', status: 'must', level: 2, x: 500, y: 220 },
+      { id: 'E2', label: 'E2 Call Guide', team: 'Enablement', status: 'review', level: 2, x: 500, y: 310 },
+      { id: 'E3', label: 'E3 Agent Roster', team: 'Enablement', status: 'must', level: 2, x: 500, y: 400 },
+
+      { id: 'L-FR', label: 'L-FR France Pack', team: 'Localization', status: 'must', level: 2, x: 680, y: 220, subtitle: 'RETIRE' },
+      { id: 'L-RETAINED', label: 'Retained Packs (US/UK/DE)', team: 'Localization', status: 'review', level: 2, x: 680, y: 310 },
+
+      { id: 'P1', label: 'P1 Launch Readiness Gate', team: 'Programme', status: 'must', level: 3, x: 400, y: 500 },
+      { id: 'P2', label: 'P2 Product & Security Contract', team: 'Programme', status: 'no', level: 3, x: 680, y: 500, subtitle: 'UNAFFECTED' }
+    ];
+
+    const edges = [
+      { from: 'CHANGE', to: 'AUDIENCE_NODE' },
+      { from: 'CHANGE', to: 'INACTIVITY_NODE' },
+      { from: 'CHANGE', to: 'MARKET_NODE' },
+
+      { from: 'AUDIENCE_NODE', to: 'A1' },
+      { from: 'INACTIVITY_NODE', to: 'A1' },
+      { from: 'A1', to: 'A2' },
+      { from: 'A1', to: 'A4' },
+      { from: 'A1', to: 'G1' },
+      { from: 'A1', to: 'G3' },
+      { from: 'G1', to: 'G2' },
+      { from: 'G2', to: 'E2' },
+      { from: 'A1', to: 'E1' },
+      { from: 'E1', to: 'E3' },
+      { from: 'E2', to: 'E3' },
+
+      { from: 'MARKET_NODE', to: 'L-FR' },
+      { from: 'MARKET_NODE', to: 'L-RETAINED' },
+      { from: 'L-RETAINED', to: 'E3' },
+
+      { from: 'A1', to: 'P1' },
+      { from: 'A2', to: 'P1' },
+      { from: 'G3', to: 'P1' },
+      { from: 'E3', to: 'P1' },
+      { from: 'L-FR', to: 'P1' },
+      { from: 'P2', to: 'P1', dashed: true }
+    ];
+
+    return { nodes, edges };
+  }
+
+  // Export to window
+  global.TWIN_BRAIN = {
+    interpretChange,
+    mapToConfig,
+    analyzeImpact,
+    computePlanRealityMatrix,
+    explainWhy,
+    getProgramContext,
+    getGraphData,
+    OWNERS,
+    DEPENDENCIES
+  };
+
+})(typeof window !== 'undefined' ? window : global);
+
+</script>
+<script id="ui">
+'use strict';
+let state={tab:'programme',current:clone(BASE),version:1,phase:'prelaunch',proposal:null,history:[{version:1,type:'Seeded baseline',note:'Fictional planning baseline; no actual readiness or product approval.',config:clone(BASE)}],rate:60,retrainHours:.5,filter:'all'};
+const app=document.getElementById('app');
+const esc=x=>String(x).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const money=n=>'£'+n.toLocaleString('en-GB',{maximumFractionDigits:0});
+const labelStatus=s=>({must:'Must change',review:'Owner review',no:'Unaffected',retire:'Retire / suppress',new:'New local pack'}[s]);
+const stats=c=>{const x=counts(c);return`<div class="stats"><div class="stat"><strong>${x.eligible}</strong><span>In target population</span></div><div class="stat"><strong>${x.contactable}</strong><span>Contact permission</span></div><div class="stat"><strong>${x.outreach}</strong><span>Permitted outreach arm</span></div><div class="stat"><strong>${x.ready}</strong><span>Technical-ready flag</span></div></div>`;};
+function nav(tab){state.tab=tab;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));render();window.scrollTo(0,0);}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>nav(b.dataset.tab));
+function render(){app.innerHTML=({programme:programme,work:work,simulate:simulate,readiness:readyPage,history:historyPage}[state.tab])();bind();}
+function programme(){const c=state.current;return`<div class="bar"><div><div class="eyebrow">Approved planning scope · v${state.version}</div><h2>From an all-business brief to a controlled rollout</h2></div><button class="primary" data-go="simulate">Simulate audience change</button></div>${stats(c)}<div class="two"><section class="panel"><h3>The programme charter</h3><p><strong>PM objective:</strong> help eligible business accounts evaluate and adopt a hypothetical new feature safely, with a measurable and supportable path to first value.</p><p><strong>Initial mandate:</strong> consider all existing paying business accounts using ChatGPT. Do not conflate broad targeting with product entitlement, lawful contact, technical readiness or market availability.</p><p><strong>Feature placeholder:</strong> connect your own on-premises data directly on ChatGPT.</p><p><strong>Proposed success event:</strong> an authorized connection plus a meaningful first use, evaluated within 14 days of assignment. Both definition and window need product/analytics approval.</p><div class="notice"><strong>Not a feature specification.</strong> Product/security/legal must define what can actually be promised and supported before any real outreach.</div></section><section class="panel"><h3>Current audience contract</h3><p class="mono">${esc(policyText(c))}</p><p>For this SaaS scenario, “low producer” becomes <strong>low adoption</strong>. This is a proposed mapping, not a known OpenAI segment.</p><ul><li>Low adoption: active seats / licensed seats during the last 28 days, below a confirmed threshold.</li><li>Churn-like: no usage for 90+ days despite an active paying contract. This is not actual contractual churn.</li><li>When enabled, churn-like exclusion overrides low-adoption inclusion.</li><li>Unknown values must go to review in a real dataset, not silently enter the audience.</li></ul><p class="muted">Counts are calculated from a fixed synthetic fixture. None is a market estimate.</p></section></div><section class="panel"><h3>Operating sequence & ownership</h3><div class="flow"><span>PM charter</span>→<span>Product constraints</span>→<span>Audience + measurement</span>→<span>GTM + enablement</span>→<span>Local market review</span>→<span>Readiness gate</span>→<span>Launch + learn</span></div><p>Analytics, GTM and enablement co-design the operating plan rather than receiving isolated tickets. PM owns integration and change decisions. Each local lead owns adaptation and readiness, with product/security/legal providing independent constraints.</p><div class="row"><button data-go="work">Inspect team deliverables</button><button id="downloadAccounts">Download synthetic accounts CSV</button></div></section><section class="panel"><h3>Proposed market matrix</h3><div class="scroll"><table><thead><tr><th>Market / language</th><th>Local strategy decisions</th><th>Localization work</th><th>Fixture agents</th></tr></thead><tbody>${MARKETS.map(m=>`<tr><td><strong>${m.name}</strong><br>${m.locale}</td><td>Confirm account/partner coverage, outreach permissions, channel fit, support coverage and local launch timing. No assumed country preference.</td><td>Adapt invitation, terminology, call guide and training; local reviewer approves meaning and product claims. English markets need review too.</td><td>${m.agents}</td></tr>`).join('')}</tbody></table></div></section><section class="panel"><h3>A measurement plan, not just a dashboard</h3><p><strong>Hypothesis:</strong> coordinated outreach increases meaningful feature activation versus an eligible holdout, subject to an appropriate and approved experiment.</p><p><strong>Denominators:</strong> assignment-arm population for an intention-to-treat outcome; contact-permitted outreach-arm population for reach; setup starters for setup-completion diagnostics. Do not swap these when the audience changes.</p><p><strong>Fixture allocation:</strong> a stable deterministic holdout flag demonstrates suppression, not randomized evidence or sufficient statistical power. No observed outcomes or lift are fabricated.</p><p><strong>Guardrails:</strong> unauthorized access incidents, connection failures, support load, complaints and opt-outs. Definitions, thresholds and stop authority remain owner decisions.</p></section>`;}
+function work(){return`<div class="bar"><div><div class="eyebrow">Work breakdown</div><h2>What each team must actually deliver</h2></div><span class="badge">Artifacts are linked to the programme contract</span></div><div class="notice"><strong>Workflow fixtures.</strong> The short source texts below intentionally contain some audience-dependent material. They are starter artifacts for the simulation, not production-ready plans or approved product copy.</div>${['Analytics','GTM','Enablement','Programme'].map(team=>`<section class="panel" style="margin-top:18px"><h2>${team}</h2>${ARTIFACTS.filter(a=>a.team===team).map(a=>`<details><summary><span class="mono">${a.id}</span> · ${a.title} <small> / ${a.owner}</small></summary><p><strong>Work:</strong> ${a.task}</p><p><strong>Acceptance:</strong> ${a.accept}</p><p><strong>Depends on:</strong> ${a.deps.length?a.deps.join(', '):'product/event semantics, not target selection alone'}</p><div class="panel"><small>SOURCE FIXTURE · ${a.id} · v${state.version}</small><p>${esc(content(a.id,state.current))}</p></div></details>`).join('')}</section>`).join('')}<section class="panel"><h2>Localization is a branch of the operating plan</h2><p>Each <code>L-market</code> pack references the master programme version, source-copy version, locale, local strategy, reviewer and training version. A master scope change makes those links stale until the local owner reviews them.</p><div class="steps"><div class="step"><div><strong>Adapt the strategy first</strong><p>Check local account eligibility, partner coverage, channels, operational hours, permitted claims and support. A translation cannot solve a missing local delivery team.</p></div></div><div class="step"><div><strong>Localize controlled source material</strong><p>Keep technical names, placeholders and qualifying conditions consistent. Review translated audience exclusions and disclaimers. A German or French phrase below is illustrative draft copy, not certified translation.</p></div></div><div class="step"><div><strong>Train and test</strong><p>Use the local call guide in a role play. Assess routing, exclusions and escalation, not just whether agents opened the slides.</p></div></div><div class="step"><div><strong>Release market by market</strong><p>Readiness belongs to a specific market and version. Excluding a market requires suppression and retirement, not deleting its prior reporting.</p></div></div></div></section>`;}
+function simulationForm(){const c=state.proposal?.config||state.current;return`<aside class="panel simcontrols"><h3>Propose a scope change</h3><p class="muted">Structured controls, not natural-language AI. Nothing changes until you simulate and accept it.</p><button id="preset" style="width:100%;margin-bottom:16px">Load low-adoption scenario</button><label class="field"><span>Target population</span><select id="audience"><option value="all" ${c.audience==='all'?'selected':''}>All paying business accounts</option><option value="low" ${c.audience==='low'?'selected':''}>Low-adoption accounts only</option></select></label><label class="field"><span>Low-adoption threshold (%)</span><input type="number" id="threshold" min="1" max="100" value="${c.threshold}"></label><label class="check"><input type="checkbox" id="excludeChurn" ${c.excludeChurn?'checked':''}>Exclude no-usage-for-90-days accounts</label><p><small>Exclusion wins even when an account also meets the low-adoption rule.</small></p><div class="field"><span>Included markets</span><div class="checks">${MARKETS.map(m=>`<label class="check"><input type="checkbox" name="market" value="${m.id}" ${c.markets.includes(m.id)?'checked':''}>${m.id} · ${m.locale}</label>`).join('')}</div></div><label class="field"><span>When does the change arrive?</span><select id="phase"><option value="prelaunch" ${state.phase==='prelaunch'?'selected':''}>Before launch</option><option value="inflight" ${state.phase==='inflight'?'selected':''}>Outreach already in flight</option></select></label><label class="check"><input type="checkbox" id="definitions">I confirm these scenario definitions</label><p><small>“Churn-like” means inactivity, not contract cancellation. The technical feature remains hypothetical.</small></p><div id="formError" class="error" role="alert"></div><button class="primary" id="run" style="width:100%;margin-top:14px">Simulate impact</button><p><small>Running again replaces pending draft checks, not the approved programme. Export first if you want to retain an abandoned proposal.</small></p></aside>`;}
+function simulate(){return`<div class="bar"><div><div class="eyebrow">What-if analysis</div><h2>Change the audience. Expose the consequences.</h2></div><span class="badge">Approved scope stays at v${state.version}</span></div><div class="grid">${simulationForm()}<div>${state.proposal?impactPanel():`<section class="panel empty"><h3>Start with the change you described</h3><p>Load the low-adoption scenario, confirm its definitions and simulate.</p><p>The app calculates audience changes, traverses declared dependencies, drafts before/after text and invalidates affected local readiness. It does not discover dependencies using AI.</p><p>For a second test, drop France or choose “outreach already in flight”.</p></section>`}</div></div>`;}
+function localized(m,c){const low=c.audience==='low';const lead={US:low?'Explore a first useful team workflow.':'Explore a useful business workflow.',UK:low?'Explore a first useful team workflow.':'Explore a useful business workflow.',DE:low?'Entdecken Sie einen ersten hilfreichen Workflow für Ihr Team.':'Entdecken Sie einen hilfreichen Workflow für Ihr Unternehmen.',FR:low?'Explorez un premier usage utile pour votre équipe.':'Explorez un usage utile pour votre entreprise.'}[m.id];return`${lead}\nInternal routing policy: ${policyText(c)}\nDraft only. Native-language, product-claims and local operational review required. Internal policy metadata is intentionally kept in English in this prototype.`;}
+function impactPanel(){const p=state.proposal,i=p.impact;const old=counts(state.current),now=counts(p.config);const b=budget(p.config,i,state.rate,state.retrainHours);return`<section class="panel"><div class="row spread"><h3>${i.changed?'Proposed v'+p.version:'No scope change detected'}</h3><span class="badge ${p.accepted?'':'review'}">${p.accepted?'PM accepted for preparation':'What-if only'}</span></div><p>${esc(policyText(p.config))}</p><div class="stats"><div class="stat"><strong>${old.eligible} → ${now.eligible}</strong><span>Target accounts</span></div><div class="stat"><strong>${i.removed.length}</strong><span>Removed</span></div><div class="stat"><strong>${i.added.length}</strong><span>Added</span></div></div><p><strong>Still separate:</strong> ${now.contactable} contact-permitted; ${now.outreach} contact-permitted outreach-arm; ${now.ready} technical-ready; ${now.trialReady} satisfy all three. ${now.holdout} holdout accounts remain suppressed from outreach.</p>${p.phase==='inflight'&&i.changed?`<div class="notice"><strong>In-flight change:</strong> ${i.previouslyContactedRemoved.length} removed accounts have a synthetic prior-contact flag. Preserve their history. Decide what happens to assigned work, follow-ups and measurement cohorts before cutover.</div>`:''}<details><summary>Inspect exact account changes</summary><p><strong>Removed:</strong> ${i.removed.map(a=>a.id).join(', ')||'None'}</p><p><strong>Added:</strong> ${i.added.map(a=>a.id).join(', ')||'None'}</p></details>${i.changed?`<div class="row" style="margin-top:16px"><button class="primary" id="accept" ${p.accepted?'disabled':''}>${p.accepted?'Accepted for preparation':'Accept change for preparation'}</button><button data-go="readiness">Inspect readiness blockers</button></div><small>Acceptance authorizes this simulation's preparation state. It does not release an audience, publish content or train anyone.</small>`:'<p class="completion">No new version, rework budget or readiness reset is needed.</p>'}</section><section class="panel"><h3>Dependency impact register</h3><p class="muted">Known fixture dependencies, not exhaustive discovery. Open each finding for source text and proposed edits.</p><div class="legend"><span class="badge must">Must change</span><span class="badge review">Owner review</span><span class="badge no">Unaffected</span></div>${i.items.map(a=>`<details data-artifact="${a.id}"><summary><span class="badge ${a.status}">${labelStatus(a.status)}</span> ${a.id} · ${a.title}</summary><p><strong>Owner:</strong> ${a.owner}</p><p><strong>Why:</strong> ${esc(a.reason)}</p><div class="diff"><div><small>CURRENT v${state.version} · ${a.id}</small><br>${esc(a.before)}</div><div><small>PROPOSED · ${a.status==='review'?'REVIEW, NOT AUTO-APPROVAL':a.status==='no'?'UNCHANGED':'DRAFT REVISION'}</small><br>${esc(a.after)}</div></div><p><strong>Acceptance:</strong> ${a.accept}</p></details>`).join('')}</section><section class="panel"><h3>Market propagation</h3><p>Localization includes strategy, source-version matching, language QA and agent readiness. A country is not just a translated email.</p>${i.locales.map(m=>`<details><summary><span class="badge ${m.status==='no'?'no':'review'}">${labelStatus(m.status)}</span> L-${m.id} · ${m.locale}</summary><p>${m.reason}</p>${m.status==='retire'?'<p>Do not erase prior activity or obligations. Confirm suppression of new outreach and explicitly route any outstanding follow-up.</p>':`<div class="diff"><div><small>CURRENT SOURCE-LINKED PACK</small><br>${esc(state.current.markets.includes(m.id)?localized(m,state.current):'No prior local pack.')}</div><div><small>PROPOSED LOCAL DRAFT</small><br>${esc(localized(m,p.config))}</div></div><p>Market-specific channel and legal/product availability still need review. Draft translations are not approved assets.</p>`}</details>`).join('')}</section><section class="panel"><h3>Illustrative rework budget, not savings</h3><p>Editable scenario assumptions. This does not estimate time-to-market or prove that the tool saves these costs.</p><div class="two"><label class="field"><span>Blended hourly cost (£)</span><input type="number" id="rate" min="0" max="10000" value="${state.rate}"></label><label class="field"><span>Retraining hours per included-market agent</span><input type="number" id="retrain" min="0" max="100" step=".25" value="${state.retrainHours}"></label></div><button id="recalc">Recalculate budget</button><div id="budgetResult" style="margin-top:16px">${budgetHTML(b)}</div><p><small>Central review: analytics 4h + GTM 3h + enablement 3h. Included-market review: 2h each. Training: fixture headcount × editable duration. Removed-market retirement, engineering implementation, translation vendors, coordination, wait time and opportunity cost are excluded, so this is not a complete budget. Critical-path timing is unknown.</small></p></section>`;}
+function budgetHTML(b){return`<div class="stats"><div class="stat"><strong>${b.central+b.local}h</strong><span>Central + local review</span></div><div class="stat"><strong>${b.training}h</strong><span>${b.agents} agents · retraining</span></div><div class="stat"><strong>${money(b.cost)}</strong><span>${b.total}h · illustrative labour cost</span></div></div>`;}
+function readyPage(){const p=state.proposal;if(!p||!p.impact.changed)return`<section class="panel"><h2>No pending changed version</h2><p>Current planning scope is v${state.version}. A seeded or previously simulated planning version is not proof of actual product or operational readiness.</p><button class="primary" data-go="simulate">Simulate a change</button></section>`;const r=readiness(p);return`<div class="bar"><div><div class="eyebrow">Version-specific readiness</div><h2>Prepare v${p.version} without losing v${state.version}</h2></div><span class="badge ${r.ready?'':'review'}">${r.ready?'Demo gates complete':r.missing.length+' unresolved demo gates'}</span></div><div class="notice"><strong>All sign-offs below are simulated.</strong> Ticking a box does not edit a production artifact, certify an agent, approve a product or send a campaign. You are testing the operating process.</div><section class="panel" style="margin-top:18px"><h3>1 · PM scope decision</h3><p>${esc(policyText(p.config))}</p><button id="accept" class="primary" ${p.accepted?'disabled':''}>${p.accepted?'Accepted for preparation':'Accept change for preparation'}</button></section><section class="panel"><h3>2 · Central workstream review</h3>${Object.keys(p.reviews).map(k=>`<label class="check"><input type="checkbox" data-review="${esc(k)}" ${p.reviews[k]?'checked':''} ${!p.accepted?'disabled':''}>${esc(k)}: simulate reviewed artifacts and approved decision</label>`).join('')}<p><small>Acknowledgement alone is not completion. These controls stand in for evidence-backed approvals that a real implementation must link to updated artifacts.</small></p></section><section class="panel"><h3>3 · Local packs and agent readiness</h3>${p.impact.locales.filter(m=>m.status!=='no').map(m=>{const s=p.marketChecks[m.id];return`<div class="market"><h3>L-${m.id} · ${m.locale} <span class="badge review">${labelStatus(m.status)}</span></h3><p>${m.reason}</p>${m.status==='retire'?`<label class="check"><input type="checkbox" data-market="${m.id}" data-check="retired" ${s.retired?'checked':''} ${!p.accepted?'disabled':''}>Simulate suppression and retirement confirmation</label>`:`<label class="check"><input type="checkbox" data-market="${m.id}" data-check="local" ${s.local?'checked':''} ${!p.accepted?'disabled':''}>Simulate strategy adaptation and source-linked language QA</label><label class="check"><input type="checkbox" data-market="${m.id}" data-check="trained" ${s.trained?'checked':''} ${!p.accepted||!s.local?'disabled':''}>Simulate all ${m.agents} assigned agents assessed on v${p.version}</label>`}</div>`;}).join('')}</section><section class="panel"><h3>4 · Independent prerequisites and cutover</h3><label class="check"><input type="checkbox" id="prerequisite" ${p.prerequisite?'checked':''} ${!p.accepted?'disabled':''}>For the exercise only, assume product/security/legal prerequisites were confirmed</label>${p.phase==='inflight'?`<div class="notice" style="margin:14px 0">Preserve old assignment and exposure records; prohibit automatic retroactive cohort replacement. ${p.impact.previouslyContactedRemoved.length} removed accounts have prior synthetic contact.</div><label class="check"><input type="checkbox" id="cutover" ${p.cutover?'checked':''} ${!p.accepted?'disabled':''}>Simulate approval of follow-up handling, measurement cohorts and cutover boundary</label>`:'<p>Pre-launch scenario: prepare new assignments at the version boundary; no prior activity is assumed to have occurred.</p>'}<h3 style="margin-top:20px">Release decision</h3>${r.missing.length?`<ul>${r.missing.map(x=>`<li>${x}</li>`).join('')}</ul>`:'<p class="completion">All demo gates are complete. You may activate the new planning version inside this simulation.</p>'}<button class="primary" id="activate" ${!r.ready?'disabled':''}>Activate v${p.version} in simulation</button></section>`;}
+function historyPage(){return`<div class="bar"><div><div class="eyebrow">Audit trail</div><h2>Keep the old programme explainable</h2></div><div class="row"><button id="export">Export session JSON</button><button id="reset">Reset simulation</button></div></div><section class="panel"><p>Snapshots preserve programme scope, synthetic cohort membership, generated artifact text and simulated gate evidence. They do not record real delivery outcomes. Export before closing; browser refresh resets this in-memory demo.</p>${state.history.slice().reverse().map(h=>`<details open><summary>v${h.version} · ${h.type}</summary><p>${esc(h.note||'')}</p><p class="mono">${esc(policyText(h.config))}</p><p>${population(h.config).length} synthetic accounts in this version's population.</p>${h.phase?`<p>Cutover context: ${h.phase}. Prior cohorts retained, not recomputed.</p>`:''}</details>`).join('')}</section><section class="panel"><h3>How to test this with Mano</h3><ol><li>Read the team artifacts and agree which consequences you expect before simulating.</li><li>Run the low-adoption change. Check account membership, measurement implications and local pack invalidation.</li><li>Mark a single market reviewed. Confirm the programme remains blocked until the other gates pass.</li><li>Activate the version. Introduce a second change and check that prior sign-offs do not carry over.</li><li>Repeat with in-flight outreach or a removed market. Preserve old reporting and require a cutover decision.</li></ol><p><strong>Next validation:</strong> replay an authorized, redacted real programme against a general-purpose AI baseline and the existing manual process. Measure correct impacts, false alarms, review time and actions accepted. This synthetic exercise cannot prove demand or ROI.</p></section>`;}
+function newProposal(config,phase){const impact=makeImpact(state.current,config,phase);return{version:state.version+1,config:clone(config),phase,impact,accepted:false,reviews:{Analytics:false,GTM:false,Enablement:false},marketChecks:Object.fromEntries(impact.locales.map(m=>[m.id,{local:false,trained:false,retired:false}])),cutover:false,prerequisite:false};}
+function download(name,text,type){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function exportPayload(){return{disclaimer:'Entirely fictional scenario. Deterministic simulation; no actual approvals, outreach, training or product capabilities verified.',schema_version:1,state:clone(state),accounts:ACCOUNTS,artifacts:ARTIFACTS.map(a=>({...a,current_text:content(a.id,state.current)})),budget_assumptions:{hourly_gbp:state.rate,retraining_hours:state.retrainHours}};}
+function bind(){document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>nav(b.dataset.go));const on=(id,fn)=>{const el=document.getElementById(id);if(el)el.onclick=fn;};on('preset',()=>{document.getElementById('audience').value='low';document.getElementById('threshold').value='20';document.getElementById('excludeChurn').checked=true;document.getElementById('definitions').checked=false;});on('run',()=>{const error=document.getElementById('formError');if(!document.getElementById('definitions').checked){error.textContent='Confirm the definitions before running. Ambiguous targeting is a blocker.';return;}const c={audience:document.getElementById('audience').value,threshold:Number(document.getElementById('threshold').value),excludeChurn:document.getElementById('excludeChurn').checked,markets:[...document.querySelectorAll('input[name=market]:checked')].map(x=>x.value)};if(c.audience==='all')c.threshold=state.current.threshold;if(!c.markets.length){error.textContent='Choose at least one market. Programme cancellation is a separate workflow.';return;}if(!Number.isFinite(c.threshold)||c.threshold<=0||c.threshold>100){error.textContent='Threshold must be above 0 and at most 100.';return;}state.phase=document.getElementById('phase').value;state.proposal=newProposal(c,state.phase);render();});on('accept',()=>{if(state.proposal&&state.proposal.impact.changed){state.proposal.accepted=true;render();}});on('recalc',()=>{const rate=Number(document.getElementById('rate').value),hours=Number(document.getElementById('retrain').value);if(!Number.isFinite(rate)||!Number.isFinite(hours)||rate<0||hours<0||rate>10000||hours>100){document.getElementById('budgetResult').innerHTML='<p class="error">Use a valid non-negative rate and duration within the input limits.</p>';return;}state.rate=rate;state.retrainHours=hours;document.getElementById('budgetResult').innerHTML=budgetHTML(budget(state.proposal.config,state.proposal.impact,rate,hours));});document.querySelectorAll('[data-review]').forEach(el=>el.onchange=()=>{state.proposal.reviews[el.dataset.review]=el.checked;render();});document.querySelectorAll('[data-market]').forEach(el=>el.onchange=()=>{const s=state.proposal.marketChecks[el.dataset.market];s[el.dataset.check]=el.checked;if(el.dataset.check==='local'&&!el.checked)s.trained=false;render();});const pre=document.getElementById('prerequisite');if(pre)pre.onchange=()=>{state.proposal.prerequisite=pre.checked;render();};const cut=document.getElementById('cutover');if(cut)cut.onchange=()=>{state.proposal.cutover=cut.checked;render();};on('activate',()=>{const p=state.proposal;if(!p||!readiness(p).ready)return;state.history.push({version:p.version,type:'Simulated activation',note:'All demo gates recorded. This does not launch a real programme.',phase:p.phase,config:clone(p.config),account_ids:population(p.config).map(a=>a.id),artifact_texts:ARTIFACTS.map(a=>({id:a.id,text:content(a.id,p.config)})),simulated_evidence:{reviews:clone(p.reviews),markets:clone(p.marketChecks),cutover:p.cutover,prerequisite:p.prerequisite}});state.current=clone(p.config);state.version=p.version;state.proposal=null;nav('history');});on('export',()=>download('gtm-simulation-session.json',JSON.stringify(exportPayload(),null,2),'application/json'));on('reset',()=>{if(confirm('Reset this fictional session? Export first to preserve your work.')){state={...state,tab:'programme',current:clone(BASE),version:1,phase:'prelaunch',proposal:null,history:[{version:1,type:'Seeded baseline',note:'Fictional planning baseline; no actual readiness or product approval.',config:clone(BASE)}]};nav('programme');}});on('downloadAccounts',()=>{const keys=Object.keys(ACCOUNTS[0]);download('synthetic-business-accounts.csv',keys.join(',')+'\n'+ACCOUNTS.map(a=>keys.map(k=>a[k]).join(',')).join('\n'),'text/csv');});}
+window.DEMO={getState:()=>clone(state),exportPayload,newProposal};render();
+</script></body></html>

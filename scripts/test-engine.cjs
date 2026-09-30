@@ -1,0 +1,27 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const path=require('path');
+const html=fs.readFileSync(path.join(__dirname,'../output/gtm-change-simulator.html'),'utf8');
+const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
+const sandbox={window:{}};vm.createContext(sandbox);vm.runInContext(engine,sandbox);
+const g=sandbox.window.GTM,copy=x=>JSON.parse(JSON.stringify(x));
+let tests=0;function test(name,fn){fn();tests++;console.log('PASS '+name);}
+const low={...copy(g.BASE),audience:'low',threshold:20,excludeChurn:true};
+test('96 unique synthetic accounts in four markets',()=>{assert.equal(g.ACCOUNTS.length,96);assert.equal(new Set(g.ACCOUNTS.map(a=>a.id)).size,96);for(const m of g.MARKETS)assert.equal(g.ACCOUNTS.filter(a=>a.market===m.id).length,24);});
+test('All baseline contracts are paying; target is not contact or technical readiness',()=>{assert(g.ACCOUNTS.every(a=>a.contract==='active-paying'));const c=g.counts(g.BASE);assert.equal(c.eligible,96);assert(c.contactable<c.eligible);assert(c.ready<c.eligible);assert(c.outreach<=c.contactable);assert(c.trialReady<=c.outreach);});
+test('Low-adoption inclusion and inactivity exclusion with explicit precedence',()=>{const p=g.population(low);assert.equal(p.length,24);assert(p.every(a=>a.seats_active_28d/a.licensed_seats<.2&&a.days_since_activity<90));const includeChurn=g.population({...low,excludeChurn:false});assert.equal(includeChurn.length,48);});
+test('Boundary uses strict less-than, not less-than-or-equal',()=>{const c={...low,threshold:40};assert(g.population(c).every(a=>a.seats_active_28d/a.licensed_seats<.4));assert.equal(g.population(c).length,24);});
+test('No change creates no impacts or rework',()=>{const i=g.makeImpact(g.BASE,g.BASE,'prelaunch');assert.equal(i.changed,false);assert(i.items.every(a=>a.status==='no'));assert(i.locales.every(a=>a.status==='no'));assert.equal(g.budget(g.BASE,i,60,.5).cost,0);});
+test('A narrowing removes 72 accounts without mutating baseline',()=>{const i=g.makeImpact(g.BASE,low,'prelaunch');assert.equal(i.removed.length,72);assert.equal(i.added.length,0);assert.equal(g.population(g.BASE).length,96);});
+test('Measurement is review; event schema and product claims remain unchanged',()=>{const i=g.makeImpact(g.BASE,low,'prelaunch');assert.equal(i.items.find(a=>a.id==='A2').status,'review');for(const id of ['A3','P2']){const a=i.items.find(a=>a.id===id);assert.equal(a.status,'no');assert.equal(a.before,a.after);}assert.equal(i.items.find(a=>a.id==='A1').status,'must');});
+test('Every retained locale invalidates for audience change',()=>{const i=g.makeImpact(g.BASE,low,'prelaunch');assert.equal(i.locales.length,4);assert(i.locales.every(m=>m.status==='review'));});
+test('Removing France retires its pack but preserves old cohort',()=>{const c={...low,markets:['US','UK','DE']},i=g.makeImpact(g.BASE,c,'inflight');assert.equal(g.population(c).length,18);assert.equal(i.locales.find(m=>m.id==='FR').status,'retire');assert(i.previouslyContactedRemoved.length>0);assert.equal(g.population(g.BASE).length,96);});
+test('Stable assignment arms across overlapping populations',()=>{const p=g.population(low);for(const a of p)assert.equal(a.assigned_arm,g.population(g.BASE).find(x=>x.id===a.id).assigned_arm);assert(g.counts(low).holdout>0);});
+function proposal(c,phase='prelaunch'){const impact=g.makeImpact(g.BASE,c,phase);return{config:c,accepted:false,phase,impact,reviews:{Analytics:false,GTM:false,Enablement:false},marketChecks:Object.fromEntries(impact.locales.map(m=>[m.id,{local:false,trained:false,retired:false}])),cutover:false,prerequisite:false};}
+function complete(p){p.accepted=true;for(const k in p.reviews)p.reviews[k]=true;for(const s of Object.values(p.marketChecks)){s.local=true;s.trained=true;s.retired=true;}p.prerequisite=true;return p;}
+test('Cannot be ready without acceptance, workstream and local evidence',()=>{const p=proposal(low);assert.equal(g.readiness(p).ready,false);complete(p);assert.equal(g.readiness(p).ready,true);p.marketChecks.DE.trained=false;assert.equal(g.readiness(p).ready,false);});
+test('In-flight cohort cutover is an independent gate',()=>{const p=complete(proposal(low,'inflight'));assert.equal(g.readiness(p).ready,false);p.cutover=true;assert.equal(g.readiness(p).ready,true);});
+test('Retired market requires suppression gate, not training',()=>{const p=complete(proposal({...low,markets:['US','UK','DE']}));p.marketChecks.FR.local=false;p.marketChecks.FR.trained=false;assert.equal(g.readiness(p).ready,true);p.marketChecks.FR.retired=false;assert.equal(g.readiness(p).ready,false);});
+test('No target population possible without throwing or claiming success',()=>{const c={...low,threshold:1};assert.equal(g.population(c).length,0);const i=g.makeImpact(g.BASE,c,'prelaunch');assert.equal(i.removed.length,96);});
+test('Empty population cannot pass release even with all sign-offs',()=>{const p=complete(proposal({...low,threshold:1}));assert.equal(g.readiness(p).ready,false);});
+test('Illustrative budget is computed from explicit assumptions',()=>{const i=g.makeImpact(g.BASE,low,'prelaunch'),b=g.budget(low,i,60,.5);assert.equal(b.agents,34);assert.equal(b.central,10);assert.equal(b.local,8);assert.equal(b.training,17);assert.equal(b.total,35);assert.equal(b.cost,2100);});
+console.log(JSON.stringify({tests,baseline:g.counts(g.BASE),low:g.counts(low),rework:g.budget(low,g.makeImpact(g.BASE,low,'prelaunch'),60,.5)},null,2));

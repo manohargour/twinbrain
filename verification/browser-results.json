@@ -1,0 +1,10 @@
+{
+  "checks": 16,
+  "errors": [],
+  "externalRequests": [],
+  "browser": "Installed Google Chrome, separate headless profile",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ]
+}

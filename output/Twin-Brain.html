@@ -1,0 +1,3193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Twin Brain — Organisational Change Intelligence</title>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #475569;
+      --subtle: #64748b;
+      --line: #e2e8f0;
+      --line-dark: #cbd5e1;
+      --paper: #f8fafc;
+      --white: #ffffff;
+      --green: #059669;
+      --green-dark: #047857;
+      --pale: #ecfdf5;
+      --pale-border: #a7f3d0;
+      --amber: #b45309;
+      --amberbg: #fffbeb;
+      --amber-border: #fde68a;
+      --red: #b91c1c;
+      --redbg: #fef2f2;
+      --red-border: #fecaca;
+      --blue: #1d4ed8;
+      --bluebg: #eff6ff;
+      --blue-border: #bfdbfe;
+      --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 14px/1.6 var(--font-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Base Typography & Elements */
+    h1, h2, h3, h4, p { margin: 0 0 10px; }
+    h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.6px; line-height: 1.25; }
+    h2 { font-size: 20px; font-weight: 600; letter-spacing: -0.4px; }
+    h3 { font-size: 16px; font-weight: 600; }
+    h4 { font-size: 14px; font-weight: 600; }
+    a { color: var(--green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Layout Shell */
+    .tb-shell { max-width: 1400px; margin: 0 auto; padding: 24px 32px 60px; }
+
+    /* Header */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+      padding: 20px 32px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+    .tb-topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .tb-brand { display: flex; align-items: center; gap: 12px; }
+    .tb-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      font-weight: 700;
+      box-shadow: 0 2px 4px rgba(5, 150, 105, 0.25);
+    }
+    .tb-title-group h1 { margin: 0; font-size: 22px; color: var(--ink); }
+    .tb-thesis { color: var(--muted); font-size: 13px; font-weight: 500; }
+    .tb-thesis strong { color: var(--green); }
+
+    /* Navigation */
+    nav { display: flex; gap: 4px; margin-top: 14px; border-top: 1px solid var(--line); padding-top: 8px; }
+    nav button {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    nav button:hover { background: var(--paper); color: var(--ink); }
+    nav button.active { background: var(--ink); color: var(--white); }
+
+    /* Common Buttons & Inputs */
+    .tb-btn {
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--line-dark);
+      background: var(--white);
+      color: var(--ink);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .tb-btn:hover { background: var(--paper); border-color: var(--subtle); }
+    .tb-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .tb-btn-primary {
+      background: var(--green);
+      color: var(--white);
+      border-color: var(--green-dark);
+      box-shadow: var(--shadow-sm);
+    }
+    .tb-btn-primary:hover:not(:disabled) { background: var(--green-dark); border-color: var(--green-dark); }
+    .tb-btn-amber {
+      background: var(--amber);
+      color: var(--white);
+      border-color: #92400e;
+    }
+    .tb-btn-amber:hover { background: #92400e; }
+    .tb-btn-lg { padding: 10px 20px; font-size: 14px; }
+    .tb-btn-sm { padding: 5px 10px; font-size: 12px; }
+
+    /* Badges & Pills */
+    .tb-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.4;
+      background: #edf2f7;
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+    .tb-badge-must { background: var(--redbg); color: var(--red); border-color: var(--red-border); }
+    .tb-badge-review { background: var(--amberbg); color: var(--amber); border-color: var(--amber-border); }
+    .tb-badge-no { background: var(--pale); color: var(--green); border-color: var(--pale-border); }
+    .tb-badge-subtle { background: #f1f5f9; color: var(--subtle); border-color: #e2e8f0; }
+
+    .tb-pill {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tb-pill-green { background: var(--pale); color: var(--green); border: 1px solid var(--pale-border); }
+    .tb-pill-amber { background: var(--amberbg); color: var(--amber); border: 1px solid var(--amber-border); }
+    .tb-pill-subtle { background: #f1f5f9; color: var(--subtle); }
+
+    /* Panels & Cards */
+    .tb-panel {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .tb-eyebrow {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--green);
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+    .tb-panel-title { font-size: 18px; margin-bottom: 6px; }
+    .tb-muted { color: var(--muted); font-size: 13px; }
+
+    /* Flex Utilities */
+    .tb-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .tb-row.spread { justify-content: space-between; }
+    .tb-grid { display: grid; gap: 16px; }
+    .tb-grid-2 { grid-template-columns: 1fr 1fr; }
+    .tb-grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+    /* Hero NLP Section */
+    .tb-hero {
+      border: 1px solid #c7d2fe;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+    .tb-hero-title { font-size: 22px; margin-bottom: 6px; }
+    .tb-textarea {
+      width: 100%;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: inherit;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--ink);
+      background: var(--white);
+      resize: vertical;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .tb-textarea:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+    .tb-chips-label { font-size: 12px; font-weight: 600; color: var(--subtle); margin: 12px 0 6px; }
+    .tb-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .tb-chip {
+      background: var(--white);
+      border: 1px solid var(--line-dark);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .tb-chip:hover {
+      background: var(--pale);
+      border-color: var(--green);
+      color: var(--green-dark);
+    }
+    .tb-hero-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+    /* Ambiguity Alert */
+    .tb-alert {
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      box-shadow: var(--shadow-sm);
+    }
+    .tb-alert-amber { background: var(--amberbg); border: 1.5px solid var(--amber-border); color: #78350f; }
+    .tb-alert-icon { font-size: 22px; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+    .tb-alert-content h4 { margin: 0 0 6px; font-size: 15px; color: #78350f; }
+    .tb-definition-quote {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid var(--amber-border);
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 8px 0;
+    }
+
+    /* Change Understood Cards */
+    .tb-understood-panel { border-left: 4px solid var(--green); }
+    .tb-summary-text { font-size: 14px; margin: 10px 0 16px; color: var(--ink); }
+    .tb-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 14px;
+    }
+    .tb-card-header {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--subtle);
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 4px;
+    }
+    .tb-diff-row { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; margin-bottom: 4px; }
+    .tb-diff-row .tb-label { color: var(--muted); flex-shrink: 0; }
+    .tb-diff-row .tb-val { font-weight: 500; text-align: right; }
+    .tb-val-old { color: var(--subtle); text-decoration: line-through; }
+    .tb-val-new { color: var(--green-dark); font-weight: 600; }
+    .tb-highlight { background: #fef08a; padding: 0 4px; border-radius: 3px; }
+
+    .tb-json-details { margin-top: 10px; font-size: 12px; }
+    .tb-json-details summary { cursor: pointer; color: var(--green); font-weight: 600; }
+    .tb-json-block {
+      background: #0f172a;
+      color: #38bdf8;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      overflow-x: auto;
+      margin-top: 8px;
+    }
+
+    /* Executive Summary Banner */
+    .tb-executive-banner {
+      background: var(--white);
+      border: 1.5px solid var(--line-dark);
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .tb-impact-headline { font-size: 26px; color: var(--ink); letter-spacing: -0.6px; margin: 4px 0 0; }
+    .tb-filter-chip {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tb-filter-chip:hover { background: var(--white); border-color: var(--subtle); }
+    .tb-filter-chip.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+    /* Plan -> Reality Matrix Table */
+    .tb-table-responsive { overflow-x: auto; margin-top: 12px; }
+    .tb-matrix-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .tb-matrix-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: #f1f5f9;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--line);
+    }
+    .tb-matrix-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    .tb-matrix-table tr:hover td { background: #f8fafc; }
+    .tb-row-must td { background: #fff8f8; }
+    .tb-row-review td { background: #fffcf0; }
+    .tb-delta-sub { font-size: 11px; color: var(--subtle); margin-top: 2px; }
+
+    /* Dependency Graph SVG */
+    .tb-graph-wrapper {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 14px;
+      overflow-x: auto;
+      text-align: center;
+    }
+    .tb-graph-svg { max-width: 100%; height: auto; }
+    .tb-edge { stroke: #94a3b8; stroke-width: 1.5; }
+    .tb-edge-must { stroke: #ef4444; stroke-width: 2; }
+    .tb-edge-dashed { stroke-dasharray: 4, 4; }
+    .tb-graph-node rect {
+      fill: #ffffff;
+      stroke: var(--line-dark);
+      stroke-width: 1.5;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tb-graph-node:hover rect {
+      stroke-width: 2.5;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    }
+    .tb-node-root rect { fill: #0f172a; stroke: #0f172a; }
+    .tb-node-root text { fill: #ffffff; font-weight: 700; }
+    .tb-node-must rect { fill: var(--redbg); stroke: var(--red); }
+    .tb-node-review rect { fill: var(--amberbg); stroke: var(--amber); }
+    .tb-node-no rect { fill: var(--pale); stroke: var(--green); }
+    .tb-node-text { font-size: 11px; font-weight: 600; fill: var(--ink); pointer-events: none; }
+
+    /* Graph Interactive Blast Radius */
+    .tb-graph-node.tb-node-selected rect {
+      stroke: #4f46e5 !important;
+      stroke-width: 3.5px !important;
+      fill: #eef2ff !important;
+      filter: drop-shadow(0 0 10px rgba(79, 70, 229, 0.7)) !important;
+    }
+    .tb-graph-node.tb-node-upstream rect {
+      stroke: #0284c7 !important;
+      stroke-width: 2.5px !important;
+      fill: #e0f2fe !important;
+      filter: drop-shadow(0 0 8px rgba(2, 132, 199, 0.5)) !important;
+    }
+    .tb-graph-node.tb-node-downstream rect {
+      stroke: #dc2626 !important;
+      stroke-width: 2.5px !important;
+      fill: #fee2e2 !important;
+      filter: drop-shadow(0 0 8px rgba(220, 38, 38, 0.5)) !important;
+    }
+    .tb-graph-node.tb-node-dimmed {
+      opacity: 0.22;
+      transition: opacity 0.2s ease;
+    }
+    .tb-edge.tb-edge-active-upstream {
+      stroke: #0284c7 !important;
+      stroke-width: 3px !important;
+    }
+    .tb-edge.tb-edge-active-downstream {
+      stroke: #dc2626 !important;
+      stroke-width: 3px !important;
+    }
+    .tb-edge.tb-edge-dimmed {
+      opacity: 0.12;
+      transition: opacity 0.2s ease;
+    }
+    .tb-graph-selection-panel {
+      margin-top: 14px;
+      padding: 14px 18px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Presenter Guided Tour Bar */
+    .tb-tour-bar {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(880px, calc(100vw - 32px));
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      box-shadow: 0 16px 40px -6px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px 20px;
+      z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: slideTourUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes slideTourUp {
+      from { transform: translate(-50%, 40px); opacity: 0; }
+      to { transform: translate(-50%, 0); opacity: 1; }
+    }
+    .tb-tour-header { display: flex; justify-content: space-between; align-items: center; }
+    .tb-tour-step-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      background: #38bdf8;
+      color: #0f172a;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+    .tb-tour-body { font-size: 14px; line-height: 1.5; color: #e2e8f0; }
+    .tb-tour-script {
+      background: rgba(255, 255, 255, 0.08);
+      border-left: 3px solid #38bdf8;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-style: italic;
+      color: #e2e8f0;
+      font-size: 13.5px;
+      margin-top: 4px;
+    }
+    .tb-tour-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .tb-tour-btn {
+      background: #334155;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tb-tour-btn:hover { background: #475569; color: #ffffff; }
+    .tb-tour-btn-primary { background: #2563eb; border-color: #3b82f6; color: white; }
+    .tb-tour-btn-primary:hover { background: #1d4ed8; }
+    .tb-tour-btn-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 0 4px;
+    }
+    .tb-tour-btn-close:hover { color: #ffffff; }
+
+    /* Impact Cards */
+    .tb-cards-list { display: grid; gap: 14px; margin-top: 14px; }
+    .tb-impact-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px 20px;
+      border-left: 4px solid var(--line-dark);
+      transition: box-shadow 0.15s ease;
+    }
+    .tb-impact-card:hover { box-shadow: var(--shadow-md); }
+    .tb-impact-must_change { border-left-color: var(--red); }
+    .tb-impact-owner_review { border-left-color: var(--amber); }
+    .tb-impact-unaffected { border-left-color: var(--green); }
+
+    .tb-card-id { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--subtle); }
+    .tb-card-name { font-size: 15px; margin: 0; }
+    .tb-card-field { margin: 8px 0; font-size: 13px; }
+    .tb-field-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--subtle); display: block; margin-bottom: 2px; }
+    .tb-reason-text { color: #1e293b; }
+    .tb-action-text { color: var(--ink); font-weight: 500; }
+    .tb-pop-delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .tb-card-footer { margin-top: 12px; padding-top: 10px; border-top: 1px solid #f1f5f9; }
+    .tb-btn-why {
+      background: #f8fafc;
+      color: var(--blue);
+      border-color: var(--blue-border);
+    }
+    .tb-btn-why:hover { background: var(--bluebg); }
+
+    .tb-card-diff-details { font-size: 12px; width: 100%; margin-top: 8px; }
+    .tb-card-diff-details summary { cursor: pointer; color: var(--subtle); font-weight: 600; }
+    .tb-diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+    .tb-diff-col { background: #f8fafc; border: 1px solid var(--line); padding: 10px; border-radius: 4px; }
+    .tb-diff-col pre { margin: 4px 0 0; font-family: var(--font-mono); font-size: 11px; white-space: pre-wrap; }
+
+    /* Modal Backdrop & Modal */
+    .tb-modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(2px);
+      display: grid;
+      place-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .tb-modal {
+      background: var(--white);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      padding: 24px;
+    }
+    .tb-modal-header { border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 16px; }
+    .tb-btn-close {
+      background: transparent;
+      border: 0;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--subtle);
+      line-height: 1;
+    }
+
+    /* Causal Chain in Modal */
+    .tb-causal-chain {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .tb-chain-title { font-size: 12px; font-weight: 700; color: var(--subtle); text-transform: uppercase; margin-bottom: 12px; }
+    .tb-chain-step { display: flex; align-items: center; gap: 12px; }
+    .tb-step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .tb-step-content { font-size: 13px; }
+    .tb-chain-arrow { font-size: 16px; color: var(--subtle); text-align: left; padding: 2px 0 2px 8px; }
+
+    /* Readiness Checklist */
+    .tb-gate-item {
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .tb-gate-checkbox { width: 18px; height: 18px; accent-color: var(--green); cursor: pointer; }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .tb-shell { padding: 16px; }
+      .tb-grid-2, .tb-grid-3 { grid-template-columns: 1fr; }
+      .tb-diff-grid { grid-template-columns: 1fr; }
+      .tb-topline { flex-direction: column; align-items: flex-start; }
+      nav { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation & Header -->
+  <header>
+    <div class="tb-topline">
+      <div class="tb-brand">
+        <div class="tb-logo-icon">⚡</div>
+        <div class="tb-title-group">
+          <h1>Twin Brain <span style="font-weight: 400; color: var(--subtle);">· Organisational Change Intelligence</span></h1>
+          <div class="tb-thesis">Thesis: <strong>Change something once. Know everything it impacts.</strong></div>
+        </div>
+      </div>
+      <div class="tb-row" style="gap: 10px;">
+        <span class="tb-badge tb-badge-no">Google Hackathon Prototype</span>
+        <button type="button" class="tb-btn tb-btn-sm" id="tbTourBtn" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border: none; font-weight: 700; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35); display: inline-flex; align-items: center; gap: 6px;">🎯 2-Min Demo Tour</button>
+        <button type="button" class="tb-btn tb-btn-sm" id="tbSettingsBtn">⚙️ AI Settings</button>
+      </div>
+    </div>
+    <nav aria-label="Main Navigation">
+      <button type="button" data-tab="intelligence" class="active">🧠 1 · Change Intelligence</button>
+      <button type="button" data-tab="charter">📋 2 · Programme Charter</button>
+      <button type="button" data-tab="workstreams">👥 3 · Team Workstreams</button>
+      <button type="button" data-tab="readiness">🚦 4 · Readiness Gates</button>
+      <button type="button" data-tab="history">📜 5 · Audit &amp; History</button>
+    </nav>
+  </header>
+
+  <!-- Main View Container -->
+  <main class="tb-shell" id="appMain"></main>
+
+  <!-- Global Modal Container for Explainability & Settings -->
+  <div id="modalContainer"></div>
+
+  <!-- 1. GTM DETERMINISTIC ENGINE (Preserved 100% for deterministic arithmetic) -->
+  <script id="engine">
+    'use strict';
+    const MARKETS = [
+      { id: 'US', name: 'United States', locale: 'en-US', agents: 12 },
+      { id: 'UK', name: 'United Kingdom', locale: 'en-GB', agents: 6 },
+      { id: 'DE', name: 'Germany', locale: 'de-DE', agents: 8 },
+      { id: 'FR', name: 'France', locale: 'fr-FR', agents: 8 }
+    ];
+
+    const ACCOUNTS = MARKETS.flatMap((m, mi) => Array.from({ length: 24 }, (_, j) => {
+      const seats = 50 + j * 10;
+      return {
+        id: `SYN-${m.id}-${String(j + 1).padStart(3, '0')}`,
+        market: m.id,
+        licensed_seats: seats,
+        seats_active_28d: Math.floor(seats * [0, 0.1, 0.4, 0.8][j % 4]),
+        days_since_activity: j % 4 === 0 ? 100 : 4 + (j % 7),
+        technical_ready: j % 5 !== 0,
+        contact_permitted: j % 6 !== 0,
+        assigned_arm: j % 5 === 4 ? 'holdout' : 'outreach',
+        previously_contacted: j % 7 === 0,
+        contract: 'active-paying'
+      };
+    }));
+
+    const BASE = {
+      audience: 'all',
+      threshold: 20,
+      excludeChurn: false,
+      markets: ['US', 'UK', 'DE', 'FR']
+    };
+
+    const clone = x => JSON.parse(JSON.stringify(x));
+    const same = (a, b) => JSON.stringify({ ...a, markets: [...a.markets].sort() }) === JSON.stringify({ ...b, markets: [...b.markets].sort() });
+
+    function policyText(c) {
+      return `${c.audience === 'all' ? 'All existing paying business accounts' : `Low adoption only: active seats / licensed seats over 28 days < ${c.threshold}%`}. ${c.excludeChurn ? 'Exclude accounts with no activity for 90+ days; this exclusion takes precedence.' : 'No churn-like exclusion.'} Markets: ${c.markets.join(', ')}.`;
+    }
+
+    function population(c) {
+      return ACCOUNTS.filter(a => c.markets.includes(a.market) &&
+        (c.audience === 'all' || a.seats_active_28d / a.licensed_seats < c.threshold / 100) &&
+        (!c.excludeChurn || a.days_since_activity < 90));
+    }
+
+    function counts(c) {
+      const p = population(c);
+      return {
+        eligible: p.length,
+        contactable: p.filter(a => a.contact_permitted).length,
+        ready: p.filter(a => a.technical_ready).length,
+        outreach: p.filter(a => a.contact_permitted && a.assigned_arm === 'outreach').length,
+        holdout: p.filter(a => a.assigned_arm === 'holdout').length,
+        trialReady: p.filter(a => a.contact_permitted && a.assigned_arm === 'outreach' && a.technical_ready).length
+      };
+    }
+
+    const ARTIFACTS = [
+      { id: 'A1', team: 'Analytics', title: 'Audience policy & membership', owner: 'Analytics lead', deps: ['audience', 'markets'], task: 'Translate the approved population into reproducible rules; deduplicate accounts, validate source freshness, inspect excluded records and snapshot account membership.', accept: 'PM signs the business rule; analytics tests boundaries, overlap, nulls and exclusions; account list carries programme_version and audience_snapshot_id.' },
+      { id: 'A2', team: 'Analytics', title: 'Measurement plan', owner: 'Measurement lead', deps: ['audience', 'markets'], task: 'Define the hypothesis, account-level unit, outcome window, primary outcome, guardrails and treatment/holdout design. Check power and contamination before claiming lift.', accept: 'Named denominator and baseline; stable assignment; approved handling of non-response, segment differences and any in-flight change. Descriptive metrics separated from causal estimates.' },
+      { id: 'A3', team: 'Analytics', title: 'Event contract', owner: 'Analytics + engineering', deps: [], task: 'Instrument exposure, outreach, setup start, authorized connection success and meaningful first use. Define deduplication, test traffic exclusion, event ownership and failure states.', accept: 'Events carry pseudonymous account ID, programme_version, audience_snapshot_id, assignment_arm, market and timestamp. Do not record customer source content or secrets.' },
+      { id: 'A4', team: 'Analytics', title: 'Reporting specification', owner: 'BI owner', deps: ['audience', 'markets'], task: 'Build funnel, segment and market views with explicit denominators, data freshness, coverage and quality flags. Preserve cohort history.', accept: 'Dashboard filters reconcile to audience snapshots. Reach, activation and outcome rates use named denominators. No pooled old/new population disguised as a trend.' },
+      { id: 'G1', team: 'GTM', title: 'Segmentation & channel plan', owner: 'GTM lead', deps: ['audience', 'markets'], task: 'Distinguish account eligibility from buyer role and channel eligibility. Define administrator vs business sponsor journey, sales vs partner ownership, contact caps and handoffs.', accept: 'Each segment has a named need, route, owner, contact permission and fallback. Market strategy is confirmed locally, not inferred from country stereotypes.' },
+      { id: 'G2', team: 'GTM', title: 'Master messaging & offer', owner: 'Product marketing', deps: ['audience'], task: 'Create value proposition, demo invitation, email, discovery questions and approved objections. Separate verified claims from product questions.', accept: 'All claims trace to P2. CTA is a readiness discussion in this fixture, not a claim of production availability. Low-adoption copy does not assume technical readiness.' },
+      { id: 'G3', team: 'GTM', title: 'Assignment & suppression', owner: 'Sales / partner operations', deps: ['audience', 'markets'], task: 'Deduplicate across sales and partners; preserve account ownership, consent and holdout suppression. Define routing, escalation and already-contacted exceptions.', accept: 'No excluded or holdout account enters new outreach. Cutover policy for assigned or contacted accounts is explicitly approved. No live outreach in this prototype.' },
+      { id: 'E1', team: 'Enablement', title: 'Training curriculum', owner: 'Enablement lead', deps: ['audience', 'markets'], task: 'Create role-specific modules for target recognition, value proposition, discovery, demo readiness, objections, escalation and privacy boundaries.', accept: 'Update affected modules rather than retraining everything. Product safety foundations remain intact. Learning goals and knowledge checks map to the new version.' },
+      { id: 'E2', team: 'Enablement', title: 'Call guide & quality rubric', owner: 'Field enablement', deps: ['audience'], task: 'Build discovery and routing script, qualifying questions, prohibited claims, handling of excluded accounts, next steps and QA scoring.', accept: 'Script and rubric match the approved audience. Agent never asks for passwords or customer data in a call; technical setup follows an approved product workflow.' },
+      { id: 'E3', team: 'Enablement', title: 'Agent readiness roster', owner: 'Operations manager', deps: ['audience', 'markets'], task: 'Assign agents to markets, publish versioned material, deliver update training, assess competency and record completion before changed outreach.', accept: 'Document publication is not training completion. Each assigned agent must acknowledge the version and pass the required assessment; staffing and coaching gaps remain visible.' },
+      { id: 'P1', team: 'Programme', title: 'Launch & cutover gate', owner: 'Programme manager', deps: ['audience', 'markets'], task: 'Own objective, scope, milestones, accountable leads, change decisions, market gates, exceptions and rollback. Decide whether to accept, defer or narrow a change.', accept: 'Global approvals plus market QA and agent readiness must pass. Product/legal/security approval is an independent prerequisite, never inferred from an audience change.' },
+      { id: 'P2', team: 'Programme', title: 'Product claims & safety contract', owner: 'Product + security + legal', deps: [], task: 'Confirm actual architecture, supported environments, entitlements, data handling, access controls, reliability, market availability, support and approved claims before launch.', accept: 'Currently a fictional precondition, not verified. An unchanged targeting rule must not rewrite security claims. Real deployment is blocked until these facts are independently confirmed.' }
+    ];
+
+    function content(id, c) {
+      const names = c.markets.join(', ');
+      const n = counts(c);
+      const scope = policyText(c);
+      const low = c.audience === 'low';
+      const texts = {
+        A1: scope + ' Eligibility is a targeting rule, not technical readiness or permission to contact.',
+        A2: `Population: ${scope} Primary outcome: account completes an authorized connection and meaningful first use within 14 days of assignment (design assumption). Compare outreach vs stable holdout only after feasibility/power approval. Denominator: all eligible accounts assigned to each arm, not only respondents. Proposed fixture cohort: ${n.eligible} accounts.`,
+        A3: 'Events: programme_assigned; outreach_delivered; setup_started; connection_authorized; first_meaningful_use. Required fields: account_id, programme_version, audience_snapshot_id, assignment_arm, market, timestamp, deduplication_key. No customer data payloads. Schema already supports programme versioning.',
+        A4: `Scope: ${scope} Report eligible (${n.eligible}), contact-permitted (${n.contactable}), outreach-arm and contact-permitted (${n.outreach}), and technically ready (${n.ready}) as separate counts. Slice by market and immutable version; never overwrite prior cohort denominators.`,
+        G1: `Markets: ${names}. ${low ? 'Prioritize low-adoption administrators and an adoption-readiness conversation.' : 'Use separate discovery paths for low, established and high-adoption accounts, with a re-engagement path where appropriate.'} Hybrid motion: permitted email invitation then routed human follow-up; sales or partner ownership must be explicit. Local owner validates channel and staffing.`,
+        G2: `Draft invitation: ${low ? 'Explore whether this proposed feature could support a first useful team workflow.' : 'Explore whether this proposed feature fits your business workflows.'} Book a readiness discussion with your account team. No claim that setup is instant, data never leaves premises, or the feature is available now.`,
+        G3: `New outreach must satisfy (${scope}) AND contact_permitted AND assignment_arm=outreach. Preserve account owner and contact caps. Existing assignments and completed interactions require a separate cutover decision.`,
+        E1: `Modules: audience qualification (${scope}); ${low ? 'first-use discovery for low-adoption teams' : 'discovery paths across adoption levels'}; technical handoff; approved claims; support escalation. Modify affected targeting and discovery modules only.`,
+        E2: `Opening: ${low ? 'What has prevented your team from getting to a useful first workflow?' : 'Where does your team currently use ChatGPT, and what is missing?'} Validate account eligibility and identify administrator. Offer approved readiness assessment, not guaranteed connection. Escalate security and architecture questions.`,
+        E3: `Market roster: ${names}. Each human agent needs material-version acknowledgment and required assessment recorded before new-version outreach. Published slides alone do not establish readiness.`,
+        P1: `Release scope: ${scope} Need analytics, GTM and enablement review; local content QA; agent readiness; assignment/suppression cutover. Product/security/legal prerequisite remains independent.`,
+        P2: 'UNVERIFIED FICTIONAL FEATURE: architecture, supported on-premises systems, network path, entitlement, security, data handling, residency, reliability and market availability require product/security/legal confirmation. No deployment or external promises allowed from this simulation.'
+      };
+      return texts[id];
+    }
+
+    function makeImpact(old, c, phase) {
+      const audience = old.audience !== c.audience || old.threshold !== c.threshold || old.excludeChurn !== c.excludeChurn;
+      const markets = old.markets.join('|') !== c.markets.join('|');
+      const before = population(old);
+      const after = population(c);
+      const nextIds = new Set(after.map(a => a.id));
+      const removed = before.filter(a => !nextIds.has(a.id));
+      const prevIds = new Set(before.map(a => a.id));
+      const added = after.filter(a => !prevIds.has(a.id));
+      const changed = !same(old, c);
+
+      const items = ARTIFACTS.map(a => {
+        const impacted = changed && ((audience && a.deps.includes('audience')) || (markets && a.deps.includes('markets')));
+        const must = impacted && ['A1', 'A4', 'G3', 'E3', 'P1'].includes(a.id);
+        return {
+          ...a,
+          status: impacted ? (must ? 'must' : 'review') : 'no',
+          before: content(a.id, old),
+          after: content(a.id, c),
+          reason: !impacted ? (
+            a.id === 'A3' ? 'Audience-only change does not change event semantics; existing version fields support it. Validate instrumentation in integration, not a schema rewrite.' :
+            a.id === 'P2' ? 'Audience change supplies no evidence for new product/security claims. Keep this independent prerequisite unchanged.' :
+            'No linked field changed in this fixture.'
+          ) : (
+            a.id === 'A2' ? 'Changing eligibility changes the estimand, cohort mix and feasible sample. Re-evaluate power and interpretation; do not mechanically rewrite the experiment.' :
+            a.id === 'E3' ? 'A changed pack invalidates prior readiness for affected work. Publishing it does not train the agents.' :
+            a.id === 'G3' ? 'New assignments must follow the new audience and preserve consent, ownership and holdout suppression.' :
+            a.id === 'G2' ? 'Check whether the promise and CTA still fit the new audience; revise only where justified.' :
+            `This artifact explicitly depends on ${[audience && a.deps.includes('audience') ? 'audience policy' : '', markets && a.deps.includes('markets') ? 'market coverage' : ''].filter(Boolean).join(' and ')}.`
+          )
+        };
+      });
+
+      const localeIds = [...new Set([...old.markets, ...c.markets])];
+      const locales = localeIds.map(id => {
+        const removedMarket = !c.markets.includes(id);
+        const addedMarket = !old.markets.includes(id);
+        return {
+          ...MARKETS.find(m => m.id === id),
+          status: !changed ? 'no' : removedMarket ? 'retire' : addedMarket ? 'new' : 'review',
+          reason: !changed ? 'Existing localized pack unchanged.' :
+            removedMarket ? 'Retire active outreach assets; suppress new assignments; preserve historical reporting and existing customer commitments.' :
+            'New master scope invalidates local audience references, message fit, script and training readiness. Review local strategy before language QA.'
+        };
+      });
+
+      return {
+        changed,
+        items,
+        locales,
+        removed,
+        added,
+        previouslyContactedRemoved: removed.filter(a => a.previously_contacted),
+        phase
+      };
+    }
+
+    function budget(c, impact, rate, hours) {
+      if (!impact.changed) return { central: 0, local: 0, training: 0, total: 0, cost: 0, agents: 0 };
+      const active = MARKETS.filter(m => c.markets.includes(m.id));
+      const central = 10;
+      const local = active.length * 2;
+      const agents = active.reduce((s, m) => s + m.agents, 0);
+      const training = agents * hours;
+      const total = central + local + training;
+      return { central, local, training, total, cost: total * rate, agents };
+    }
+
+    function readiness(p) {
+      if (!p) return { ready: false, missing: ['Simulate and accept a proposed change first.'] };
+      const missing = [];
+      if (!p.config || population(p.config).length === 0) missing.push('Target population is empty; revise or cancel rather than release.');
+      if (!p.accepted) missing.push('PM has not accepted this proposed version.');
+      for (const [k, v] of Object.entries(p.reviews)) if (!v) missing.push(k + ' review not recorded.');
+      for (const m of p.impact.locales) {
+        const s = p.marketChecks[m.id];
+        if (m.status === 'retire') {
+          if (!s.retired) missing.push(m.id + ': suppression / retirement not confirmed.');
+        } else if (m.status !== 'no') {
+          if (!s.local) missing.push(m.id + ': local strategy and language QA not confirmed.');
+          if (!s.trained) missing.push(m.id + ': agent assessment completion not confirmed.');
+        }
+      }
+      if (p.phase === 'inflight' && !p.cutover) missing.push('Existing assignments, cohort treatment and cutover require approval.');
+      if (!p.prerequisite) missing.push('Product/security/legal prerequisite not marked as simulated confirmation.');
+      return { ready: missing.length === 0, missing };
+    }
+
+    window.GTM = {
+      MARKETS,
+      ACCOUNTS,
+      BASE,
+      ARTIFACTS,
+      policyText,
+      population,
+      counts,
+      content,
+      makeImpact,
+      budget,
+      readiness,
+      same
+    };
+  </script>
+
+  <!-- 2. TWIN BRAIN INTELLIGENCE MODULE -->
+  <script>
+    'use strict';
+    // Embed Twin Brain Core logic
+  </script>
+  <!-- TWIN_BRAIN_CORE_START -->
+<script>
+// Twin Brain — Organisational Change Intelligence
+// Core Semantic Engine, Unified Context, and Explainability Causal Graph
+'use strict';
+
+(function(global) {
+  const g = global.GTM;
+  if (!g) {
+    console.error('Twin Brain core requires window.GTM');
+    return;
+  }
+
+  // --- 1. UNIFIED PROJECT CONTEXT (Prompt Section 7) ---
+  const OWNERS = [
+    { id: 'analytics-lead', name: 'Analytics Lead', team: 'Analytics', role: 'Audience definition & identity rules' },
+    { id: 'measurement-lead', name: 'Measurement Lead', team: 'Analytics', role: 'Experimentation & causal lift' },
+    { id: 'bi-owner', name: 'BI Owner', team: 'Analytics', role: 'Reporting specifications & dashboards' },
+    { id: 'gtm-lead', name: 'GTM Lead', team: 'GTM', role: 'Segmentation, channels & capacity' },
+    { id: 'product-marketing', name: 'Product Marketing', team: 'GTM', role: 'Master messaging, positioning & CTA' },
+    { id: 'sales-partner-ops', name: 'Sales / Partner Operations', team: 'GTM', role: 'Account assignment, routing & suppression' },
+    { id: 'enablement-lead', name: 'Enablement Lead', team: 'Enablement', role: 'Training curriculum & methodology' },
+    { id: 'field-enablement', name: 'Field Enablement', team: 'Enablement', role: 'Call guide, objections & QA rubric' },
+    { id: 'operations-manager', name: 'Operations Manager', team: 'Enablement', role: 'Agent readiness roster & certifications' },
+    { id: 'programme-manager', name: 'Programme Manager', team: 'Programme', role: 'Launch gates, scope decisions & cutover' },
+    { id: 'product-security-legal', name: 'Product + Security + Legal', team: 'Programme', role: 'Technical claims, architecture & safety boundaries' },
+    { id: 'local-lead-us', name: 'US Market Lead', team: 'Localization', role: 'US local strategy & motion QA' },
+    { id: 'local-lead-uk', name: 'UK Market Lead', team: 'Localization', role: 'UK local strategy & motion QA' },
+    { id: 'local-lead-de', name: 'Germany Market Lead', team: 'Localization', role: 'DE language QA & local delivery' },
+    { id: 'local-lead-fr', name: 'France Market Lead', team: 'Localization', role: 'FR language QA & local delivery' }
+  ];
+
+  const DEPENDENCIES = [
+    // Upstream Business Change links
+    { from: 'CHANGE_PROPOSAL', to: 'AUDIENCE_FILTER', relationship: 'defines', strength: 'hard', source: 'declared' },
+    { from: 'CHANGE_PROPOSAL', to: 'MARKET_SCOPE', relationship: 'defines', strength: 'hard', source: 'declared' },
+    { from: 'CHANGE_PROPOSAL', to: 'INACTIVITY_RULE', relationship: 'defines', strength: 'hard', source: 'declared' },
+
+    // Audience & Inactivity dependencies
+    { from: 'AUDIENCE_FILTER', to: 'A1', relationship: 'governs audience policy', strength: 'hard', source: 'declared' },
+    { from: 'INACTIVITY_RULE', to: 'A1', relationship: 'governs inactivity filter', strength: 'hard', source: 'declared' },
+    { from: 'A1', to: 'A4', relationship: 'supplies cohort denominator', strength: 'hard', source: 'declared' },
+    { from: 'A1', to: 'A2', relationship: 'supplies population & estimand', strength: 'hard', source: 'declared' },
+    { from: 'A1', to: 'G1', relationship: 'defines target accounts', strength: 'hard', source: 'declared' },
+    { from: 'A1', to: 'G3', relationship: 'supplies account manifests', strength: 'hard', source: 'declared' },
+    { from: 'A1', to: 'E1', relationship: 'defines customer profile to train', strength: 'soft', source: 'declared' },
+
+    // GTM & Enablement flow
+    { from: 'G1', to: 'G2', relationship: 'defines segment value propositions', strength: 'hard', source: 'declared' },
+    { from: 'G2', to: 'E2', relationship: 'informs call guide scripts', strength: 'hard', source: 'declared' },
+    { from: 'E1', to: 'E3', relationship: 'curriculum needed for roster certification', strength: 'hard', source: 'declared' },
+    { from: 'E2', to: 'E3', relationship: 'rubric required for agent assessment', strength: 'hard', source: 'declared' },
+
+    // Market & Localization flow
+    { from: 'MARKET_SCOPE', to: 'L-US', relationship: 'authorizes US rollout', strength: 'hard', source: 'declared' },
+    { from: 'MARKET_SCOPE', to: 'L-UK', relationship: 'authorizes UK rollout', strength: 'hard', source: 'declared' },
+    { from: 'MARKET_SCOPE', to: 'L-DE', relationship: 'authorizes Germany rollout', strength: 'hard', source: 'declared' },
+    { from: 'MARKET_SCOPE', to: 'L-FR', relationship: 'authorizes France rollout', strength: 'hard', source: 'declared' },
+    { from: 'L-US', to: 'E3', relationship: 'supplies US agent readiness', strength: 'hard', source: 'declared' },
+    { from: 'L-UK', to: 'E3', relationship: 'supplies UK agent readiness', strength: 'hard', source: 'declared' },
+    { from: 'L-DE', to: 'E3', relationship: 'supplies Germany agent readiness', strength: 'hard', source: 'declared' },
+    { from: 'L-FR', to: 'E3', relationship: 'supplies France agent readiness', strength: 'hard', source: 'declared' },
+
+    // Launch readiness gate dependencies
+    { from: 'A1', to: 'P1', relationship: 'requires signed policy', strength: 'hard', source: 'declared' },
+    { from: 'A2', to: 'P1', relationship: 'requires measurement sign-off', strength: 'hard', source: 'declared' },
+    { from: 'G3', to: 'P1', relationship: 'requires suppression manifest', strength: 'hard', source: 'declared' },
+    { from: 'E3', to: 'P1', relationship: 'requires certified agents', strength: 'hard', source: 'declared' },
+    { from: 'L-US', to: 'P1', relationship: 'requires local US sign-off', strength: 'hard', source: 'declared' },
+    { from: 'L-UK', to: 'P1', relationship: 'requires local UK sign-off', strength: 'hard', source: 'declared' },
+    { from: 'L-DE', to: 'P1', relationship: 'requires local Germany sign-off', strength: 'hard', source: 'declared' },
+    { from: 'L-FR', to: 'P1', relationship: 'requires local France sign-off or suppression', strength: 'hard', source: 'declared' },
+
+    // Independent prerequisite
+    { from: 'P2', to: 'P1', relationship: 'independent prerequisite check', strength: 'hard', source: 'declared' }
+  ];
+
+  function getProgramContext(config, version) {
+    const activeConfig = config || g.BASE;
+    const currentVer = version || 1;
+
+    const baseArtifacts = g.ARTIFACTS.map(a => ({
+      id: a.id,
+      name: a.title,
+      team: a.team,
+      owner: a.owner,
+      version: `v${currentVer}`,
+      content: g.content(a.id, activeConfig),
+      dependencies: a.deps,
+      approvalStatus: currentVer > 1 ? 'PENDING_REVIEW' : 'BASELINE_APPROVED',
+      source: {
+        type: 'fixture',
+        id: `SRC-${a.id}-v${currentVer}`,
+        url: `gtm://artifacts/${a.id}/v${currentVer}`
+      }
+    }));
+
+    // Add local packs
+    const localPacks = g.MARKETS.map(m => ({
+      id: `L-${m.id}`,
+      name: `${m.name} Local Enablement Pack`,
+      team: 'Localization',
+      owner: `${m.id} Market Lead`,
+      version: `v${currentVer}`,
+      content: `Locale: ${m.locale}. Agents: ${m.agents}. Strategy: Source-linked to v${currentVer}.`,
+      dependencies: ['audience', 'markets'],
+      approvalStatus: activeConfig.markets.includes(m.id) ? 'PENDING_QA' : 'RETIRED',
+      source: {
+        type: 'fixture',
+        id: `SRC-LOCALE-${m.id}-v${currentVer}`,
+        url: `gtm://locales/${m.id}/v${currentVer}`
+      }
+    }));
+
+    return {
+      program: {
+        id: 'PROG-CONNECT-DATA',
+        name: 'Connect on-premises data directly on ChatGPT',
+        version: currentVer,
+        objective: 'Help eligible business accounts evaluate and adopt on-premises data connectivity safely, with a measurable and supportable path to first value.',
+        currentAudience: activeConfig
+      },
+      artifacts: [...baseArtifacts, ...localPacks],
+      markets: g.MARKETS,
+      owners: OWNERS,
+      dependencies: DEPENDENCIES,
+      approvals: [
+        { id: 'app-analytics', name: 'Analytics Workstream Review', required: true, status: 'pending' },
+        { id: 'app-gtm', name: 'GTM Workstream Review', required: true, status: 'pending' },
+        { id: 'app-enablement', name: 'Enablement Workstream Review', required: true, status: 'pending' },
+        { id: 'app-pm', name: 'PM Acceptance Gate', required: true, status: 'pending' }
+      ],
+      readiness: [
+        { id: 'gate-pm', name: 'PM Scope Decision', status: 'pending' },
+        { id: 'gate-central', name: 'Central Workstream Reviews', status: 'pending' },
+        { id: 'gate-local', name: 'Local Strategy & Language QA', status: 'pending' },
+        { id: 'gate-training', name: 'Agent Assessment Completion', status: 'pending' },
+        { id: 'gate-suppress', name: 'Market Retirement & Suppression', status: 'pending' },
+        { id: 'gate-prereq', name: 'Independent Product / Security Prerequisite', status: 'pending' }
+      ],
+      versions: [
+        { version: 1, type: 'Seeded baseline', config: g.BASE }
+      ]
+    };
+  }
+
+  // --- 2. GEMINI INTERPRETATION STAGE (Prompt Sections 4 & 5) ---
+  function interpretChange(promptText) {
+    if (!promptText || typeof promptText !== 'string') {
+      return {
+        change_summary: 'Empty change request',
+        changes: [],
+        ambiguities: [],
+        requires_confirmation: false
+      };
+    }
+
+    const text = promptText.trim();
+    const lower = text.toLowerCase();
+    const changes = [];
+    const ambiguities = [];
+
+    // Ambiguity Check 1: "Low producers"
+    if (lower.includes('low producer') || lower.includes('low-producer')) {
+      ambiguities.push({
+        term: 'Low producers',
+        issue: '“Low producers” is not defined in the current programme charter.',
+        potential_definition: 'active seats / licensed seats < 20% during the previous 30 days (Low adoption)',
+        resolution: 'Map to low-adoption audience filter (< 20% threshold)',
+        resolvedConfig: { audience: 'low', threshold: 20 }
+      });
+    }
+
+    // Ambiguity Check 2: "Inactive users" without days
+    if ((lower.includes('inactive') || lower.includes('inactivity')) && 
+        !lower.includes('90') && !lower.includes('days') && !lower.includes('month') && !lower.includes('exclude')) {
+      ambiguities.push({
+        term: 'Inactive users',
+        issue: '“Inactive users” does not specify an inactivity day threshold.',
+        potential_definition: 'Exclude accounts with no activity for 90+ days (Churn-like behavioral proxy)',
+        resolution: 'Exclude accounts with days_since_activity >= 90',
+        resolvedConfig: { excludeChurn: true }
+      });
+    }
+
+    // 1. Audience Filter
+    const isLowAdoption = lower.includes('low-adoption') || 
+                          lower.includes('low adoption') || 
+                          lower.includes('narrowing the initial launch') || 
+                          lower.includes('narrow to low') ||
+                          lower.includes('low producer');
+    
+    const isAllAudience = lower.includes('all customers') || 
+                          lower.includes('all paying') || 
+                          lower.includes('all business accounts') || 
+                          lower.includes('expand to all') ||
+                          lower.includes('broad audience');
+
+    if (isLowAdoption) {
+      // Check for explicit threshold like "30%", "40%"
+      let threshold = 20;
+      const threshMatch = lower.match(/(\d{1,2})\s*%/);
+      if (threshMatch) {
+        threshold = parseInt(threshMatch[1], 10);
+      }
+      changes.push({
+        type: 'audience_filter',
+        field: 'adoption',
+        operation: 'low_adoption_only',
+        value: true,
+        threshold: threshold,
+        confidence: 0.97
+      });
+    } else if (isAllAudience) {
+      changes.push({
+        type: 'audience_filter',
+        field: 'adoption',
+        operation: 'all_paying_accounts',
+        value: true,
+        confidence: 0.98
+      });
+    }
+
+    // 2. Inactivity Exclusion
+    const hasInactive = lower.includes('inactive') || 
+                        lower.includes('inactivity') || 
+                        lower.includes('churn') || 
+                        lower.includes('no usage');
+    
+    if (hasInactive) {
+      let days = 90;
+      const daysMatch = lower.match(/(\d+)\s*(days|day)/);
+      if (daysMatch) {
+        days = parseInt(daysMatch[1], 10);
+      }
+      changes.push({
+        type: 'audience_filter',
+        field: 'inactive_days',
+        operation: 'exclude_greater_than_or_equal',
+        value: days,
+        confidence: 0.94
+      });
+    }
+
+    // 3. Market Scope Changes
+    // France removal
+    if (lower.includes('remove france') || 
+        lower.includes('drop france') || 
+        lower.includes('exclude france') || 
+        lower.includes('without france') ||
+        lower.includes('no france')) {
+      changes.push({
+        type: 'market_scope',
+        operation: 'remove',
+        value: 'FR',
+        confidence: 0.99
+      });
+    }
+
+    // Germany removal
+    if (lower.includes('remove germany') || 
+        lower.includes('drop germany') || 
+        lower.includes('exclude germany') || 
+        lower.includes('without germany')) {
+      changes.push({
+        type: 'market_scope',
+        operation: 'remove',
+        value: 'DE',
+        confidence: 0.99
+      });
+    }
+
+    // UK removal
+    if (lower.includes('remove uk') || lower.includes('drop uk') || lower.includes('exclude uk')) {
+      changes.push({
+        type: 'market_scope',
+        operation: 'remove',
+        value: 'UK',
+        confidence: 0.99
+      });
+    }
+
+    // US removal
+    if (lower.includes('remove us') || lower.includes('drop us') || lower.includes('exclude us')) {
+      changes.push({
+        type: 'market_scope',
+        operation: 'remove',
+        value: 'US',
+        confidence: 0.99
+      });
+    }
+
+    // Phase: In-flight vs Pre-launch
+    let phase = 'prelaunch';
+    if (lower.includes('in flight') || lower.includes('in-flight') || lower.includes('already launched') || lower.includes('already contacted')) {
+      phase = 'inflight';
+    }
+
+    // Summary synthesis
+    let summaryParts = [];
+    if (isLowAdoption) summaryParts.push('Narrow audience to low-adoption accounts');
+    if (hasInactive) summaryParts.push('Exclude inactive accounts (90+ days)');
+    const removedMarkets = changes.filter(c => c.type === 'market_scope' && c.operation === 'remove').map(c => c.value);
+    if (removedMarkets.length > 0) summaryParts.push(`Remove ${removedMarkets.join(', ')} from launch scope`);
+    if (isAllAudience) summaryParts.push('Expand audience to all paying accounts');
+
+    const change_summary = summaryParts.length > 0 
+      ? summaryParts.join(', ')
+      : 'Review proposed programme scope parameters';
+
+    return {
+      change_summary,
+      changes,
+      ambiguities,
+      requires_confirmation: true,
+      phase
+    };
+  }
+
+  function mapToConfig(parsed, currentConfig) {
+    const base = currentConfig ? JSON.parse(JSON.stringify(currentConfig)) : JSON.parse(JSON.stringify(g.BASE));
+    let next = { ...base };
+
+    // Apply audience changes
+    const adoptionChange = parsed.changes.find(c => c.type === 'audience_filter' && c.field === 'adoption');
+    if (adoptionChange) {
+      if (adoptionChange.operation === 'low_adoption_only') {
+        next.audience = 'low';
+        next.threshold = adoptionChange.threshold || 20;
+      } else if (adoptionChange.operation === 'all_paying_accounts') {
+        next.audience = 'all';
+      }
+    }
+
+    // Apply inactivity exclusion
+    const inactivityChange = parsed.changes.find(c => c.type === 'audience_filter' && c.field === 'inactive_days');
+    if (inactivityChange) {
+      next.excludeChurn = true;
+    }
+
+    // Apply market changes
+    const marketRemovals = parsed.changes.filter(c => c.type === 'market_scope' && c.operation === 'remove');
+    if (marketRemovals.length > 0) {
+      const toRemove = new Set(marketRemovals.map(c => c.value));
+      next.markets = next.markets.filter(m => !toRemove.has(m));
+    }
+
+    // Handle ambiguities auto-applied if user confirmed
+    if (parsed.ambiguities && parsed.ambiguities.length > 0 && parsed.confirmedAmbiguities) {
+      for (const amb of parsed.ambiguities) {
+        if (amb.resolvedConfig) {
+          next = { ...next, ...amb.resolvedConfig };
+        }
+      }
+    }
+
+    return next;
+  }
+
+  // --- 3. IMPACT CATEGORIZATION & REASONING (Prompt Sections 8, 9, 10, 11) ---
+  function analyzeImpact(oldConfig, newConfig, phase = 'prelaunch') {
+    const rawImpact = g.makeImpact(oldConfig, newConfig, phase);
+    const oldPop = g.population(oldConfig);
+    const newPop = g.population(newConfig);
+    const oldCounts = g.counts(oldConfig);
+    const newCounts = g.counts(newConfig);
+
+    const audienceChanged = oldConfig.audience !== newConfig.audience || 
+                            oldConfig.threshold !== newConfig.threshold || 
+                            oldConfig.excludeChurn !== newConfig.excludeChurn;
+    const marketsChanged = oldConfig.markets.join(',') !== newConfig.markets.join(',');
+
+    const items = [];
+
+    // Process central artifacts
+    for (const a of rawImpact.items) {
+      let category = 'UNAFFECTED';
+      let action = 'No change required.';
+      let reason = a.reason;
+
+      if (a.status === 'must') {
+        category = 'MUST_CHANGE';
+      } else if (a.status === 'review') {
+        category = 'OWNER_REVIEW';
+      } else {
+        category = 'UNAFFECTED';
+      }
+
+      // Semantic Action & Reason enrichment
+      if (a.id === 'A1') {
+        category = 'MUST_CHANGE';
+        reason = `Current audience definition includes all retained accounts (${oldCounts.eligible}). The proposed change restricts this to low-adoption accounts (${newCounts.eligible}) and excludes 90+ day inactive accounts.`;
+        action = 'Create audience definition v2 and validate boundary conditions against synthetic accounts.';
+      } else if (a.id === 'A2') {
+        category = 'OWNER_REVIEW';
+        reason = `Existing assumptions were developed against a population of ${oldCounts.eligible} accounts. The proposed cohort contains ${newCounts.eligible} accounts.`;
+        action = 'Analytics owner must review sample size, statistical power, strata, and denominator assumptions. [Restraint: Twin Brain does not claim the experiment is invalid].';
+      } else if (a.id === 'A3') {
+        category = 'UNAFFECTED';
+        reason = 'Audience narrowing does not change event semantics or telemetry contracts. Existing schema already supports programme_version and audience_snapshot_id.';
+        action = 'No change required. Validate event schema in integration, not a rewrite.';
+      } else if (a.id === 'A4') {
+        category = 'MUST_CHANGE';
+        reason = `Dashboards track v1 baseline (${oldCounts.eligible} accounts). Reporting must slice by immutable version and preserve separate denominators for reach and activation.`;
+        action = 'Build v2 funnel dashboard slices; ensure prior cohort denominators are retained and not overwritten.';
+      } else if (a.id === 'G1') {
+        category = 'OWNER_REVIEW';
+        reason = 'Audience narrowing concentrates outreach on low-adoption administrators. Channel capacity, sales vs partner routing, and touchpoint volume require adjustment.';
+        action = 'GTM lead must review buyer role discovery paths and align channel ownership for concentrated cohort.';
+      } else if (a.id === 'G2') {
+        category = 'OWNER_REVIEW';
+        reason = 'Current value proposition was drafted for general enterprise evaluation. Low-adoption accounts require a specific adoption-readiness discovery CTA.';
+        action = 'Review copy fit for low-adoption teams; ensure draft CTA invites readiness discussion without over-promising production availability.';
+      } else if (a.id === 'G3') {
+        category = 'MUST_CHANGE';
+        reason = `Existing campaign manifest references audience v1 containing ${oldCounts.eligible} accounts. Proposed cohort reduces population to ${newCounts.eligible} accounts.`;
+        action = `Generate a v2 audience manifest (${newCounts.eligible} accounts) and suppress excluded accounts from new dispatch.`;
+      } else if (a.id === 'E1') {
+        category = 'MUST_CHANGE';
+        reason = 'Enablement modules currently teach broad feature discovery. Must retrain agents on diagnosing low-adoption obstacles and objection handling.';
+        action = 'Update targeting and discovery modules; align knowledge checks to low-adoption rubric.';
+      } else if (a.id === 'E2') {
+        category = 'OWNER_REVIEW';
+        reason = 'Call guide script currently uses generic opening questions. Opening questions should probe what prevented team usage.';
+        action = 'Field enablement must review call guide scripts and update the QA scoring rubric for low-adoption discovery.';
+      } else if (a.id === 'E3') {
+        category = 'MUST_CHANGE';
+        reason = 'Prior agent certifications are invalid for the revised audience scope and updated curriculum.';
+        action = 'Invalidate prior certifications; record completion of v2 assessment across all assigned agents.';
+      } else if (a.id === 'P1') {
+        category = 'MUST_CHANGE';
+        reason = 'All previous baseline sign-offs were bound to v1 scope. Boundary change automatically re-opens the launch gate.';
+        action = 'PM must accept v2 change for preparation and coordinate sign-offs across leads before activation.';
+      } else if (a.id === 'P2') {
+        category = 'UNAFFECTED';
+        reason = 'Audience narrowing does not change the technical capability or security guarantees offered by the product.';
+        action = 'No change required. Product/security boundary remains an independent prerequisite.';
+      }
+
+      items.push({
+        id: a.id,
+        name: a.title,
+        team: a.team,
+        owner: a.owner,
+        category,
+        reason,
+        action,
+        beforeContent: a.before,
+        afterContent: a.after,
+        deps: a.deps,
+        populationDelta: ['A1', 'A2', 'A4', 'G3'].includes(a.id) 
+          ? { before: oldCounts.eligible, after: newCounts.eligible } 
+          : null
+      });
+    }
+
+    // Process market / localization packs
+    for (const m of rawImpact.locales) {
+      if (m.status === 'retire') {
+        items.push({
+          id: `L-${m.id}`,
+          name: `${m.name} Enablement Pack`,
+          team: 'Localization',
+          owner: `${m.id} Market Lead`,
+          category: 'MUST_CHANGE',
+          reason: `${m.name} has been removed from launch scope but currently has active rollout content and ${m.agents} assigned agents.`,
+          action: 'Retire future distribution and cancel pending enablement while retaining historical evidence and customer audit trail.',
+          marketId: m.id,
+          agents: m.agents,
+          status: m.status
+        });
+      } else if (m.status === 'new') {
+        items.push({
+          id: `L-${m.id}`,
+          name: `${m.name} Enablement Pack (${m.locale})`,
+          team: 'Localization',
+          owner: `${m.id} Market Lead`,
+          category: 'MUST_CHANGE',
+          reason: `${m.name} is newly added to launch scope.`,
+          action: 'Create new local enablement pack, conduct language QA, and onboard local agents.',
+          marketId: m.id,
+          agents: m.agents,
+          status: m.status
+        });
+      }
+    }
+
+    // Compute Executive Summary counts (Prompt Section 8)
+    const mustChangeCount = items.filter(i => i.category === 'MUST_CHANGE').length;
+    const ownerReviewCount = items.filter(i => i.category === 'OWNER_REVIEW').length;
+    const unaffectedCount = items.filter(i => i.category === 'UNAFFECTED').length;
+    const totalImpacts = mustChangeCount + ownerReviewCount;
+
+    return {
+      rawImpact,
+      items,
+      summary: {
+        totalImpacts,
+        mustChangeCount,
+        ownerReviewCount,
+        unaffectedCount,
+        headline: `${totalImpacts} downstream impacts detected`,
+        subline: `${mustChangeCount} Must change · ${ownerReviewCount} Need owner review · ${unaffectedCount} Unaffected`
+      },
+      counts: {
+        old: oldCounts,
+        new: newCounts,
+        removedAccounts: rawImpact.removed.length,
+        addedAccounts: rawImpact.added.length
+      },
+      budget: g.budget(newConfig, rawImpact, 60, 0.5)
+    };
+  }
+
+  // --- 4. PLAN → REALITY MATRIX (Prompt Section 12) ---
+  function computePlanRealityMatrix(oldConfig, newConfig) {
+    const oldCounts = g.counts(oldConfig);
+    const newCounts = g.counts(newConfig);
+    const rawImpact = g.makeImpact(oldConfig, newConfig, 'prelaunch');
+    const budget = g.budget(newConfig, rawImpact, 60, 0.5);
+
+    const oldMarketsStr = oldConfig.markets.join(' ');
+    const newMarketsStr = newConfig.markets.join(' ');
+
+    const rows = [
+      {
+        metric: 'Audience Population',
+        before: `${oldCounts.eligible} accounts`,
+        after: `${newCounts.eligible} accounts`,
+        delta: newCounts.eligible < oldCounts.eligible 
+          ? `-${oldCounts.eligible - newCounts.eligible} accounts (-${Math.round((1 - newCounts.eligible/oldCounts.eligible)*100)}%)` 
+          : 'No change',
+        status: newCounts.eligible !== oldCounts.eligible ? 'must' : 'no'
+      },
+      {
+        metric: 'Markets in Scope',
+        before: oldMarketsStr,
+        after: newMarketsStr,
+        delta: oldMarketsStr !== newMarketsStr ? 'Scope modified' : 'Unchanged',
+        status: oldMarketsStr !== newMarketsStr ? 'must' : 'no'
+      },
+      {
+        metric: 'France Rollout Status',
+        before: oldConfig.markets.includes('FR') ? 'Active' : 'Not in scope',
+        after: newConfig.markets.includes('FR') ? 'Active' : 'Retire / Suppress',
+        delta: (oldConfig.markets.includes('FR') && !newConfig.markets.includes('FR')) ? 'Retire & suppress' : 'Unchanged',
+        status: (oldConfig.markets.includes('FR') && !newConfig.markets.includes('FR')) ? 'must' : 'no'
+      },
+      {
+        metric: 'Experiment Assumptions',
+        before: `v1 (${oldCounts.eligible} accounts)`,
+        after: newCounts.eligible !== oldCounts.eligible ? 'Review required' : 'v1 valid',
+        delta: newCounts.eligible !== oldCounts.eligible ? 'Sample power & strata affected' : 'Unchanged',
+        status: newCounts.eligible !== oldCounts.eligible ? 'review' : 'no'
+      },
+      {
+        metric: 'GTM Campaign Manifest',
+        before: `v1 (${oldCounts.eligible} accounts)`,
+        after: newCounts.eligible !== oldCounts.eligible ? 'Regenerate manifest (v2)' : 'v1 valid',
+        delta: newCounts.eligible !== oldCounts.eligible ? `${newCounts.eligible} active / ${rawImpact.removed.length} suppressed` : 'Unchanged',
+        status: newCounts.eligible !== oldCounts.eligible ? 'must' : 'no'
+      },
+      {
+        metric: 'Agent Training & Roster',
+        before: 'Current (34 agents certified)',
+        after: rawImpact.changed ? `Partially stale (${budget.agents} agents affected)` : 'Current',
+        delta: rawImpact.changed ? `${budget.training}h retraining required` : 'Unchanged',
+        status: rawImpact.changed ? 'must' : 'no'
+      },
+      {
+        metric: 'Programme Readiness Gate',
+        before: 'Pending initial checks',
+        after: rawImpact.changed ? 'Reopened (Pending demo gates)' : 'Pending',
+        delta: rawImpact.changed ? 'All prior sign-offs invalidated' : 'Unchanged',
+        status: rawImpact.changed ? 'must' : 'no'
+      },
+      {
+        metric: 'Illustrative Rework Labour',
+        before: '0 hours (£0)',
+        after: rawImpact.changed ? `${budget.total} hours (£${budget.cost.toLocaleString('en-GB')})` : '0 hours (£0)',
+        delta: rawImpact.changed ? `${budget.central}h central + ${budget.local}h local + ${budget.training}h training` : '£0',
+        status: rawImpact.changed ? 'review' : 'no'
+      }
+    ];
+
+    return rows;
+  }
+
+  // --- 5. EXPLAINABILITY: "SHOW WHY" CAUSAL GRAPH (Prompt Section 14) ---
+  function explainWhy(itemId, analysis) {
+    const item = analysis.items.find(i => i.id === itemId);
+    if (!item) {
+      return {
+        id: itemId,
+        title: itemId,
+        category: 'UNKNOWN',
+        chain: ['Unknown artifact ID'],
+        rationale: 'No explanation available.'
+      };
+    }
+
+    let chain = [];
+    let rationale = '';
+
+    switch (itemId) {
+      case 'L-FR':
+        chain = [
+          'Master Brief v1 (Initial Mandate includes FR)',
+          'Market Scope Decision: Remove France from rollout',
+          'France Localized Pack (L-FR) marked for retirement',
+          'Suppression gate required for 8 assigned French agents',
+          'Historical audit trail preserved, outreach blocked'
+        ];
+        rationale = 'France was removed from the launch scope in the proposed change. Existing localized assets and queued communications must be retired and suppressed to prevent outreach to French accounts, while maintaining historical audit records.';
+        break;
+
+      case 'A1':
+        chain = [
+          'Natural Language Change Request: Narrow audience',
+          'Adoption & Inactivity Boundary Rules Extracted',
+          'A1 Audience Definition & Membership Policy v2',
+          'Synthetic Account Population Snapshot (96 → 24 accounts)'
+        ];
+        rationale = 'The proposed change alters core targeting rules by restricting eligibility to accounts with < 20% seat adoption and excluding those inactive for 90+ days. A1 is the single source of truth for audience policy.';
+        break;
+
+      case 'A2':
+        chain = [
+          'A1 Audience Definition Policy v2',
+          'Target Population reduced from 96 to 24 accounts',
+          'Statistical Power & Minimum Detectable Effect compromised',
+          'A2 Measurement Plan Assumptions require owner review'
+        ];
+        rationale = 'The original measurement plan assumed 96 accounts to achieve statistical power for causal lift. Narrowing to 24 accounts (18 in active markets) substantially alters the sample size, power, and strata. The measurement owner must review assumptions rather than Twin Brain automatically invalidating the test.';
+        break;
+
+      case 'A3':
+        chain = [
+          'Audience Targeting Boundary Filter',
+          'Commercial Eligibility Layer',
+          'A3 Telemetry Contract (Independent Architecture)'
+        ];
+        rationale = 'Audience narrowing does not alter event semantics, telemetry payloads, or connection success definitions. The existing telemetry schema already includes programme_version and audience_snapshot_id fields, requiring no schema rewrite.';
+        break;
+
+      case 'A4':
+        chain = [
+          'A1 Audience Definition Snapshot v2',
+          'Denominator Change (96 → 24 eligible accounts)',
+          'A4 Reporting Specification & Funnel Dashboard'
+        ];
+        rationale = 'Reporting dashboards must use immutable denominators per version. Overwriting baseline counts would corrupt historical conversion metrics; a v2 funnel view must be created.';
+        break;
+
+      case 'G1':
+        chain = [
+          'A1 Audience Policy (Low adoption only)',
+          'Account Needs: Focus on adoption blockers vs general evaluation',
+          'G1 Segmentation & Channel Plan'
+        ];
+        rationale = 'Narrowing audience shifts the commercial conversation from broad exploration to re-engagement and barrier diagnosis. Sales and partner capacity must be rebalanced.';
+        break;
+
+      case 'G2':
+        chain = [
+          'G1 Segmentation Plan',
+          'Customer Value Proposition & Email Invitations',
+          'G2 Master Messaging & Offer'
+        ];
+        rationale = 'The draft CTA and value proposition were designed for general business workflows. They need owner review to verify whether the copy effectively addresses low-adoption accounts.';
+        break;
+
+      case 'G3':
+        chain = [
+          'A1 Audience Snapshot v2',
+          '72 Accounts Excluded from Outreach Universe',
+          'G3 Assignment & Suppression Manifest'
+        ];
+        rationale = 'The live outreach manifest currently contains 96 accounts. 72 excluded accounts must be actively suppressed to prevent sales outreach to disqualified customers.';
+        break;
+
+      case 'E1':
+        chain = [
+          'G2 Master Messaging & Low-Adoption Discovery',
+          'Curriculum Modules for Target Recognition',
+          'E1 Training Curriculum'
+        ];
+        rationale = 'Curriculum must be updated to train customer-facing reps on qualifying low-adoption accounts, uncovering workflow bottlenecks, and handling specific objections.';
+        break;
+
+      case 'E2':
+        chain = [
+          'E1 Training Curriculum',
+          'Discovery Questions & QA Rubric',
+          'E2 Call Guide & Quality Rubric'
+        ];
+        rationale = 'Rep scripts and coaching rubrics must reflect the new qualifying criteria. Reps should probe why usage stalled rather than pitching generic features.';
+        break;
+
+      case 'E3':
+        chain = [
+          'E1 Curriculum & E2 Script Updates',
+          'Prior Agent Certifications Marked Stale',
+          'E3 Agent Readiness Roster'
+        ];
+        rationale = 'Publishing updated materials does not train reps. Prior certifications are invalidated and reps must be reassessed on v2 materials before outreach can begin.';
+        break;
+
+      case 'P1':
+        chain = [
+          'Programmatic Scope Mutation (v1 → v2)',
+          'Invalidation of Central & Local Readiness Sign-offs',
+          'P1 Launch & Cutover Gate Reopened'
+        ];
+        rationale = 'All baseline readiness approvals were granted for v1. Changing audience boundaries and market coverage invalidates prior gates; PM must coordinate re-approval.';
+        break;
+
+      case 'P2':
+        chain = [
+          'Target Audience Selection',
+          'Commercial Outreach Scope',
+          'P2 Product Claims & Security Contract (Independent Boundary)'
+        ];
+        rationale = 'Audience narrowing does not alter product architecture, supported environments, encryption, or security claims. Product capability remains an independent prerequisite.';
+        break;
+
+      case 'L-US':
+      case 'L-UK':
+      case 'L-DE':
+        chain = [
+          'Master Brief v2 Scope Change',
+          'Source Copy Updates (G2, E2)',
+          `${item.name} (${item.marketId || ''}) Stale Link`,
+          'Local Strategy & Language QA Re-verification'
+        ];
+        rationale = `Master scope changes invalidate the source-version parity of the ${item.name}. Local lead must review the updated discovery questions and retrain assigned agents.`;
+        break;
+
+      default:
+        chain = [
+          'Master Scope Change',
+          `Direct dependency on ${item.deps ? item.deps.join(' and ') : 'programme policy'}`,
+          item.name
+        ];
+        rationale = item.reason;
+    }
+
+    return {
+      id: itemId,
+      title: item.name,
+      team: item.team,
+      owner: item.owner,
+      category: item.category,
+      chain,
+      rationale,
+      action: item.action
+    };
+  }
+
+  // --- 6. DEPENDENCY GRAPH DATA (Prompt Section 13) ---
+  function getGraphData(analysis) {
+    // Generate clean layered DAG nodes
+    const nodes = [
+      { id: 'CHANGE', label: 'BUSINESS CHANGE', type: 'root', status: 'change', level: 0, x: 400, y: 30 },
+
+      { id: 'AUDIENCE_NODE', label: 'Audience Filter', type: 'filter', status: 'must', level: 1, x: 200, y: 120 },
+      { id: 'INACTIVITY_NODE', label: 'Inactivity Rule (90d)', type: 'filter', status: 'must', level: 1, x: 400, y: 120 },
+      { id: 'MARKET_NODE', label: 'Market Scope (Remove FR)', type: 'filter', status: 'must', level: 1, x: 600, y: 120 },
+
+      { id: 'A1', label: 'A1 Audience Definition', team: 'Analytics', status: 'must', level: 2, x: 120, y: 220 },
+      { id: 'A2', label: 'A2 Measurement Plan', team: 'Analytics', status: 'review', level: 2, x: 260, y: 220 },
+      { id: 'A4', label: 'A4 Reporting Spec', team: 'Analytics', status: 'must', level: 2, x: 120, y: 310 },
+      
+      { id: 'G1', label: 'G1 Segmentation Plan', team: 'GTM', status: 'review', level: 2, x: 380, y: 220 },
+      { id: 'G2', label: 'G2 Master Messaging', team: 'GTM', status: 'review', level: 2, x: 380, y: 310 },
+      { id: 'G3', label: 'G3 Manifest & Suppress', team: 'GTM', status: 'must', level: 2, x: 260, y: 310 },
+
+      { id: 'E1', label: 'E1 Curriculum', team: 'Enablement', status: 'must', level: 2, x: 500, y: 220 },
+      { id: 'E2', label: 'E2 Call Guide', team: 'Enablement', status: 'review', level: 2, x: 500, y: 310 },
+      { id: 'E3', label: 'E3 Agent Roster', team: 'Enablement', status: 'must', level: 2, x: 500, y: 400 },
+
+      { id: 'L-FR', label: 'L-FR France Pack', team: 'Localization', status: 'must', level: 2, x: 680, y: 220, subtitle: 'RETIRE' },
+      { id: 'L-RETAINED', label: 'Retained Packs (US/UK/DE)', team: 'Localization', status: 'review', level: 2, x: 680, y: 310 },
+
+      { id: 'P1', label: 'P1 Launch Readiness Gate', team: 'Programme', status: 'must', level: 3, x: 400, y: 500 },
+      { id: 'P2', label: 'P2 Product & Security Contract', team: 'Programme', status: 'no', level: 3, x: 680, y: 500, subtitle: 'UNAFFECTED' }
+    ];
+
+    const edges = [
+      { from: 'CHANGE', to: 'AUDIENCE_NODE' },
+      { from: 'CHANGE', to: 'INACTIVITY_NODE' },
+      { from: 'CHANGE', to: 'MARKET_NODE' },
+
+      { from: 'AUDIENCE_NODE', to: 'A1' },
+      { from: 'INACTIVITY_NODE', to: 'A1' },
+      { from: 'A1', to: 'A2' },
+      { from: 'A1', to: 'A4' },
+      { from: 'A1', to: 'G1' },
+      { from: 'A1', to: 'G3' },
+      { from: 'G1', to: 'G2' },
+      { from: 'G2', to: 'E2' },
+      { from: 'A1', to: 'E1' },
+      { from: 'E1', to: 'E3' },
+      { from: 'E2', to: 'E3' },
+
+      { from: 'MARKET_NODE', to: 'L-FR' },
+      { from: 'MARKET_NODE', to: 'L-RETAINED' },
+      { from: 'L-RETAINED', to: 'E3' },
+
+      { from: 'A1', to: 'P1' },
+      { from: 'A2', to: 'P1' },
+      { from: 'G3', to: 'P1' },
+      { from: 'E3', to: 'P1' },
+      { from: 'L-FR', to: 'P1' },
+      { from: 'P2', to: 'P1', dashed: true }
+    ];
+
+    return { nodes, edges };
+  }
+
+  // Export to window
+  global.TWIN_BRAIN = {
+    interpretChange,
+    mapToConfig,
+    analyzeImpact,
+    computePlanRealityMatrix,
+    explainWhy,
+    getProgramContext,
+    getGraphData,
+    OWNERS,
+    DEPENDENCIES
+  };
+
+})(typeof window !== 'undefined' ? window : global);
+
+</script>
+<!-- TWIN_BRAIN_CORE_END -->
+  <!-- TWIN_BRAIN_UI_START -->
+<script>
+// Twin Brain — UI Components & Views
+'use strict';
+
+(function(global) {
+  const g = global.GTM;
+  const tb = global.TWIN_BRAIN;
+  if (!g || !tb) {
+    console.error('Twin Brain UI requires GTM and TWIN_BRAIN on global window');
+    return;
+  }
+
+  const esc = x => String(x || '').replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[ch]));
+
+  // Visual helper styles for badges
+  const categoryBadge = cat => {
+    switch (cat) {
+      case 'MUST_CHANGE':
+        return '<span class="tb-badge tb-badge-must">🔴 Must change</span>';
+      case 'OWNER_REVIEW':
+        return '<span class="tb-badge tb-badge-review">🟠 Owner review</span>';
+      case 'UNAFFECTED':
+        return '<span class="tb-badge tb-badge-no">🟢 Unaffected</span>';
+      case 'BLOCKED':
+        return '<span class="tb-badge tb-badge-blocked">⛔ Blocked</span>';
+      default:
+        return `<span class="tb-badge">${esc(cat)}</span>`;
+    }
+  };
+
+  // --- 1. HERO NLP INPUT COMPONENT (Prompt Step 1) ---
+  function renderHeroNLP(state) {
+    const currentInput = state.nlpInput !== undefined 
+      ? state.nlpInput 
+      : 'We are narrowing the initial launch to low-adoption enterprise customers. Exclude accounts inactive for 90 days and remove France from the first rollout.';
+
+    return `
+      <section class="tb-panel tb-hero">
+        <div class="tb-hero-header">
+          <div class="tb-eyebrow">Step 1 · Natural-Language Change Input</div>
+          <h2 class="tb-hero-title">What changed?</h2>
+          <p class="tb-muted">
+            Describe a proposed business decision or scope shift in natural language. 
+            Twin Brain extracts structured intent, validates domain definitions, and deterministically models downstream blast radius.
+          </p>
+        </div>
+
+        <div class="tb-input-container">
+          <textarea id="tbNlpInput" class="tb-textarea" rows="3" placeholder="e.g. We are narrowing the initial launch to low-adoption enterprise customers. Exclude accounts inactive for 90 days and remove France from the first rollout.">${esc(currentInput)}</textarea>
+          
+          <div class="tb-chips-label">Quick test scenarios:</div>
+          <div class="tb-chips">
+            <button type="button" class="tb-chip" data-preset="canonical">
+              💡 Narrow to low-adoption (&lt;20%), exclude 90d inactive, remove France
+            </button>
+            <button type="button" class="tb-chip" data-preset="ambiguous">
+              ⚠️ Only target low producers (Clarification demo)
+            </button>
+            <button type="button" class="tb-chip" data-preset="germany">
+              🌐 Remove Germany, exclude inactive, &lt;30% adoption
+            </button>
+            <button type="button" class="tb-chip" data-preset="expand">
+              🔄 Expand to all paying business accounts
+            </button>
+          </div>
+
+          <div class="tb-hero-actions">
+            <button type="button" class="tb-btn tb-btn-primary tb-btn-lg" id="tbAnalyzeBtn">
+              <span class="tb-ai-sparkle">✨</span> Analyse Change
+            </button>
+            <span class="tb-pill tb-pill-subtle">Gemini Semantic Change Interpreter v2.5</span>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  // --- 2. AMBIGUITY CLARIFICATION DIALOG (Prompt Section 4) ---
+  function renderAmbiguityAlert(ambiguities) {
+    if (!ambiguities || ambiguities.length === 0) return '';
+
+    return `
+      <div class="tb-alert tb-alert-amber" id="tbAmbiguityBox">
+        <div class="tb-alert-icon">⚠️</div>
+        <div class="tb-alert-content">
+          <h4>Clarification required before analysis</h4>
+          ${ambiguities.map(a => `
+            <div class="tb-ambiguity-item">
+              <p><strong>${esc(a.issue)}</strong></p>
+              <p>Twin Brain suggests the following standard programme definition:</p>
+              <div class="tb-definition-quote">
+                <code>${esc(a.potential_definition)}</code>
+              </div>
+            </div>
+          `).join('')}
+          <div class="tb-row" style="margin-top: 12px; gap: 10px;">
+            <button type="button" class="tb-btn tb-btn-amber" id="tbConfirmAmbiguityBtn">
+              ✓ Confirm definition &amp; proceed
+            </button>
+            <button type="button" class="tb-btn" id="tbEditNlpBtn">
+              ✏️ Rephrase input
+            </button>
+          </div>
+          <small class="tb-muted" style="display:block; margin-top: 6px;">
+            Human-in-the-loop: Twin Brain never guesses ambiguous business metrics without explicit owner confirmation.
+          </small>
+        </div>
+      </div>
+    `;
+  }
+
+  // --- 3. INTERPRETATION UI ("CHANGE UNDERSTOOD") (Prompt Section 5) ---
+  function renderInterpretationUnderstood(state) {
+    const p = state.parsedChange;
+    if (!p) return '';
+
+    const oldConfig = state.current;
+    const newConfig = state.proposedConfig || tb.mapToConfig(p, oldConfig);
+
+    const oldAudienceText = oldConfig.audience === 'all' ? 'All retained paying accounts' : `Low-adoption accounts (<${oldConfig.threshold}%)`;
+    const newAudienceText = newConfig.audience === 'all' ? 'All retained paying accounts' : `Low-adoption retained accounts (<${newConfig.threshold}% seats active)`;
+
+    const oldEligibilityText = oldConfig.excludeChurn ? 'Exclude accounts inactive for 90+ days' : 'No inactivity exclusion';
+    const newEligibilityText = newConfig.excludeChurn ? 'Exclude accounts inactive for 90+ days' : 'No inactivity exclusion';
+
+    const oldMarketsText = oldConfig.markets.map(m => ({ US: 'US', UK: 'UK', DE: 'Germany', FR: 'France' }[m] || m)).join(' / ');
+    const newMarketsText = newConfig.markets.map(m => ({ US: 'US', UK: 'UK', DE: 'Germany', FR: 'France' }[m] || m)).join(' / ');
+
+    return `
+      <section class="tb-panel tb-understood-panel">
+        <div class="tb-row spread">
+          <div>
+            <div class="tb-eyebrow">Step 2 · Gemini Interpretation Stage</div>
+            <h3 class="tb-panel-title">Change understood</h3>
+          </div>
+          <span class="tb-pill ${state.interpretationConfirmed ? 'tb-pill-green' : 'tb-pill-amber'}">
+            ${state.interpretationConfirmed ? '✓ Confirmed by User' : 'Awaiting Confirmation'}
+          </span>
+        </div>
+
+        <p class="tb-summary-text">
+          <strong>Summary:</strong> ${esc(p.change_summary)}
+        </p>
+
+        <div class="tb-grid tb-grid-3">
+          <div class="tb-card tb-diff-card">
+            <div class="tb-card-header">Audience Target</div>
+            <div class="tb-diff-row">
+              <span class="tb-label">Current:</span>
+              <span class="tb-val tb-val-old">${esc(oldAudienceText)}</span>
+            </div>
+            <div class="tb-diff-row">
+              <span class="tb-label">Proposed:</span>
+              <span class="tb-val tb-val-new">${esc(newAudienceText)}</span>
+            </div>
+          </div>
+
+          <div class="tb-card tb-diff-card">
+            <div class="tb-card-header">Eligibility Rules</div>
+            <div class="tb-diff-row">
+              <span class="tb-label">Current:</span>
+              <span class="tb-val tb-val-old">${esc(oldEligibilityText)}</span>
+            </div>
+            <div class="tb-diff-row">
+              <span class="tb-label">Proposed:</span>
+              <span class="tb-val tb-val-new">${esc(newEligibilityText)}</span>
+            </div>
+          </div>
+
+          <div class="tb-card tb-diff-card">
+            <div class="tb-card-header">Market Scope</div>
+            <div class="tb-diff-row">
+              <span class="tb-label">Current:</span>
+              <span class="tb-val tb-val-old">${esc(oldMarketsText)}</span>
+            </div>
+            <div class="tb-diff-row">
+              <span class="tb-label">Proposed:</span>
+              <span class="tb-val tb-val-new ${oldMarketsText !== newMarketsText ? 'tb-highlight' : ''}">${esc(newMarketsText)}</span>
+            </div>
+          </div>
+        </div>
+
+        <details class="tb-json-details" style="margin-top: 14px;">
+          <summary>View Gemini Structured Output JSON (Confidence &amp; Operations)</summary>
+          <pre class="tb-json-block"><code>${esc(JSON.stringify(p, null, 2))}</code></pre>
+        </details>
+
+        <div class="tb-row" style="margin-top: 16px; gap: 12px;">
+          <button type="button" class="tb-btn tb-btn-primary" id="tbConfirmInterpretationBtn" ${state.interpretationConfirmed ? 'disabled' : ''}>
+            ${state.interpretationConfirmed ? '✓ Interpretation Confirmed' : 'Confirm interpretation'}
+          </button>
+          <button type="button" class="tb-btn" id="tbEditInterpretationBtn">
+            Edit parameters
+          </button>
+        </div>
+        <small class="tb-muted" style="display:block; margin-top: 6px;">
+          Deterministic calculation &amp; dependency invalidation occur only after human confirmation.
+        </small>
+      </section>
+    `;
+  }
+
+  // --- 4. EXECUTIVE SUMMARY COUNTERS (Prompt Section 8) ---
+  function renderExecutiveSummary(analysis, currentFilter) {
+    const s = analysis.summary;
+    const filter = currentFilter || 'all';
+
+    return `
+      <section class="tb-executive-banner">
+        <div class="tb-row spread" style="align-items: baseline;">
+          <div>
+            <div class="tb-eyebrow">Step 3 · Deterministic Blast Radius</div>
+            <h1 class="tb-impact-headline">${s.headline}</h1>
+          </div>
+          <div class="tb-pill-group">
+            <button type="button" class="tb-filter-chip ${filter === 'all' ? 'active' : ''}" data-filter="all">
+              All (${analysis.items.length})
+            </button>
+            <button type="button" class="tb-filter-chip ${filter === 'MUST_CHANGE' ? 'active' : ''}" data-filter="MUST_CHANGE">
+              🔴 Must change (${s.mustChangeCount})
+            </button>
+            <button type="button" class="tb-filter-chip ${filter === 'OWNER_REVIEW' ? 'active' : ''}" data-filter="OWNER_REVIEW">
+              🟠 Owner review (${s.ownerReviewCount})
+            </button>
+            <button type="button" class="tb-filter-chip ${filter === 'UNAFFECTED' ? 'active' : ''}" data-filter="UNAFFECTED">
+              🟢 Unaffected (${s.unaffectedCount})
+            </button>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  // --- 5. PLAN → REALITY VIEW (Prompt Section 12) ---
+  function renderPlanRealityMatrix(oldConfig, newConfig) {
+    const matrix = tb.computePlanRealityMatrix(oldConfig, newConfig);
+
+    return `
+      <section class="tb-panel">
+        <div class="tb-row spread">
+          <div>
+            <div class="tb-eyebrow">Comparison Matrix</div>
+            <h3 class="tb-panel-title">Plan → Reality View</h3>
+          </div>
+          <span class="tb-badge tb-badge-subtle">Baseline v1 vs Proposed v2</span>
+        </div>
+        <p class="tb-muted">High-contrast comparison of operational commitments versus proposed reality.</p>
+
+        <div class="tb-table-responsive">
+          <table class="tb-matrix-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Metric / Workstream</th>
+                <th style="width: 25%;">BEFORE (Baseline v1)</th>
+                <th style="width: 30%;">AFTER (Proposed v2)</th>
+                <th style="width: 20%;">Impact State</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${matrix.map(row => `
+                <tr class="tb-row-${row.status}">
+                  <td><strong>${esc(row.metric)}</strong></td>
+                  <td class="tb-val-old">${esc(row.before)}</td>
+                  <td class="tb-val-new">
+                    <strong>${esc(row.after)}</strong>
+                    <div class="tb-delta-sub">${esc(row.delta)}</div>
+                  </td>
+                  <td>
+                    ${row.status === 'must' ? '<span class="tb-badge tb-badge-must">Must change</span>' :
+                      row.status === 'review' ? '<span class="tb-badge tb-badge-review">Owner review</span>' :
+                      '<span class="tb-badge tb-badge-no">Unaffected</span>'}
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    `;
+  }
+
+  // --- 6. INTERACTIVE DEPENDENCY GRAPH (Prompt Section 13) ---
+  function renderDependencyGraph(analysis) {
+    const { nodes, edges } = tb.getGraphData(analysis);
+
+    return `
+      <section class="tb-panel">
+        <div class="tb-row spread">
+          <div>
+            <div class="tb-eyebrow">Dependency Graph</div>
+            <h3 class="tb-panel-title">Semantic Cascade Architecture</h3>
+          </div>
+          <div class="tb-legend">
+            <span class="tb-badge tb-badge-must">Must change</span>
+            <span class="tb-badge tb-badge-review">Owner review</span>
+            <span class="tb-badge tb-badge-no">Unaffected</span>
+            <span class="tb-badge tb-badge-subtle">Click node for details</span>
+          </div>
+        </div>
+        <p class="tb-muted">
+          Directed dependency cascade from business change intent to execution deliverables and readiness gates.
+        </p>
+
+        <div class="tb-graph-wrapper">
+          <svg viewBox="0 0 800 560" class="tb-graph-svg" id="tbGraphSvg">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 9 5 L 0 9 z" fill="#94a3b8" />
+              </marker>
+              <marker id="arrow-must" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 9 5 L 0 9 z" fill="#ef4444" />
+              </marker>
+            </defs>
+
+            <!-- Render Edges -->
+            <g class="tb-graph-edges">
+              ${edges.map(e => {
+                const src = nodes.find(n => n.id === e.from);
+                const tgt = nodes.find(n => n.id === e.to);
+                if (!src || !tgt) return '';
+                const isMust = tgt.status === 'must';
+                return `
+                  <line x1="${src.x}" y1="${src.y + 18}" x2="${tgt.x}" y2="${tgt.y - 18}"
+                        class="tb-edge ${e.dashed ? 'tb-edge-dashed' : ''} ${isMust ? 'tb-edge-must' : ''}"
+                        marker-end="${isMust ? 'url(#arrow-must)' : 'url(#arrow)'}" />
+                `;
+              }).join('')}
+            </g>
+
+            <!-- Render Nodes -->
+            <g class="tb-graph-nodes">
+              ${nodes.map(n => {
+                const isRoot = n.type === 'root';
+                const isMust = n.status === 'must';
+                const isReview = n.status === 'review';
+                const isNo = n.status === 'no';
+                const nodeClass = isRoot ? 'tb-node-root' : isMust ? 'tb-node-must' : isReview ? 'tb-node-review' : 'tb-node-no';
+
+                return `
+                  <g class="tb-graph-node ${nodeClass}" data-node-id="${n.id}" transform="translate(${n.x}, ${n.y})">
+                    <rect x="-75" y="-18" width="150" height="36" rx="6" />
+                    <text x="0" y="4" text-anchor="middle" class="tb-node-text">${esc(n.label)}</text>
+                  </g>
+                `;
+              }).join('')}
+            </g>
+          </svg>
+        </div>
+
+        <div id="tbGraphSelection" class="tb-graph-selection-panel" style="display:none;"></div>
+      </section>
+    `;
+  }
+
+  // --- 7. IMPACT CATEGORIES CARDS (Prompt Sections 9, 10, 11) ---
+  function renderImpactCards(analysis, currentFilter) {
+    const filter = currentFilter || 'all';
+    const items = analysis.items.filter(i => filter === 'all' || i.category === filter);
+
+    return `
+      <section class="tb-panel">
+        <div class="tb-row spread">
+          <div>
+            <div class="tb-eyebrow">Actionable Impact Register</div>
+            <h3 class="tb-panel-title">Detailed Organizational Consequences</h3>
+          </div>
+          <span class="tb-muted">Showing ${items.length} work items</span>
+        </div>
+
+        <div class="tb-cards-list">
+          ${items.map(item => `
+            <div class="tb-impact-card tb-impact-${item.category.toLowerCase()}" data-item-id="${item.id}">
+              <div class="tb-card-top">
+                <div class="tb-row spread">
+                  <div class="tb-row" style="gap: 10px;">
+                    ${categoryBadge(item.category)}
+                    <span class="tb-card-id">${esc(item.id)}</span>
+                    <h4 class="tb-card-name">${esc(item.name)}</h4>
+                  </div>
+                  <span class="tb-badge tb-badge-subtle">${esc(item.team)} · ${esc(item.owner)}</span>
+                </div>
+              </div>
+
+              <div class="tb-card-body">
+                <div class="tb-card-field">
+                  <span class="tb-field-label">Reason:</span>
+                  <div class="tb-field-value tb-reason-text">${esc(item.reason)}</div>
+                </div>
+
+                ${item.populationDelta ? `
+                  <div class="tb-card-field tb-pop-delta">
+                    <span class="tb-field-label">Population Delta:</span>
+                    <span class="tb-val-old">${item.populationDelta.before} accounts</span>
+                    <span class="tb-arrow">➔</span>
+                    <span class="tb-val-new"><strong>${item.populationDelta.after} accounts</strong></span>
+                  </div>
+                ` : ''}
+
+                <div class="tb-card-field">
+                  <span class="tb-field-label">Action Required:</span>
+                  <div class="tb-field-value tb-action-text">${esc(item.action)}</div>
+                </div>
+
+                <div class="tb-card-footer tb-row spread">
+                  <button type="button" class="tb-btn tb-btn-sm tb-btn-why" data-show-why="${esc(item.id)}">
+                    🔍 Show why
+                  </button>
+                  ${item.beforeContent ? `
+                    <details class="tb-card-diff-details">
+                      <summary>Inspect before / after revisions</summary>
+                      <div class="tb-diff-grid">
+                        <div class="tb-diff-col">
+                          <small>CURRENT TEXT</small>
+                          <pre>${esc(item.beforeContent)}</pre>
+                        </div>
+                        <div class="tb-diff-col">
+                          <small>PROPOSED TEXT</small>
+                          <pre>${esc(item.afterContent)}</pre>
+                        </div>
+                      </div>
+                    </details>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </section>
+    `;
+  }
+
+  // --- 8. EXPLAINABILITY "SHOW WHY" MODAL (Prompt Section 14) ---
+  function renderExplainWhyModal(itemId, analysis) {
+    const exp = tb.explainWhy(itemId, analysis);
+
+    return `
+      <div class="tb-modal-backdrop" id="tbWhyModalBackdrop">
+        <div class="tb-modal">
+          <div class="tb-modal-header tb-row spread">
+            <div>
+              <div class="tb-eyebrow">Explainability Engine · Causal Path</div>
+              <h3>Why ${esc(exp.title)} ${exp.category === 'MUST_CHANGE' ? 'must change' : exp.category === 'OWNER_REVIEW' ? 'requires owner review' : 'is unaffected'}</h3>
+            </div>
+            <button type="button" class="tb-btn-close" id="tbCloseWhyModal">&times;</button>
+          </div>
+
+          <div class="tb-modal-body">
+            <div class="tb-causal-chain">
+              <div class="tb-chain-title">Causal Cascade from Business Decision:</div>
+              <div class="tb-chain-steps">
+                ${exp.chain.map((step, idx) => `
+                  <div class="tb-chain-step">
+                    <div class="tb-step-num">${idx + 1}</div>
+                    <div class="tb-step-content">
+                      <strong>${esc(step)}</strong>
+                    </div>
+                  </div>
+                  ${idx < exp.chain.length - 1 ? '<div class="tb-chain-arrow">↓</div>' : ''}
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="tb-panel" style="margin-top: 16px; background: #f8fafc;">
+              <h4>Twin Brain Rationale</h4>
+              <p>${esc(exp.rationale)}</p>
+            </div>
+
+            <div class="tb-panel" style="margin-top: 12px; background: #f0fdf4; border-color: #bbf7d0;">
+              <h4>Recommended Action for ${esc(exp.owner || 'Owner')}</h4>
+              <p><strong>${esc(exp.action)}</strong></p>
+            </div>
+          </div>
+
+          <div class="tb-modal-footer tb-row" style="justify-content: flex-end;">
+            <button type="button" class="tb-btn tb-btn-primary" id="tbCloseWhyModalBtn">Close explanation</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // --- 9. HACKATHON PRESENTATION TOUR BAR ---
+  function renderTourBar(stepIdx, totalSteps, stepData) {
+    if (!stepData) return '';
+    return `
+      <div class="tb-tour-bar" id="tbTourBar">
+        <div class="tb-tour-header">
+          <div class="tb-row" style="gap: 10px; align-items: center;">
+            <span class="tb-tour-step-badge">Demo Step ${stepIdx + 1} of ${totalSteps}</span>
+            <strong style="color: #ffffff; font-size: 15px;">${esc(stepData.title)}</strong>
+          </div>
+          <button type="button" class="tb-tour-btn-close" id="tbTourExitBtn" title="Exit presentation tour (Esc)">✕</button>
+        </div>
+        <div class="tb-tour-body">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: #38bdf8; font-weight: 700;">
+            🎤 Presenter Talking Point (Read to Judges):
+          </div>
+          <div class="tb-tour-script">
+            "${esc(stepData.script)}"
+          </div>
+        </div>
+        <div class="tb-tour-actions">
+          <div>
+            ${stepIdx > 0 ? `<button type="button" class="tb-tour-btn" id="tbTourPrevBtn">◀ Previous</button>` : ''}
+          </div>
+          <div class="tb-row" style="gap: 8px;">
+            <button type="button" class="tb-tour-btn" id="tbTourStopBtn">Exit Tour</button>
+            <button type="button" class="tb-tour-btn tb-tour-btn-primary" id="tbTourNextBtn">
+              ${stepIdx < totalSteps - 1 ? `${esc(stepData.nextLabel || 'Next Step')} ▶` : 'Finish Demo ✓'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Export UI library
+  global.TWIN_BRAIN_UI = {
+    renderHeroNLP,
+    renderAmbiguityAlert,
+    renderInterpretationUnderstood,
+    renderExecutiveSummary,
+    renderPlanRealityMatrix,
+    renderDependencyGraph,
+    renderImpactCards,
+    renderExplainWhyModal,
+    renderTourBar
+  };
+
+})(typeof window !== 'undefined' ? window : global);
+
+</script>
+<!-- TWIN_BRAIN_UI_END -->
+
+  <!-- 3. APPLICATION STATE & CONTROLLER -->
+  <script>
+    'use strict';
+    const g = window.GTM;
+    const tb = window.TWIN_BRAIN;
+    const tui = window.TWIN_BRAIN_UI;
+
+    let appState = {
+      tab: 'intelligence',
+      current: JSON.parse(JSON.stringify(g.BASE)),
+      version: 1,
+      nlpInput: 'We are narrowing the initial launch to low-adoption enterprise customers. Exclude accounts inactive for 90 days and remove France from the first rollout.',
+      parsedChange: null,
+      interpretationConfirmed: false,
+      proposedConfig: null,
+      impactAnalysis: null,
+      filter: 'all',
+      proposal: null,
+      selectedGraphNodeId: null,
+      tourActive: false,
+      tourStep: 0,
+      history: [
+        { version: 1, type: 'Baseline Charter', note: 'All existing paying accounts across US, UK, DE, FR.', config: JSON.parse(JSON.stringify(g.BASE)) }
+      ],
+      geminiApiKey: typeof localStorage !== 'undefined' ? (localStorage.getItem('tb_gemini_api_key') || '') : ''
+    };
+
+    function init() {
+      // Auto-analyze canonical proposal for initial render
+      executeAnalysis(appState.nlpInput, false);
+      bindGlobalEvents();
+      renderApp();
+    }
+
+    function executeAnalysis(promptText, autoConfirm) {
+      appState.nlpInput = promptText;
+      const parsed = tb.interpretChange(promptText);
+      appState.parsedChange = parsed;
+      appState.interpretationConfirmed = false;
+      appState.proposedConfig = tb.mapToConfig(parsed, appState.current);
+
+      if (autoConfirm || parsed.ambiguities.length === 0) {
+        confirmAndCalculateImpact();
+      } else {
+        appState.impactAnalysis = null;
+      }
+    }
+
+    function confirmAndCalculateImpact() {
+      appState.interpretationConfirmed = true;
+      appState.impactAnalysis = tb.analyzeImpact(appState.current, appState.proposedConfig, appState.parsedChange?.phase || 'prelaunch');
+      
+      // Update proposal structure for readiness tab
+      appState.proposal = {
+        version: appState.version + 1,
+        config: JSON.parse(JSON.stringify(appState.proposedConfig)),
+        phase: appState.parsedChange?.phase || 'prelaunch',
+        impact: appState.impactAnalysis.rawImpact,
+        accepted: false,
+        reviews: { Analytics: false, GTM: false, Enablement: false },
+        marketChecks: Object.fromEntries(appState.impactAnalysis.rawImpact.locales.map(m => [m.id, { local: false, trained: false, retired: false }])),
+        cutover: false,
+        prerequisite: false
+      };
+    }
+
+    // --- GRAPH BLAST RADIUS & CAUSAL HIGHLIGHTING ---
+    function highlightNodeBlastRadius(nodeId) {
+      appState.selectedGraphNodeId = nodeId;
+      const graphData = tb.getGraphData(appState.impactAnalysis || { rawImpact: { locales: [] } });
+      const { nodes, edges } = graphData;
+
+      const selectedNode = nodes.find(n => n.id === nodeId);
+      if (!selectedNode) return;
+
+      // Downstream descendants (BFS)
+      const downstreamSet = new Set();
+      const downstreamEdgeIndices = new Set();
+      const dq = [nodeId];
+      while (dq.length > 0) {
+        const curr = dq.shift();
+        edges.forEach((e, idx) => {
+          if (e.from === curr) {
+            downstreamEdgeIndices.add(idx);
+            if (!downstreamSet.has(e.to)) {
+              downstreamSet.add(e.to);
+              dq.push(e.to);
+            }
+          }
+        });
+      }
+
+      // Upstream ancestors (BFS)
+      const upstreamSet = new Set();
+      const upstreamEdgeIndices = new Set();
+      const uq = [nodeId];
+      while (uq.length > 0) {
+        const curr = uq.shift();
+        edges.forEach((e, idx) => {
+          if (e.to === curr) {
+            upstreamEdgeIndices.add(idx);
+            if (!upstreamSet.has(e.from)) {
+              upstreamSet.add(e.from);
+              uq.push(e.from);
+            }
+          }
+        });
+      }
+
+      // Apply SVG classes
+      const svg = document.getElementById('tbGraphSvg');
+      if (svg) {
+        const nodeEls = svg.querySelectorAll('.tb-graph-node');
+        nodeEls.forEach(el => {
+          const id = el.dataset.nodeId;
+          el.classList.remove('tb-node-selected', 'tb-node-upstream', 'tb-node-downstream', 'tb-node-dimmed');
+          if (id === nodeId) {
+            el.classList.add('tb-node-selected');
+          } else if (upstreamSet.has(id)) {
+            el.classList.add('tb-node-upstream');
+          } else if (downstreamSet.has(id)) {
+            el.classList.add('tb-node-downstream');
+          } else {
+            el.classList.add('tb-node-dimmed');
+          }
+        });
+
+        const edgeEls = svg.querySelectorAll('.tb-edge');
+        edgeEls.forEach((el, idx) => {
+          el.classList.remove('tb-edge-active-upstream', 'tb-edge-active-downstream', 'tb-edge-dimmed');
+          if (upstreamEdgeIndices.has(idx)) {
+            el.classList.add('tb-edge-active-upstream');
+          } else if (downstreamEdgeIndices.has(idx)) {
+            el.classList.add('tb-edge-active-downstream');
+          } else {
+            el.classList.add('tb-edge-dimmed');
+          }
+        });
+      }
+
+      // Render Selection Panel
+      const panel = document.getElementById('tbGraphSelection');
+      if (panel) {
+        panel.style.display = 'flex';
+        const statusBadge = selectedNode.status === 'must' ? '<span class="tb-badge tb-badge-must">Must change</span>' :
+                            selectedNode.status === 'review' ? '<span class="tb-badge tb-badge-review">Owner review</span>' :
+                            selectedNode.status === 'no' ? '<span class="tb-badge tb-badge-no">Unaffected</span>' :
+                            '<span class="tb-badge">Business Trigger</span>';
+        
+        panel.innerHTML = `
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            ${statusBadge}
+            <strong style="font-size:15px;">${esc(selectedNode.label)}</strong>
+            <span style="font-size:12px; color:var(--subtle);">Team: <strong>${esc(selectedNode.team || 'Strategy')}</strong></span>
+            <div style="display:inline-flex; gap:12px; font-size:12.5px; background:rgba(0,0,0,0.04); padding:4px 10px; border-radius:4px;">
+              <span style="color:#0284c7; font-weight:700;">🔵 Upstream Prerequisites: ${upstreamSet.size}</span>
+              <span style="color:#dc2626; font-weight:700;">🔴 Downstream Blast Radius: ${downstreamSet.size}</span>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="tb-btn tb-btn-sm tb-btn-why" id="tbGraphPanelWhyBtn">🔍 Causal Cascade ("Why?")</button>
+            <button type="button" class="tb-btn tb-btn-sm" id="tbGraphPanelResetBtn">✕ Reset</button>
+          </div>
+        `;
+        const whyBtn = document.getElementById('tbGraphPanelWhyBtn');
+        if (whyBtn) whyBtn.onclick = () => openWhyModal(selectedNode.id);
+        const resetBtn = document.getElementById('tbGraphPanelResetBtn');
+        if (resetBtn) resetBtn.onclick = clearGraphSelection;
+      }
+    }
+
+    function clearGraphSelection() {
+      appState.selectedGraphNodeId = null;
+      const svg = document.getElementById('tbGraphSvg');
+      if (svg) {
+        svg.querySelectorAll('.tb-graph-node').forEach(el => {
+          el.classList.remove('tb-node-selected', 'tb-node-upstream', 'tb-node-downstream', 'tb-node-dimmed');
+        });
+        svg.querySelectorAll('.tb-edge').forEach(el => {
+          el.classList.remove('tb-edge-active-upstream', 'tb-edge-active-downstream', 'tb-edge-dimmed');
+        });
+      }
+      const panel = document.getElementById('tbGraphSelection');
+      if (panel) panel.style.display = 'none';
+    }
+
+    // --- HACKATHON GUIDED DEMO TOUR ---
+    const TOUR_STEPS = [
+      {
+        title: 'Step 1: The Business Problem ("What Changed?")',
+        script: 'In enterprise GTM and product launches, a single scope change usually triggers an email thread storm and weeks of forgotten downstream chaos. Twin Brain solves this: Change something once. Know everything it impacts.',
+        nextLabel: 'Test Ambiguity Restraint',
+        setup: () => {
+          appState.tab = 'intelligence';
+          appState.nlpInput = 'We are narrowing the initial launch to low-adoption enterprise customers. Exclude accounts inactive for 90 days and remove France from the first rollout.';
+          executeAnalysis(appState.nlpInput, false);
+          renderApp();
+          const el = document.getElementById('tbNlpInput');
+          if (el) {
+            el.focus();
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      },
+      {
+        title: 'Step 2: The "Gotcha" Test (Ambiguity Restraint)',
+        script: 'Most AI tools blindly hallucinate definitions. Watch what Twin Brain does: it halts and says "Low producers is not defined in the charter. Did you mean active seats < 20%?" This human-in-the-loop restraint prevents catastrophic launch errors.',
+        nextLabel: 'Confirm Definition & Inspect Diff',
+        setup: () => {
+          appState.tab = 'intelligence';
+          appState.nlpInput = 'Only target low producers.';
+          executeAnalysis(appState.nlpInput, false);
+          renderApp();
+          const alertEl = document.querySelector('.tb-ambiguity-alert');
+          if (alertEl) alertEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      },
+      {
+        title: 'Step 3: Structured Interpretation & Human Confirmation',
+        script: 'Gemini interprets; deterministic rules calculate and enforce. We confirm the structured diff across Audience, Inactivity, and Market Scope before touching any operational state.',
+        nextLabel: 'Calculate 13 Downstream Impacts',
+        setup: () => {
+          appState.tab = 'intelligence';
+          appState.nlpInput = 'We are narrowing the initial launch to low-adoption enterprise customers. Exclude accounts inactive for 90 days and remove France from the first rollout.';
+          executeAnalysis(appState.nlpInput, false);
+          renderApp();
+          const cardEl = document.querySelector('.tb-understood-panel');
+          if (cardEl) cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      },
+      {
+        title: 'Step 4: Executive Impact Summary & Plan → Reality View',
+        script: 'Exactly 13 downstream impacts detected across 16 artifacts. Notice the AI restraint: 7 must change, 4 owner review, 2 unaffected. For the Measurement Plan, Twin Brain doesn\'t falsely claim the experiment is invalid—it warns the owner of the 96 to 24 sample size drop.',
+        nextLabel: 'Inspect Blast Radius Graph',
+        setup: () => {
+          confirmAndCalculateImpact();
+          renderApp();
+          const summaryEl = document.querySelector('.tb-exec-summary');
+          if (summaryEl) summaryEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      },
+      {
+        title: 'Step 5: Visual DAG Blast Radius & Causal Explainability',
+        script: 'Every single conclusion is explainable. Clicking any node lights up its blast radius, and "Show why" proves the causal chain from Master Brief down to the 8 affected French field agents.',
+        nextLabel: 'Finish Demo',
+        setup: () => {
+          confirmAndCalculateImpact();
+          renderApp();
+          highlightNodeBlastRadius('L-FR');
+          const graphEl = document.querySelector('.tb-graph-wrapper');
+          if (graphEl) graphEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(() => {
+            openWhyModal('L-FR');
+          }, 600);
+        }
+      }
+    ];
+
+    function startTour() {
+      appState.tourActive = true;
+      appState.tourStep = 0;
+      runTourStep(0);
+    }
+
+    function runTourStep(idx) {
+      if (idx < 0 || idx >= TOUR_STEPS.length) {
+        stopTour();
+        return;
+      }
+      appState.tourStep = idx;
+      TOUR_STEPS[idx].setup();
+      renderTourBarUI();
+    }
+
+    function nextTourStep() {
+      if (appState.tourStep < TOUR_STEPS.length - 1) {
+        runTourStep(appState.tourStep + 1);
+      } else {
+        stopTour();
+      }
+    }
+
+    function prevTourStep() {
+      if (appState.tourStep > 0) {
+        runTourStep(appState.tourStep - 1);
+      }
+    }
+
+    function stopTour() {
+      appState.tourActive = false;
+      const existing = document.getElementById('tbTourBar');
+      if (existing) existing.remove();
+    }
+
+    function renderTourBarUI() {
+      if (typeof document === 'undefined') return;
+      let existing = document.getElementById('tbTourBar');
+      if (!appState.tourActive) {
+        if (existing) existing.remove();
+        return;
+      }
+      const step = TOUR_STEPS[appState.tourStep];
+      const barHtml = tui.renderTourBar(appState.tourStep, TOUR_STEPS.length, step);
+      if (existing) {
+        existing.outerHTML = barHtml;
+      } else {
+        document.body.insertAdjacentHTML('beforeend', barHtml);
+      }
+      bindTourEvents();
+    }
+
+    function bindTourEvents() {
+      const nextBtn = document.getElementById('tbTourNextBtn');
+      if (nextBtn) nextBtn.onclick = nextTourStep;
+      const prevBtn = document.getElementById('tbTourPrevBtn');
+      if (prevBtn) prevBtn.onclick = prevTourStep;
+      const stopBtn = document.getElementById('tbTourStopBtn');
+      if (stopBtn) stopBtn.onclick = stopTour;
+      const exitBtn = document.getElementById('tbTourExitBtn');
+      if (exitBtn) exitBtn.onclick = stopTour;
+    }
+
+    function renderApp() {
+      const container = document.getElementById('appMain');
+      switch (appState.tab) {
+        case 'intelligence':
+          container.innerHTML = renderIntelligenceTab();
+          break;
+        case 'charter':
+          container.innerHTML = renderCharterTab();
+          break;
+        case 'workstreams':
+          container.innerHTML = renderWorkstreamsTab();
+          break;
+        case 'readiness':
+          container.innerHTML = renderReadinessTab();
+          break;
+        case 'history':
+          container.innerHTML = renderHistoryTab();
+          break;
+      }
+      bindTabEvents();
+      if (appState.tourActive) {
+        renderTourBarUI();
+      }
+      if (appState.tab === 'intelligence' && appState.selectedGraphNodeId) {
+        highlightNodeBlastRadius(appState.selectedGraphNodeId);
+      }
+    }
+
+    // --- VIEW: 1. CHANGE INTELLIGENCE ---
+    function renderIntelligenceTab() {
+      let html = '';
+
+      // Step 1: Natural-Language Input
+      html += tui.renderHeroNLP(appState);
+
+      // Step 1.5: Ambiguity Alert (if ambiguous terms found)
+      if (appState.parsedChange && appState.parsedChange.ambiguities.length > 0 && !appState.interpretationConfirmed) {
+        html += tui.renderAmbiguityAlert(appState.parsedChange.ambiguities);
+      }
+
+      // Step 2: Interpretation Understood UI
+      if (appState.parsedChange) {
+        html += tui.renderInterpretationUnderstood(appState);
+      }
+
+      // Step 3: Executive Blast Radius & Actionable Impacts (only after confirmation)
+      if (appState.interpretationConfirmed && appState.impactAnalysis) {
+        html += tui.renderExecutiveSummary(appState.impactAnalysis, appState.filter);
+        html += tui.renderPlanRealityMatrix(appState.current, appState.proposedConfig);
+        html += tui.renderDependencyGraph(appState.impactAnalysis);
+        html += tui.renderImpactCards(appState.impactAnalysis, appState.filter);
+      }
+
+      return html;
+    }
+
+    // --- VIEW: 2. PROGRAMME CHARTER ---
+    function renderCharterTab() {
+      const c = appState.current;
+      const cnt = g.counts(c);
+
+      return `
+        <div class="tb-panel">
+          <div class="tb-row spread">
+            <div>
+              <div class="tb-eyebrow">Approved Planning Scope · v${appState.version}</div>
+              <h2>Programme Charter &amp; Master Brief</h2>
+            </div>
+            <button type="button" class="tb-btn tb-btn-primary" data-switch-tab="intelligence">
+              🧠 Analyze a Change Proposal
+            </button>
+          </div>
+
+          <div class="tb-grid tb-grid-2" style="margin-top: 16px;">
+            <div class="tb-card">
+              <h4>Objective</h4>
+              <p>Help eligible business accounts evaluate and adopt on-premises data connectivity directly on ChatGPT safely, with a measurable path to first value.</p>
+              <h4>Current Mandate</h4>
+              <p>Broad consideration: all existing paying business accounts using ChatGPT. Target is not contact permission or technical readiness.</p>
+            </div>
+            <div class="tb-card">
+              <h4>Active Targeting Rule</h4>
+              <div class="tb-definition-quote">
+                <code>${esc(g.policyText(c))}</code>
+              </div>
+              <div class="tb-row" style="margin-top: 10px; gap: 16px;">
+                <div><strong>${cnt.eligible}</strong> <span class="tb-muted">Eligible accounts</span></div>
+                <div><strong>${cnt.contactable}</strong> <span class="tb-muted">Contact permitted</span></div>
+                <div><strong>${cnt.ready}</strong> <span class="tb-muted">Technical ready</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tb-panel">
+          <h3>Market Allocation</h3>
+          <table class="tb-matrix-table" style="margin-top: 10px;">
+            <thead>
+              <tr><th>Market</th><th>Locale</th><th>Assigned Agents</th><th>Strategic Deliverables</th></tr>
+            </thead>
+            <tbody>
+              ${g.MARKETS.map(m => `
+                <tr>
+                  <td><strong>${m.name}</strong> (${m.id})</td>
+                  <td><code>${m.locale}</code></td>
+                  <td>${m.agents} agents</td>
+                  <td>Local discovery questions, language QA, and agent competency assessment.</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    // --- VIEW: 3. TEAM WORKSTREAMS ---
+    function renderWorkstreamsTab() {
+      const teams = ['Analytics', 'GTM', 'Enablement', 'Programme'];
+      return `
+        <div class="tb-panel">
+          <div class="tb-eyebrow">Unified Knowledge Context</div>
+          <h2>Connected Workstreams &amp; Artifact Registry</h2>
+          <p class="tb-muted">Artifacts are source-linked to the programme policy contract. Upstream policy mutations automatically invalidate dependent deliverables.</p>
+
+          ${teams.map(team => `
+            <div style="margin-top: 20px;">
+              <h3 style="color: var(--green-dark); border-bottom: 2px solid var(--line); padding-bottom: 6px;">${team} Deliverables</h3>
+              <div class="tb-cards-list">
+                ${g.ARTIFACTS.filter(a => a.team === team).map(a => `
+                  <div class="tb-impact-card">
+                    <div class="tb-row spread">
+                      <div class="tb-row" style="gap: 8px;">
+                        <span class="tb-badge tb-badge-subtle">${a.id}</span>
+                        <h4>${a.title}</h4>
+                      </div>
+                      <span class="tb-muted">${a.owner}</span>
+                    </div>
+                    <p style="margin: 8px 0;"><strong>Work:</strong> ${a.task}</p>
+                    <p style="margin: 4px 0;"><strong>Acceptance Criteria:</strong> ${a.accept}</p>
+                    <div class="tb-definition-quote" style="margin-top: 8px;">
+                      <small style="color:var(--subtle); font-weight:700;">CURRENT FIXTURE CONTENT (v${appState.version})</small><br>
+                      <code>${esc(g.content(a.id, appState.current))}</code>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // --- VIEW: 4. READINESS GATES ---
+    function renderReadinessTab() {
+      const p = appState.proposal;
+      if (!p || !p.impact.changed) {
+        return `
+          <div class="tb-panel" style="text-align: center; padding: 40px 20px;">
+            <h3>No pending changed version to prepare</h3>
+            <p class="tb-muted">Propose and confirm a scope change in the Change Intelligence tab to evaluate readiness gates.</p>
+            <button type="button" class="tb-btn tb-btn-primary" data-switch-tab="intelligence">
+              Go to Change Intelligence
+            </button>
+          </div>
+        `;
+      }
+
+      const r = g.readiness(p);
+
+      return `
+        <div class="tb-panel">
+          <div class="tb-row spread">
+            <div>
+              <div class="tb-eyebrow">Governance &amp; Release Control</div>
+              <h2>Prepare v${p.version} Release Gates</h2>
+            </div>
+            <span class="tb-pill ${r.ready ? 'tb-pill-green' : 'tb-pill-amber'}">
+              ${r.ready ? '✓ All Gates Cleared' : `${r.missing.length} Gates Pending`}
+            </span>
+          </div>
+
+          <div class="tb-alert tb-alert-amber" style="margin-top: 14px;">
+            <div class="tb-alert-icon">ℹ️</div>
+            <div class="tb-alert-content">
+              <strong>Simulated sign-offs.</strong> Ticking checks tests the governance process. In a production system, these represent cryptographic signatures and validated artifact commits.
+            </div>
+          </div>
+
+          <div style="margin-top: 16px;">
+            <h4>1 · PM Scope Acceptance</h4>
+            <div class="tb-gate-item">
+              <div>
+                <strong>Accept v${p.version} change for team preparation</strong>
+                <div class="tb-muted">${esc(g.policyText(p.config))}</div>
+              </div>
+              <button type="button" class="tb-btn tb-btn-primary" id="tbAcceptProposalBtn" ${p.accepted ? 'disabled' : ''}>
+                ${p.accepted ? '✓ Accepted for Preparation' : 'Accept Change'}
+              </button>
+            </div>
+
+            <h4 style="margin-top: 20px;">2 · Central Workstream Reviews</h4>
+            ${Object.keys(p.reviews).map(k => `
+              <div class="tb-gate-item">
+                <div>
+                  <strong>${esc(k)} Lead Review</strong>
+                  <div class="tb-muted">Verify updated v${p.version} specifications, denominators, and messaging</div>
+                </div>
+                <input type="checkbox" class="tb-gate-checkbox" data-review-key="${esc(k)}" ${p.reviews[k] ? 'checked' : ''} ${!p.accepted ? 'disabled' : ''}>
+              </div>
+            `).join('')}
+
+            <h4 style="margin-top: 20px;">3 · Local Packs &amp; Agent Readiness</h4>
+            ${p.impact.locales.filter(m => m.status !== 'no').map(m => {
+              const s = p.marketChecks[m.id];
+              return `
+                <div class="tb-gate-item">
+                  <div>
+                    <strong>${m.name} (${m.id}) · ${m.status === 'retire' ? 'Retire / Suppress' : 'Local QA & Training'}</strong>
+                    <div class="tb-muted">${esc(m.reason)}</div>
+                  </div>
+                  <div class="tb-row" style="gap: 12px;">
+                    ${m.status === 'retire' ? `
+                      <label class="tb-row" style="font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" class="tb-gate-checkbox" data-market-id="${m.id}" data-market-check="retired" ${s.retired ? 'checked' : ''} ${!p.accepted ? 'disabled' : ''}>
+                        Confirm suppression &amp; retirement
+                      </label>
+                    ` : `
+                      <label class="tb-row" style="font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" class="tb-gate-checkbox" data-market-id="${m.id}" data-market-check="local" ${s.local ? 'checked' : ''} ${!p.accepted ? 'disabled' : ''}>
+                        Strategy &amp; Language QA
+                      </label>
+                      <label class="tb-row" style="font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" class="tb-gate-checkbox" data-market-id="${m.id}" data-market-check="trained" ${s.trained ? 'checked' : ''} ${!p.accepted || !s.local ? 'disabled' : ''}>
+                        ${m.agents} Agents Certified
+                      </label>
+                    `}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+
+            <h4 style="margin-top: 20px;">4 · Independent Prerequisites</h4>
+            <div class="tb-gate-item">
+              <div>
+                <strong>Product / Security / Legal Baseline Confirmation</strong>
+                <div class="tb-muted">Independent precondition; audience changes never imply technical availability</div>
+              </div>
+              <input type="checkbox" class="tb-gate-checkbox" id="tbPrereqCheck" ${p.prerequisite ? 'checked' : ''} ${!p.accepted ? 'disabled' : ''}>
+            </div>
+
+            <div class="tb-row spread" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line);">
+              <div>
+                ${r.ready ? '<span class="tb-pill tb-pill-green">✓ All readiness gates complete. Version is ready to activate.</span>' :
+                  `<span class="tb-pill tb-pill-amber">Blocked on: ${esc(r.missing[0])}</span>`}
+              </div>
+              <button type="button" class="tb-btn tb-btn-primary tb-btn-lg" id="tbActivateVersionBtn" ${!r.ready ? 'disabled' : ''}>
+                Activate v${p.version} in Simulation
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- VIEW: 5. AUDIT & HISTORY ---
+    function renderHistoryTab() {
+      return `
+        <div class="tb-panel">
+          <div class="tb-row spread">
+            <div>
+              <div class="tb-eyebrow">Audit Trail &amp; Snapshots</div>
+              <h2>Version History &amp; Governance Ledger</h2>
+            </div>
+            <div class="tb-row" style="gap: 10px;">
+              <button type="button" class="tb-btn" id="tbDownloadJsonBtn">💾 Export Session JSON</button>
+              <button type="button" class="tb-btn" id="tbDownloadAccountsBtn">📊 Download Accounts CSV</button>
+              <button type="button" class="tb-btn" id="tbResetBtn" style="color: var(--red);">Reset Session</button>
+            </div>
+          </div>
+
+          <div style="margin-top: 16px;">
+            ${appState.history.slice().reverse().map(h => `
+              <div class="tb-impact-card" style="margin-bottom: 12px;">
+                <div class="tb-row spread">
+                  <h4>v${h.version} · ${esc(h.type)}</h4>
+                  <span class="tb-badge tb-badge-subtle">${g.population(h.config).length} accounts in target population</span>
+                </div>
+                <p class="tb-muted" style="margin: 6px 0;">${esc(h.note || '')}</p>
+                <div class="tb-definition-quote">
+                  <code>${esc(g.policyText(h.config))}</code>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // --- EVENT BINDINGS ---
+    function bindGlobalEvents() {
+      // Tab switching
+      document.querySelectorAll('nav button').forEach(btn => {
+        btn.onclick = () => {
+          appState.tab = btn.dataset.tab;
+          document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b === btn));
+          renderApp();
+          window.scrollTo(0, 0);
+        };
+      });
+
+      // Settings button
+      const settingsBtn = document.getElementById('tbSettingsBtn');
+      if (settingsBtn) {
+        settingsBtn.onclick = openSettingsModal;
+      }
+
+      // 2-Min Demo Tour button
+      const tourBtn = document.getElementById('tbTourBtn');
+      if (tourBtn) {
+        tourBtn.onclick = startTour;
+      }
+
+      // Keyboard arrow keys for tour
+      if (typeof window !== 'undefined') {
+        window.addEventListener('keydown', (e) => {
+          if (appState.tourActive) {
+            if (e.key === 'ArrowRight' || e.key === 'Enter') {
+              e.preventDefault();
+              nextTourStep();
+            } else if (e.key === 'ArrowLeft') {
+              e.preventDefault();
+              prevTourStep();
+            } else if (e.key === 'Escape') {
+              e.preventDefault();
+              stopTour();
+            }
+          }
+        });
+      }
+    }
+
+    function bindTabEvents() {
+      // Tab switcher in content
+      document.querySelectorAll('[data-switch-tab]').forEach(btn => {
+        btn.onclick = () => {
+          const tab = btn.dataset.switchTab;
+          document.querySelector(`nav button[data-tab="${tab}"]`).click();
+        };
+      });
+
+      // Quick chip clicks
+      document.querySelectorAll('.tb-chip').forEach(chip => {
+        chip.onclick = () => {
+          const textarea = document.getElementById('tbNlpInput');
+          switch (chip.dataset.preset) {
+            case 'canonical':
+              textarea.value = 'We are narrowing the initial launch to low-adoption enterprise customers. Exclude accounts inactive for 90 days and remove France from the first rollout.';
+              break;
+            case 'ambiguous':
+              textarea.value = 'Only target low producers.';
+              break;
+            case 'germany':
+              textarea.value = 'Remove Germany and target accounts with less than 30% adoption. Exclude inactive for 90 days.';
+              break;
+            case 'expand':
+              textarea.value = 'Expand to all paying business accounts across all markets with no inactivity exclusion.';
+              break;
+          }
+          executeAnalysis(textarea.value, false);
+          renderApp();
+        };
+      });
+
+      // Analyze button
+      const analyzeBtn = document.getElementById('tbAnalyzeBtn');
+      if (analyzeBtn) {
+        analyzeBtn.onclick = () => {
+          const text = document.getElementById('tbNlpInput').value;
+          executeAnalysis(text, false);
+          renderApp();
+        };
+      }
+
+      // Confirm ambiguity button
+      const confirmAmbiguityBtn = document.getElementById('tbConfirmAmbiguityBtn');
+      if (confirmAmbiguityBtn) {
+        confirmAmbiguityBtn.onclick = () => {
+          if (appState.parsedChange) {
+            appState.parsedChange.confirmedAmbiguities = true;
+            appState.proposedConfig = tb.mapToConfig(appState.parsedChange, appState.current);
+            confirmAndCalculateImpact();
+            renderApp();
+          }
+        };
+      }
+
+      // Confirm interpretation button
+      const confirmInterpBtn = document.getElementById('tbConfirmInterpretationBtn');
+      if (confirmInterpBtn) {
+        confirmInterpBtn.onclick = () => {
+          confirmAndCalculateImpact();
+          renderApp();
+        };
+      }
+
+      // Filter chips
+      document.querySelectorAll('.tb-filter-chip').forEach(chip => {
+        chip.onclick = () => {
+          appState.filter = chip.dataset.filter;
+          renderApp();
+        };
+      });
+
+      // "Show why" buttons
+      document.querySelectorAll('[data-show-why]').forEach(btn => {
+        btn.onclick = () => {
+          openWhyModal(btn.dataset.showWhy);
+        };
+      });
+
+      // Interactive Dependency Graph nodes
+      document.querySelectorAll('.tb-graph-node').forEach(node => {
+        node.onclick = (e) => {
+          e.stopPropagation();
+          const nodeId = node.dataset.nodeId;
+          if (appState.selectedGraphNodeId === nodeId) {
+            openWhyModal(nodeId);
+          } else {
+            highlightNodeBlastRadius(nodeId);
+          }
+        };
+      });
+
+      // Clear graph selection on SVG background click
+      const graphSvg = document.getElementById('tbGraphSvg');
+      if (graphSvg) {
+        graphSvg.onclick = (e) => {
+          if (!e.target.closest('.tb-graph-node')) {
+            clearGraphSelection();
+          }
+        };
+      }
+
+      // Readiness buttons
+      const acceptProposalBtn = document.getElementById('tbAcceptProposalBtn');
+      if (acceptProposalBtn) {
+        acceptProposalBtn.onclick = () => {
+          if (appState.proposal) {
+            appState.proposal.accepted = true;
+            renderApp();
+          }
+        };
+      }
+
+      document.querySelectorAll('[data-review-key]').forEach(cb => {
+        cb.onchange = () => {
+          appState.proposal.reviews[cb.dataset.reviewKey] = cb.checked;
+          renderApp();
+        };
+      });
+
+      document.querySelectorAll('[data-market-id]').forEach(cb => {
+        cb.onchange = () => {
+          const mid = cb.dataset.marketId;
+          const check = cb.dataset.marketCheck;
+          appState.proposal.marketChecks[mid][check] = cb.checked;
+          if (check === 'local' && !cb.checked) {
+            appState.proposal.marketChecks[mid].trained = false;
+          }
+          renderApp();
+        };
+      });
+
+      const prereqCheck = document.getElementById('tbPrereqCheck');
+      if (prereqCheck) {
+        prereqCheck.onchange = () => {
+          appState.proposal.prerequisite = prereqCheck.checked;
+          renderApp();
+        };
+      }
+
+      const activateVersionBtn = document.getElementById('tbActivateVersionBtn');
+      if (activateVersionBtn) {
+        activateVersionBtn.onclick = () => {
+          const p = appState.proposal;
+          if (!p || !g.readiness(p).ready) return;
+
+          appState.history.push({
+            version: p.version,
+            type: 'Simulated Activation',
+            note: `Activated v${p.version}: ${g.policyText(p.config)}`,
+            config: JSON.parse(JSON.stringify(p.config))
+          });
+
+          appState.current = JSON.parse(JSON.stringify(p.config));
+          appState.version = p.version;
+          appState.proposal = null;
+          appState.impactAnalysis = null;
+          appState.parsedChange = null;
+          appState.interpretationConfirmed = false;
+          document.querySelector('nav button[data-tab="history"]').click();
+        };
+      }
+
+      // Export / Download buttons
+      const dlJson = document.getElementById('tbDownloadJsonBtn');
+      if (dlJson) {
+        dlJson.onclick = exportSessionJson;
+      }
+
+      const dlAcc = document.getElementById('tbDownloadAccountsBtn');
+      if (dlAcc) {
+        dlAcc.onclick = exportAccountsCsv;
+      }
+
+      const resetBtn = document.getElementById('tbResetBtn');
+      if (resetBtn) {
+        resetBtn.onclick = () => {
+          if (confirm('Reset this simulation session? All unsaved proposals will reset to v1.')) {
+            appState.current = JSON.parse(JSON.stringify(g.BASE));
+            appState.version = 1;
+            appState.proposal = null;
+            appState.history = [
+              { version: 1, type: 'Baseline Charter', note: 'All existing paying accounts.', config: JSON.parse(JSON.stringify(g.BASE)) }
+            ];
+            document.querySelector('nav button[data-tab="intelligence"]').click();
+          }
+        };
+      }
+    }
+
+    // Modal Helpers
+    function openWhyModal(itemId) {
+      if (!appState.impactAnalysis) return;
+      const modalCont = document.getElementById('modalContainer');
+      modalCont.innerHTML = tui.renderExplainWhyModal(itemId, appState.impactAnalysis);
+
+      document.getElementById('tbCloseWhyModal').onclick = closeWhyModal;
+      document.getElementById('tbCloseWhyModalBtn').onclick = closeWhyModal;
+      document.getElementById('tbWhyModalBackdrop').onclick = (e) => {
+        if (e.target.id === 'tbWhyModalBackdrop') closeWhyModal();
+      };
+    }
+
+    function closeWhyModal() {
+      document.getElementById('modalContainer').innerHTML = '';
+    }
+
+    function openSettingsModal() {
+      const modalCont = document.getElementById('modalContainer');
+      modalCont.innerHTML = `
+        <div class="tb-modal-backdrop" id="tbSettingsModalBackdrop">
+          <div class="tb-modal">
+            <div class="tb-modal-header tb-row spread">
+              <h3>⚡ Gemini AI Engine Settings</h3>
+              <button type="button" class="tb-btn-close" id="tbCloseSettingsModal">&times;</button>
+            </div>
+            <div class="tb-modal-body">
+              <p>Twin Brain operates in dual mode:</p>
+              <ul>
+                <li><strong>Local Semantic Engine (Default):</strong> High-fidelity, deterministic NLP parser with domain ontology. Works 100% offline with 0ms latency.</li>
+                <li><strong>Google Gemini Live API:</strong> Connect directly to Gemini 2.0 / 1.5 for dynamic free-form synthesis and open-ended change interpretation.</li>
+              </ul>
+              <div style="margin: 16px 0;">
+                <label style="font-weight: 600; display:block; margin-bottom: 6px;">Google Gemini API Key (Optional):</label>
+                <input type="password" id="tbGeminiApiKeyInput" class="tb-textarea" style="height: 40px; padding: 8px 12px;" placeholder="AIzaSy..." value="${esc(appState.geminiApiKey)}">
+                <small class="tb-muted">Stored locally in your browser session. Never sent to any third party.</small>
+              </div>
+            </div>
+            <div class="tb-modal-footer tb-row" style="justify-content: flex-end; gap: 8px;">
+              <button type="button" class="tb-btn" id="tbClearKeyBtn">Clear Key</button>
+              <button type="button" class="tb-btn tb-btn-primary" id="tbSaveKeyBtn">Save Settings</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('tbCloseSettingsModal').onclick = () => modalCont.innerHTML = '';
+      document.getElementById('tbClearKeyBtn').onclick = () => {
+        localStorage.removeItem('tb_gemini_api_key');
+        appState.geminiApiKey = '';
+        modalCont.innerHTML = '';
+      };
+      document.getElementById('tbSaveKeyBtn').onclick = () => {
+        const key = document.getElementById('tbGeminiApiKeyInput').value.trim();
+        localStorage.setItem('tb_gemini_api_key', key);
+        appState.geminiApiKey = key;
+        modalCont.innerHTML = '';
+      };
+    }
+
+    function downloadFile(filename, text, mimeType) {
+      const blob = new Blob([text], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function exportSessionJson() {
+      const payload = {
+        product: 'Twin Brain — Organisational Change Intelligence',
+        version: appState.version,
+        current_scope: appState.current,
+        history: appState.history,
+        context: tb.getProgramContext(appState.current, appState.version),
+        timestamp: new Date().toISOString()
+      };
+      downloadFile(`twin-brain-session-v${appState.version}.json`, JSON.stringify(payload, null, 2), 'application/json');
+    }
+
+    function exportAccountsCsv() {
+      const keys = Object.keys(g.ACCOUNTS[0]);
+      const csv = keys.join(',') + '\n' + g.ACCOUNTS.map(a => keys.map(k => a[k]).join(',')).join('\n');
+      downloadFile('synthetic-business-accounts.csv', csv, 'text/csv');
+    }
+
+    // Launch
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
