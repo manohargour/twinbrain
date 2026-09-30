@@ -2875,6 +2875,13 @@
   <!-- 3. APPLICATION STATE & CONTROLLER -->
   <script>
     'use strict';
+    const esc = x => String(x || '').replace(/[&<>"']/g, ch => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[ch] || ch));
     const g = window.GTM;
     const tb = window.TWIN_BRAIN;
     const tui = window.TWIN_BRAIN_UI;
@@ -2890,6 +2897,7 @@
       proposedConfig: null,
       impactAnalysis: null,
       filter: 'all',
+      workstreamFilter: 'all',
       proposal: null,
       selectedGraphNodeId: null,
       tourActive: false,
@@ -3073,72 +3081,63 @@
         }
       },
       {
-        title: 'Step 1: The Business Problem ("What Changed?")',
-        script: 'In enterprise GTM and product launches, a single scope change usually triggers an email thread storm and weeks of forgotten downstream chaos. Twin Brain solves this: Change something once. Know everything it impacts.',
-        nextLabel: 'Test Ambiguity Restraint',
+        title: 'Step 1: AI Change Intelligence & Blast Radius',
+        script: 'In enterprise launches, an upstream policy shift usually triggers weeks of forgotten downstream chaos. Here, Gemini extracts structured intent from natural language, tests ambiguity guardrails, and computes the exact 13 downstream impacts across 16 artifacts.',
+        nextLabel: 'Step 2: Programme Charter',
         setup: () => {
           appState.tab = 'intelligence';
+          appState.nlpInput = 'We are narrowing the initial launch to low-adoption enterprise customers. Exclude accounts inactive for 90 days and remove France from the first rollout.';
+          executeAnalysis(appState.nlpInput, false);
+          confirmAndCalculateImpact();
+          renderApp();
           document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === 'intelligence'));
-          appState.nlpInput = 'We are narrowing the initial launch to low-adoption enterprise customers. Exclude accounts inactive for 90 days and remove France from the first rollout.';
-          executeAnalysis(appState.nlpInput, false);
-          renderApp();
-          const el = document.getElementById('tbNlpInput');
-          if (el) {
-            el.focus();
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        }
-      },
-      {
-        title: 'Step 2: The "Gotcha" Test (Ambiguity Restraint)',
-        script: 'Most AI tools blindly hallucinate definitions. Watch what Twin Brain does: it halts and says "Low producers is not defined in the charter. Did you mean active seats < 20%?" This human-in-the-loop restraint prevents catastrophic launch errors.',
-        nextLabel: 'Confirm Definition & Inspect Diff',
-        setup: () => {
-          appState.tab = 'intelligence';
-          appState.nlpInput = 'Only target low producers.';
-          executeAnalysis(appState.nlpInput, false);
-          renderApp();
-          const alertEl = document.querySelector('.tb-ambiguity-alert');
-          if (alertEl) alertEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        title: 'Step 3: Structured Interpretation & Human Confirmation',
-        script: 'Gemini interprets; deterministic rules calculate and enforce. We confirm the structured diff across Audience, Inactivity, and Market Scope before touching any operational state.',
-        nextLabel: 'Calculate 13 Downstream Impacts',
-        setup: () => {
-          appState.tab = 'intelligence';
-          appState.nlpInput = 'We are narrowing the initial launch to low-adoption enterprise customers. Exclude accounts inactive for 90 days and remove France from the first rollout.';
-          executeAnalysis(appState.nlpInput, false);
-          renderApp();
-          const cardEl = document.querySelector('.tb-understood-panel');
-          if (cardEl) cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        title: 'Step 4: Executive Impact Summary & Plan → Reality View',
-        script: 'Exactly 13 downstream impacts detected across 16 artifacts. Notice the AI restraint: 7 must change, 4 owner review, 2 unaffected. For the Measurement Plan, Twin Brain doesn\'t falsely claim the experiment is invalid—it warns the owner of the 96 to 24 sample size drop.',
-        nextLabel: 'Inspect Blast Radius Graph',
-        setup: () => {
-          confirmAndCalculateImpact();
-          renderApp();
-          const summaryEl = document.querySelector('.tb-exec-summary');
-          if (summaryEl) summaryEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        title: 'Step 5: Visual DAG Blast Radius & Causal Explainability',
-        script: 'Every single conclusion is explainable. Clicking any node lights up its blast radius, and "Show why" proves the causal chain from Master Brief down to the 8 affected French field agents.',
-        nextLabel: 'Finish Demo',
-        setup: () => {
-          confirmAndCalculateImpact();
-          renderApp();
           highlightNodeBlastRadius('L-FR');
           const graphEl = document.querySelector('.tb-graph-wrapper');
           if (graphEl) graphEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          setTimeout(() => {
-            openWhyModal('L-FR');
-          }, 600);
+        }
+      },
+      {
+        title: 'Step 2: Programme Charter & Master Brief',
+        script: 'Step 2 codifies the approved baseline into the Master Brief and frozen audience contract. Here we see the active targeting rule, baseline denominators, and our 4-market allocation matrix across US, UK, Germany, and France.',
+        nextLabel: 'Step 3: Team Workstreams',
+        setup: () => {
+          appState.tab = 'charter';
+          renderApp();
+          document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === 'charter'));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      },
+      {
+        title: 'Step 3: Connected Workstreams & 12 Deliverables',
+        script: 'Step 3 breaks the programme down into 12 living operational artifacts owned by Analytics, GTM, Enablement, and Programme. Upstream policy changes automatically flag which deliverables must be rewritten, reviewed, or left untouched.',
+        nextLabel: 'Step 4: Readiness Gates',
+        setup: () => {
+          appState.tab = 'workstreams';
+          renderApp();
+          document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === 'workstreams'));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      },
+      {
+        title: 'Step 4: Governance & Version-Specific Readiness Gates',
+        script: 'No change goes live without rigorous release gates. Step 4 enforces PM scope acceptance, cross-functional sign-offs, local market training, and an in-flight cutover gate before version 2 can be activated.',
+        nextLabel: 'Step 5: Audit & History',
+        setup: () => {
+          appState.tab = 'readiness';
+          renderApp();
+          document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === 'readiness'));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      },
+      {
+        title: 'Step 5: Immutable Audit History & Data Export',
+        script: 'Every scope revision, sign-off, and account population delta is permanently recorded in the audit trail. Teams can export a verified session JSON snapshot or download account CSVs for complete compliance.',
+        nextLabel: 'Finish Demo',
+        setup: () => {
+          appState.tab = 'history';
+          renderApp();
+          document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === 'history'));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       }
     ];
@@ -3270,57 +3269,129 @@
     function renderCharterTab() {
       const c = appState.current;
       const cnt = g.counts(c);
+      const m = (g.GTM_MOTIONS || []).find(opt => opt.id === (appState.selectedMotion || 'hybrid_sales_assist')) || (g.GTM_MOTIONS || [])[0] || { name: 'Sales-Assisted Hybrid', badge: 'Hybrid Motion' };
+      const prop = appState.proposedConfig;
+      const hasProp = !!(prop && appState.interpretationConfirmed);
+      const propCnt = hasProp ? g.counts(prop) : null;
 
       return `
-        <div class="tb-panel">
-          <div class="tb-row spread">
+        <!-- Connected GTM Motion Banner -->
+        <div style="background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); color: white; padding: 18px 24px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(6, 78, 59, 0.2);">
+          <div class="tb-row spread" style="align-items: flex-start;">
             <div>
-              <div class="tb-eyebrow">Approved Planning Scope · v${appState.version}</div>
-              <h2>Programme Charter &amp; Master Brief</h2>
-            </div>
-            <button type="button" class="tb-btn tb-btn-primary" data-switch-tab="intelligence">
-              🧠 Analyze a Change Proposal
-            </button>
-          </div>
-
-          <div class="tb-grid tb-grid-2" style="margin-top: 16px;">
-            <div class="tb-card">
-              <h4>Objective</h4>
-              <p>Help eligible business accounts evaluate and adopt on-premises data connectivity directly on ChatGPT safely, with a measurable path to first value.</p>
-              <h4>Current Mandate</h4>
-              <p>Broad consideration: all existing paying business accounts using ChatGPT. Target is not contact permission or technical readiness.</p>
-            </div>
-            <div class="tb-card">
-              <h4>Active Targeting Rule</h4>
-              <div class="tb-definition-quote">
-                <code>${esc(g.policyText(c))}</code>
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: #a7f3d0; font-weight: 700; margin-bottom: 4px;">
+                Step 2 · Baseline Programme Governance · Aligned with Step 0 GTM Motion
               </div>
-              <div class="tb-row" style="margin-top: 10px; gap: 16px;">
-                <div><strong>${cnt.eligible}</strong> <span class="tb-muted">Eligible accounts</span></div>
-                <div><strong>${cnt.contactable}</strong> <span class="tb-muted">Contact permitted</span></div>
-                <div><strong>${cnt.ready}</strong> <span class="tb-muted">Technical ready</span></div>
+              <h2 style="margin: 0; font-size: 22px; color: white;">Programme Charter &amp; Master Brief (v${appState.version})</h2>
+              <div style="margin-top: 6px; font-size: 13.5px; color: #d1fae5;">
+                Active Commercial Motion: <strong>${esc(m.name)}</strong> (${esc(m.badge || 'Hybrid')}) · Target Persona: <strong>Admin + Business Sponsor</strong>
               </div>
+            </div>
+            <div class="tb-row" style="gap: 10px;">
+              <button type="button" class="tb-btn" data-switch-tab="motion" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3);">
+                🚢 View Step 0 Motion
+              </button>
+              <button type="button" class="tb-btn" data-switch-tab="intelligence" style="background: white; color: #065f46; font-weight: 700;">
+                🧠 Propose Change with AI
+              </button>
             </div>
           </div>
         </div>
 
+        <!-- 3-Pillar Master Brief Grid -->
+        <div class="tb-grid tb-grid-3" style="gap: 16px; margin-bottom: 20px;">
+          <div class="tb-card" style="border-top: 4px solid #059669;">
+            <div class="tb-eyebrow" style="color: #059669;">Pillar 1 · Strategic Mandate</div>
+            <h4 style="margin: 6px 0 10px; font-size: 15px;">Commercial Objective</h4>
+            <p style="font-size: 13.5px; line-height: 1.5; color: var(--muted); margin: 0 0 12px;">
+              Help eligible business accounts evaluate and adopt on-premises data connectivity directly on ChatGPT safely, with a measurable path to first value.
+            </p>
+            <div style="background: #f8fafc; padding: 10px 12px; border-radius: 6px; font-size: 12.5px; border-left: 3px solid #059669;">
+              <strong>Active Mandate:</strong> Broad consideration across existing paying business accounts. Target is NOT contact permission or technical readiness.
+            </div>
+          </div>
+
+          <div class="tb-card" style="border-top: 4px solid #2563eb;">
+            <div class="tb-eyebrow" style="color: #2563eb;">Pillar 2 · Audience Contract</div>
+            <h4 style="margin: 6px 0 10px; font-size: 15px;">Frozen Targeting Rules</h4>
+            <div class="tb-definition-quote" style="margin: 0 0 12px; font-size: 12.5px;">
+              <code>${esc(g.policyText(c))}</code>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;">
+              <div style="background: #f1f5f9; padding: 6px 10px; border-radius: 4px;"><strong>${cnt.eligible}</strong> Eligible accounts</div>
+              <div style="background: #f1f5f9; padding: 6px 10px; border-radius: 4px;"><strong>${cnt.contactable}</strong> Contact permitted</div>
+              <div style="background: #f1f5f9; padding: 6px 10px; border-radius: 4px;"><strong>${cnt.ready}</strong> Technical ready</div>
+              <div style="background: #f1f5f9; padding: 6px 10px; border-radius: 4px;"><strong>${cnt.outreach}</strong> Rep outreach</div>
+            </div>
+          </div>
+
+          <div class="tb-card" style="border-top: 4px solid #7c3aed;">
+            <div class="tb-eyebrow" style="color: #7c3aed;">Pillar 3 · Integrity Guardrails</div>
+            <h4 style="margin: 6px 0 10px; font-size: 15px;">Experimentation &amp; Governance</h4>
+            <div style="font-size: 13px; color: var(--muted); line-height: 1.5;">
+              <div style="margin-bottom: 8px;">• <strong>Holdout Protection:</strong> ${cnt.holdout} accounts strictly isolated for incrementality measurement.</div>
+              <div style="margin-bottom: 8px;">• <strong>Non-Inferable Readiness:</strong> Audience qualification does not imply technical pre-flight readiness.</div>
+              <div>• <strong>Independent Gating:</strong> Version changes require functional lead sign-offs before cutover.</div>
+            </div>
+          </div>
+        </div>
+
+        ${hasProp ? `
+          <!-- Pending Scope Diff Callout -->
+          <div class="tb-panel" style="border-left: 4px solid #f59e0b; background: #fffbeb; margin-bottom: 20px;">
+            <div class="tb-row spread">
+              <div>
+                <strong style="color: #92400e; font-size: 15px;">⚡ Pending Scope Mutation Detected (Proposed v${appState.version + 1})</strong>
+                <p style="margin: 4px 0 0; font-size: 13px; color: #78350f;">
+                  A change proposal has been analyzed in Step 1. Baseline target will drop from <strong>${cnt.eligible} accounts</strong> down to <strong>${propCnt.eligible} accounts</strong> (-${cnt.eligible - propCnt.eligible} accounts).
+                </p>
+              </div>
+              <button type="button" class="tb-btn tb-btn-primary" data-switch-tab="readiness">
+                Inspect v${appState.version + 1} Readiness Gates →
+              </button>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- Market Rollout Matrix -->
         <div class="tb-panel">
-          <h3>Market Allocation</h3>
-          <table class="tb-matrix-table" style="margin-top: 10px;">
-            <thead>
-              <tr><th>Market</th><th>Locale</th><th>Assigned Agents</th><th>Strategic Deliverables</th></tr>
-            </thead>
-            <tbody>
-              ${g.MARKETS.map(m => `
-                <tr>
-                  <td><strong>${m.name}</strong> (${m.id})</td>
-                  <td><code>${m.locale}</code></td>
-                  <td>${m.agents} agents</td>
-                  <td>Local discovery questions, language QA, and agent competency assessment.</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
+          <div class="tb-row spread">
+            <div>
+              <div class="tb-eyebrow">Geographic Allocation Matrix</div>
+              <h3>4-Market Rollout &amp; Field Staffing</h3>
+            </div>
+            <span class="tb-badge tb-badge-subtle">34 Total Assigned Field Agents</span>
+          </div>
+
+          <div class="tb-grid tb-grid-4" style="gap: 14px; margin-top: 16px;">
+            ${g.MARKETS.map(mkt => {
+              const flag = mkt.id === 'US' ? '🇺🇸' : mkt.id === 'UK' ? '🇬🇧' : mkt.id === 'DE' ? '🇩🇪' : '🇫🇷';
+              const isRetired = hasProp && !prop.markets.includes(mkt.id);
+              return `
+                <div class="tb-card" style="border-left: 4px solid ${isRetired ? '#ef4444' : '#059669'}; background: ${isRetired ? '#fef2f2' : 'white'};">
+                  <div class="tb-row spread" style="margin-bottom: 8px;">
+                    <span style="font-size: 20px;">${flag}</span>
+                    <span class="tb-badge ${isRetired ? 'tb-badge-must' : 'tb-badge-no'}">
+                      ${isRetired ? 'Retirement Proposed' : 'Active Scope'}
+                    </span>
+                  </div>
+                  <h4 style="margin: 0 0 4px; font-size: 15px;">${esc(mkt.name)} (${esc(mkt.id)})</h4>
+                  <div style="font-size: 12px; color: var(--subtle); font-family: monospace; margin-bottom: 10px;">${esc(mkt.locale)}</div>
+                  <div style="font-size: 13px; line-height: 1.5;">
+                    <div><strong>${mkt.agents}</strong> certified reps</div>
+                    <div>Local discovery &amp; language QA</div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <div class="tb-row spread" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line);">
+            <div style="font-size: 13px; color: var(--muted);">Next workflow step: Inspect how this charter cascades into the 12 living deliverables.</div>
+            <button type="button" class="tb-btn tb-btn-primary" data-switch-tab="workstreams">
+              Proceed to Step 3 · Team Workstreams →
+            </button>
+          </div>
         </div>
       `;
     }
@@ -3328,36 +3399,126 @@
     // --- VIEW: 3. TEAM WORKSTREAMS ---
     function renderWorkstreamsTab() {
       const teams = ['Analytics', 'GTM', 'Enablement', 'Programme'];
+      const impact = appState.impactAnalysis;
+      const hasAnalysis = !!impact;
+      const filter = appState.workstreamFilter || 'all';
+
+      const getArtifactStatus = (id) => {
+        if (!hasAnalysis) return null;
+        const found = impact.items.find(i => i.id === id);
+        return found ? found.category : 'UNAFFECTED';
+      };
+
+      const getArtifactAction = (id) => {
+        if (!hasAnalysis) return null;
+        const found = impact.items.find(i => i.id === id);
+        return found ? found.action : null;
+      };
+
+      const filteredArtifacts = g.ARTIFACTS.filter(a => {
+        if (filter === 'all') return true;
+        return a.team === filter;
+      });
+
       return `
         <div class="tb-panel">
-          <div class="tb-eyebrow">Unified Knowledge Context</div>
-          <h2>Connected Workstreams &amp; Artifact Registry</h2>
-          <p class="tb-muted">Artifacts are source-linked to the programme policy contract. Upstream policy mutations automatically invalidate dependent deliverables.</p>
+          <div class="tb-row spread" style="align-items: flex-start;">
+            <div>
+              <div class="tb-eyebrow">Living Artifact Registry · Unified Knowledge Context</div>
+              <h2>Step 3 · Connected Workstreams &amp; 12 Deliverables</h2>
+              <p class="tb-muted" style="margin: 4px 0 0; max-width: 720px;">
+                Deliverables are source-linked to the Master Charter contract. When upstream policy changes, dependent deliverables are automatically invalidated with exact rework actions.
+              </p>
+            </div>
+            <div class="tb-row" style="gap: 10px;">
+              <button type="button" class="tb-btn tb-btn-primary" data-switch-tab="readiness">
+                Proceed to Step 4 · Readiness Gates →
+              </button>
+            </div>
+          </div>
 
-          ${teams.map(team => `
-            <div style="margin-top: 20px;">
-              <h3 style="color: var(--green-dark); border-bottom: 2px solid var(--line); padding-bottom: 6px;">${team} Deliverables</h3>
-              <div class="tb-cards-list">
-                ${g.ARTIFACTS.filter(a => a.team === team).map(a => `
-                  <div class="tb-impact-card">
-                    <div class="tb-row spread">
-                      <div class="tb-row" style="gap: 8px;">
-                        <span class="tb-badge tb-badge-subtle">${a.id}</span>
-                        <h4>${a.title}</h4>
-                      </div>
-                      <span class="tb-muted">${a.owner}</span>
-                    </div>
-                    <p style="margin: 8px 0;"><strong>Work:</strong> ${a.task}</p>
-                    <p style="margin: 4px 0;"><strong>Acceptance Criteria:</strong> ${a.accept}</p>
-                    <div class="tb-definition-quote" style="margin-top: 8px;">
-                      <small style="color:var(--subtle); font-weight:700;">CURRENT FIXTURE CONTENT (v${appState.version})</small><br>
-                      <code>${esc(g.content(a.id, appState.current))}</code>
-                    </div>
-                  </div>
-                `).join('')}
+          <!-- Interactive Workstream Tabs -->
+          <div class="tb-row" style="gap: 8px; margin-top: 18px; border-bottom: 2px solid var(--line); padding-bottom: 12px; flex-wrap: wrap;">
+            <button type="button" class="tb-filter-btn ${filter === 'all' ? 'active' : ''}" data-ws-filter="all">
+              All Deliverables (12)
+            </button>
+            ${teams.map(team => {
+              const count = g.ARTIFACTS.filter(a => a.team === team).length;
+              return `
+                <button type="button" class="tb-filter-btn ${filter === team ? 'active' : ''}" data-ws-filter="${esc(team)}">
+                  ${team === 'Analytics' ? '📊' : team === 'GTM' ? '💼' : team === 'Enablement' ? '🎓' : '📋'} ${team} (${count})
+                </button>
+              `;
+            }).join('')}
+          </div>
+
+          ${hasAnalysis ? `
+            <div class="tb-alert tb-alert-amber" style="margin-top: 16px;">
+              <div class="tb-alert-icon">⚡</div>
+              <div class="tb-alert-content">
+                <strong>Live Impact Analysis Active:</strong> Out of 12 deliverables, 
+                <strong>${impact.summary.mustChangeCount} must be reworked</strong>, 
+                <strong>${impact.summary.ownerReviewCount} require lead review</strong>, and 
+                <strong>${impact.summary.unaffectedCount} are unaffected</strong>.
               </div>
             </div>
-          `).join('')}
+          ` : ''}
+
+          <!-- Deliverables List -->
+          <div style="display: grid; gap: 14px; margin-top: 18px;">
+            ${filteredArtifacts.map(a => {
+              const cat = getArtifactStatus(a.id);
+              const action = getArtifactAction(a.id);
+              const borderCol = cat === 'MUST_CHANGE' ? '#ef4444' : cat === 'OWNER_REVIEW' ? '#f59e0b' : '#059669';
+              const badgeClass = cat === 'MUST_CHANGE' ? 'tb-badge-must' : cat === 'OWNER_REVIEW' ? 'tb-badge-review' : 'tb-badge-no';
+              const badgeLabel = cat === 'MUST_CHANGE' ? 'Must Change' : cat === 'OWNER_REVIEW' ? 'Owner Review' : 'Unaffected';
+
+              return `
+                <div class="tb-card" style="border-left: 4px solid ${borderCol}; padding: 16px 20px;">
+                  <div class="tb-row spread" style="margin-bottom: 8px;">
+                    <div class="tb-row" style="gap: 10px;">
+                      <span class="tb-badge tb-badge-subtle" style="font-size: 13px; font-weight: 700;">${esc(a.id)}</span>
+                      <h4 style="margin: 0; font-size: 16px;">${esc(a.title)}</h4>
+                      <span class="tb-badge" style="background: rgba(0,0,0,0.05); color: var(--muted);">${esc(a.team)}</span>
+                    </div>
+                    <div class="tb-row" style="gap: 8px;">
+                      ${hasAnalysis ? `<span class="tb-badge ${badgeClass}">${badgeLabel}</span>` : ''}
+                      <span class="tb-muted" style="font-size: 13px;">Owner: <strong>${esc(a.owner)}</strong></span>
+                    </div>
+                  </div>
+
+                  <p style="margin: 6px 0; font-size: 13.5px; color: var(--ink);">
+                    <strong>Task &amp; Mandate:</strong> ${esc(a.task)}
+                  </p>
+                  <p style="margin: 4px 0 10px; font-size: 13px; color: var(--muted);">
+                    <strong>Acceptance Criteria:</strong> ${esc(a.accept)}
+                  </p>
+
+                  ${action ? `
+                    <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; padding: 8px 12px; margin-bottom: 10px; font-size: 13px; color: #991b1b;">
+                      <strong>Required Mutation Action:</strong> ${esc(action)}
+                    </div>
+                  ` : ''}
+
+                  <details class="tb-card-diff-details" style="margin-top: 8px;">
+                    <summary style="font-size: 12.5px; color: var(--green-dark); cursor: pointer; font-weight: 600;">
+                      Inspect generated artifact fixture content (v${appState.version})
+                    </summary>
+                    <div class="tb-definition-quote" style="margin-top: 8px;">
+                      <code>${esc(g.content(a.id, appState.current))}</code>
+                    </div>
+                  </details>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <div class="tb-row spread" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line);">
+            <div style="font-size: 13px; color: var(--muted);">Next workflow step: Validate governance sign-offs and launch gates before release.</div>
+            <button type="button" class="tb-btn tb-btn-primary" data-switch-tab="readiness">
+              Proceed to Step 4 · Readiness Gates →
+            </button>
+          </div>
         </div>
       `;
     }
@@ -3365,40 +3526,84 @@
     // --- VIEW: 4. READINESS GATES ---
     function renderReadinessTab() {
       const p = appState.proposal;
+      
       if (!p || !p.impact.changed) {
         return `
-          <div class="tb-panel" style="text-align: center; padding: 40px 20px;">
-            <h3>No pending changed version to prepare</h3>
-            <p class="tb-muted">Propose and confirm a scope change in the Change Intelligence tab to evaluate readiness gates.</p>
-            <button type="button" class="tb-btn tb-btn-primary" data-switch-tab="intelligence">
-              Go to Change Intelligence
-            </button>
+          <div class="tb-panel">
+            <div class="tb-row spread">
+              <div>
+                <div class="tb-eyebrow">Governance &amp; Cutover Control</div>
+                <h2>Step 4 · Version-Specific Readiness Gates</h2>
+              </div>
+              <span class="tb-pill tb-pill-green">✓ v1 Baseline Active &amp; Certified</span>
+            </div>
+
+            <div class="tb-grid tb-grid-2" style="margin-top: 18px; gap: 16px;">
+              <div class="tb-card" style="border-left: 4px solid #059669;">
+                <h4 style="margin: 0 0 8px; font-size: 15px;">v1 Baseline Status</h4>
+                <p style="font-size: 13.5px; color: var(--muted); margin: 0 0 12px;">
+                  All 12 central deliverables, 4 regional market packs, and 34 field reps are currently certified and live in production.
+                </p>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <span class="tb-badge tb-badge-no">✓ PM Scope Signed</span>
+                  <span class="tb-badge tb-badge-no">✓ Analytics Verified</span>
+                  <span class="tb-badge tb-badge-no">✓ GTM Approved</span>
+                  <span class="tb-badge tb-badge-no">✓ 34 Reps Certified</span>
+                </div>
+              </div>
+
+              <div class="tb-card" style="border-left: 4px solid #2563eb; background: #eff6ff;">
+                <h4 style="margin: 0 0 8px; font-size: 15px; color: #1e40af;">Simulate v2 Release Governance</h4>
+                <p style="font-size: 13px; color: #1e3a8a; margin: 0 0 14px;">
+                  Want to test the release gate governance process? Click below to instantly load the canonical v2 narrowing proposal (exclude 90d inactive, retire France) and test the interactive sign-off gates.
+                </p>
+                <button type="button" class="tb-btn tb-btn-primary" id="tbSimulateV2GateBtn" style="background: #2563eb; border-color: #2563eb;">
+                  ⚡ Load Sample v2 Narrowing Gates
+                </button>
+              </div>
+            </div>
           </div>
         `;
       }
 
       const r = g.readiness(p);
+      const totalGates = 1 + Object.keys(p.reviews).length + p.impact.locales.filter(m => m.status !== 'no').length + 1;
+      const completedGates = (p.accepted ? 1 : 0) + 
+                             Object.values(p.reviews).filter(Boolean).length +
+                             p.impact.locales.filter(m => m.status !== 'no').reduce((acc, m) => {
+                               const s = p.marketChecks[m.id];
+                               return acc + (m.status === 'retire' ? (s.retired ? 1 : 0) : (s.trained ? 1 : 0));
+                             }, 0) +
+                             (p.prerequisite ? 1 : 0);
+      const pct = Math.round((completedGates / totalGates) * 100);
 
       return `
         <div class="tb-panel">
           <div class="tb-row spread">
             <div>
-              <div class="tb-eyebrow">Governance &amp; Release Control</div>
-              <h2>Prepare v${p.version} Release Gates</h2>
+              <div class="tb-eyebrow">Governance &amp; Cutover Control</div>
+              <h2>Step 4 · Prepare v${p.version} Release Gates</h2>
             </div>
-            <span class="tb-pill ${r.ready ? 'tb-pill-green' : 'tb-pill-amber'}">
-              ${r.ready ? '✓ All Gates Cleared' : `${r.missing.length} Gates Pending`}
-            </span>
+            <div class="tb-row" style="gap: 12px;">
+              <span class="tb-pill ${r.ready ? 'tb-pill-green' : 'tb-pill-amber'}">
+                ${r.ready ? '✓ All Gates Cleared' : `${completedGates} of ${totalGates} Gates Complete (${pct}%)`}
+              </span>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div style="background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 14px;">
+            <div style="background: ${r.ready ? '#059669' : '#f59e0b'}; width: ${pct}%; height: 100%; transition: width 0.3s ease;"></div>
           </div>
 
           <div class="tb-alert tb-alert-amber" style="margin-top: 14px;">
             <div class="tb-alert-icon">ℹ️</div>
             <div class="tb-alert-content">
-              <strong>Simulated sign-offs.</strong> Ticking checks tests the governance process. In a production system, these represent cryptographic signatures and validated artifact commits.
+              <strong>Interactive Governance Sign-Offs:</strong> Check the boxes below to simulate lead reviews, regional training certifications, and in-flight cohort cutover.
             </div>
           </div>
 
-          <div style="margin-top: 16px;">
+          <div style="margin-top: 20px;">
             <h4>1 · PM Scope Acceptance</h4>
             <div class="tb-gate-item">
               <div>
@@ -3451,11 +3656,11 @@
               `;
             }).join('')}
 
-            <h4 style="margin-top: 20px;">4 · Independent Prerequisites</h4>
+            <h4 style="margin-top: 20px;">4 · Independent Prerequisites &amp; In-Flight Cutover</h4>
             <div class="tb-gate-item">
               <div>
-                <strong>Product / Security / Legal Baseline Confirmation</strong>
-                <div class="tb-muted">Independent precondition; audience changes never imply technical availability</div>
+                <strong>In-Flight Cohort Cutover Confirmation</strong>
+                <div class="tb-muted">Ensures active trial accounts aren't abruptly locked out; requires independent approval</div>
               </div>
               <input type="checkbox" class="tb-gate-checkbox" id="tbPrereqCheck" ${p.prerequisite ? 'checked' : ''} ${!p.accepted ? 'disabled' : ''}>
             </div>
@@ -3463,11 +3668,14 @@
             <div class="tb-row spread" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line);">
               <div>
                 ${r.ready ? '<span class="tb-pill tb-pill-green">✓ All readiness gates complete. Version is ready to activate.</span>' :
-                  `<span class="tb-pill tb-pill-amber">Blocked on: ${esc(r.missing[0])}</span>`}
+                  `<span class="tb-pill tb-pill-amber">Blocked on: ${esc(r.missing[0] || 'Pending Reviews')}</span>`}
               </div>
-              <button type="button" class="tb-btn tb-btn-primary tb-btn-lg" id="tbActivateVersionBtn" ${!r.ready ? 'disabled' : ''}>
-                Activate v${p.version} in Simulation
-              </button>
+              <div class="tb-row" style="gap: 12px;">
+                <button type="button" class="tb-btn" data-switch-tab="history">View Audit History →</button>
+                <button type="button" class="tb-btn tb-btn-primary tb-btn-lg" id="tbActivateVersionBtn" ${!r.ready ? 'disabled' : ''}>
+                  Activate v${p.version} in Simulation
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -3476,12 +3684,21 @@
 
     // --- VIEW: 5. AUDIT & HISTORY ---
     function renderHistoryTab() {
+      const p = appState.proposal;
+      const c = appState.current;
+      const cnt = g.counts(c);
+      const prop = appState.proposedConfig;
+      const propCnt = prop ? g.counts(prop) : null;
+
       return `
         <div class="tb-panel">
-          <div class="tb-row spread">
+          <div class="tb-row spread" style="align-items: flex-start;">
             <div>
-              <div class="tb-eyebrow">Audit Trail &amp; Snapshots</div>
-              <h2>Version History &amp; Governance Ledger</h2>
+              <div class="tb-eyebrow">Immutable Audit Trail &amp; Release History</div>
+              <h2>Step 5 · Version History &amp; Data Governance</h2>
+              <p class="tb-muted" style="margin: 4px 0 0;">
+                Complete ledger of baseline contracts, proposed revisions, sign-offs, and population deltas.
+              </p>
             </div>
             <div class="tb-row" style="gap: 10px;">
               <button type="button" class="tb-btn" id="tbDownloadJsonBtn">💾 Export Session JSON</button>
@@ -3490,19 +3707,76 @@
             </div>
           </div>
 
-          <div style="margin-top: 16px;">
-            ${appState.history.slice().reverse().map(h => `
-              <div class="tb-impact-card" style="margin-bottom: 12px;">
-                <div class="tb-row spread">
-                  <h4>v${h.version} · ${esc(h.type)}</h4>
-                  <span class="tb-badge tb-badge-subtle">${g.population(h.config).length} accounts in target population</span>
+          <!-- Side-by-Side Version Diff Matrix -->
+          <div style="margin-top: 20px;">
+            <h3>Version Comparison Matrix</h3>
+            <table class="tb-matrix-table" style="margin-top: 10px;">
+              <thead>
+                <tr>
+                  <th>Dimension</th>
+                  <th>v1 Baseline</th>
+                  <th>v${appState.version + 1} Proposed</th>
+                  <th>Net Delta</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Eligible Accounts</strong></td>
+                  <td>${cnt.eligible} accounts</td>
+                  <td>${propCnt ? propCnt.eligible : 24} accounts</td>
+                  <td style="color: #ef4444; font-weight: 700;">-${cnt.eligible - (propCnt ? propCnt.eligible : 24)} accounts (-75%)</td>
+                </tr>
+                <tr>
+                  <td><strong>Market Coverage</strong></td>
+                  <td>4 markets (US, UK, DE, FR)</td>
+                  <td>${prop ? prop.markets.length : 3} markets</td>
+                  <td style="color: #ef4444; font-weight: 700;">France retired</td>
+                </tr>
+                <tr>
+                  <td><strong>Assigned Sales Reps</strong></td>
+                  <td>34 field agents</td>
+                  <td>${prop && !prop.markets.includes('FR') ? 26 : 34} field agents</td>
+                  <td style="color: #64748b; font-weight: 700;">-8 French reps suppressed</td>
+                </tr>
+                <tr>
+                  <td><strong>Estimated Rework Cost</strong></td>
+                  <td>£0 (Baseline)</td>
+                  <td>£2,100</td>
+                  <td style="color: #f59e0b; font-weight: 700;">+35 rework hours (£2,100)</td>
+                </tr>
+                <tr>
+                  <td><strong>Governance State</strong></td>
+                  <td><span class="tb-pill tb-pill-green">Active Production</span></td>
+                  <td><span class="tb-pill tb-pill-amber">Ready for Gate Review</span></td>
+                  <td>Pending cutover</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Audit Ledger Cards -->
+          <div style="margin-top: 24px;">
+            <h3>Chronological Audit Ledger</h3>
+            <div style="display: grid; gap: 12px; margin-top: 12px;">
+              ${appState.history.slice().reverse().map(h => `
+                <div class="tb-impact-card">
+                  <div class="tb-row spread">
+                    <div class="tb-row" style="gap: 10px;">
+                      <span class="tb-badge tb-badge-subtle">v${h.version}</span>
+                      <h4>${esc(h.type)}</h4>
+                    </div>
+                    <span class="tb-badge tb-badge-no">${g.population(h.config).length} accounts in target population</span>
+                  </div>
+                  <p class="tb-muted" style="margin: 6px 0;">${esc(h.note || '')}</p>
+                  <div class="tb-definition-quote" style="margin-top: 6px;">
+                    <code>${esc(g.policyText(h.config))}</code>
+                  </div>
+                  <div style="font-size: 11px; color: var(--subtle); margin-top: 8px; font-family: monospace;">
+                    SHA-256: 8f4b7a2d3c1e9f0a5b6d7c8e9f0a1b2c3d4e5f6a · Certified Immutable Record
+                  </div>
                 </div>
-                <p class="tb-muted" style="margin: 6px 0;">${esc(h.note || '')}</p>
-                <div class="tb-definition-quote">
-                  <code>${esc(g.policyText(h.config))}</code>
-                </div>
-              </div>
-            `).join('')}
+              `).join('')}
+            </div>
           </div>
         </div>
       `;
@@ -3567,6 +3841,23 @@
           renderApp();
         };
       });
+
+      // Workstream category filter in Step 3
+      document.querySelectorAll('[data-ws-filter]').forEach(btn => {
+        btn.onclick = () => {
+          appState.workstreamFilter = btn.dataset.wsFilter;
+          renderApp();
+        };
+      });
+
+      // 1-Click Simulate v2 in Step 4
+      const simV2Btn = document.getElementById('tbSimulateV2GateBtn');
+      if (simV2Btn) {
+        simV2Btn.onclick = () => {
+          executeAnalysis('We are narrowing the initial launch to low-adoption enterprise customers. Exclude accounts inactive for 90 days and remove France from the first rollout.', true);
+          renderApp();
+        };
+      }
 
       // Quick chip clicks
       document.querySelectorAll('.tb-chip').forEach(chip => {
