@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node scripts/test-engine.cjs && node scripts/test-twin-brain.cjs && node scripts/verify-twin-brain-html.cjs",
-    "build": "node scripts/bundle-twin-brain.cjs && node scripts/update-simulator.cjs && node scripts/build-portable.cjs",
+    "build": "node scripts/bundle-twin-brain.cjs",
     "bundle": "node scripts/bundle-twin-brain.cjs"
   },
   "keywords": [],

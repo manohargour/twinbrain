@@ -1,6 +1,6 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
 const path=require('path');
-const html=fs.readFileSync(path.join(__dirname,'../output/gtm-change-simulator.html'),'utf8');
+const html=fs.readFileSync(path.join(__dirname,'../output/Twin-Brain.html'),'utf8');
 const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 const sandbox={window:{}};vm.createContext(sandbox);vm.runInContext(engine,sandbox);
 const g=sandbox.window.GTM,copy=x=>JSON.parse(JSON.stringify(x));

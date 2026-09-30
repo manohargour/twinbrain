@@ -1,11 +1,11 @@
 const fs = require('fs'), vm = require('vm'), assert = require('assert/strict'), path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'output/gtm-change-simulator.html'), 'utf8');
+const html = fs.readFileSync(path.join(root, 'output/Twin-Brain.html'), 'utf8');
 
 // Extract engine
 const engineMatch = html.match(/<script id="engine">([\s\S]*?)<\/script>/);
-assert(engineMatch, 'Engine script tag found in simulator');
+assert(engineMatch, 'Engine script tag found in Twin-Brain.html');
 
 const sandbox = { window: {} };
 vm.createContext(sandbox);
