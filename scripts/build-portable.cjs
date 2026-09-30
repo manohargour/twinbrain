@@ -7,9 +7,9 @@ const app={innerHTML:''};
 const document={getElementById:id=>id==='app'?app:null,querySelectorAll:()=>[]};
 const sandbox={window:{scrollTo:()=>{}},document,console};vm.createContext(sandbox);
 for(const id of ['engine','ui']){const m=source.match(new RegExp('<script id="'+id+'">([\\s\\S]*?)<\\/script>'));vm.runInContext(m[1],sandbox);}
-const staticBody=vm.runInContext('programme()+work()',sandbox);
-const banner='<section class="notice"><strong>Preview mode:</strong> the full programme and team work are readable below. For the change simulator, download this HTML file and open it in Chrome or Safari. Interactive controls require JavaScript; state resets on reload unless exported.</section>';
+const staticBody=vm.runInContext('gtmMotionPage()+programme()+work()',sandbox);
+const banner='<section class="notice"><strong>Preview mode:</strong> the full GTM motion (Step 0), programme charter (Step 1), and team work (Step 2) are readable below. For the interactive change simulator, download this HTML file and open it in Chrome or Safari. Interactive controls require JavaScript; state resets on reload unless exported.</section>';
 const target=source.replace('<main class="shell" id="app"></main>','<main class="shell" id="app">'+banner+staticBody+'</main>');
 if(target===source)throw new Error('Source main placeholder not found');
 fs.writeFileSync(path.join(root,'output/GTM-Change-Lab.html'),target);
-console.log('Generated portable HTML with static programme and all team artifacts.');
+console.log('Generated portable HTML with static GTM motion, programme and all team artifacts.');
