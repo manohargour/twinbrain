@@ -37,4 +37,6 @@ if (html.includes(uiStart)) {
 }
 
 fs.writeFileSync(htmlPath, html, 'utf8');
-console.log('Successfully bundled standalone output/Twin-Brain.html');
+const indexPath = path.join(root, 'output/index.html');
+fs.writeFileSync(indexPath, html, 'utf8');
+console.log('Successfully bundled standalone output/Twin-Brain.html and synced to output/index.html');
