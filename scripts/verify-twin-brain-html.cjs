@@ -156,11 +156,11 @@ console.log('PASS Graph Blast Radius topology verified');
 assert(html.includes('data-tab="motion"'), 'Navigation contains Step 0 button');
 assert(Array.isArray(sandbox.window.GTM.GTM_MOTIONS) && sandbox.window.GTM.GTM_MOTIONS.length === 4, 'Engine exports all 4 GTM motions');
 const motionTabHtml = sandbox.window.TWIN_BRAIN_UI.renderGtmMotionTab({ selectedMotion: 'hybrid_sales_assist', current: sandbox.window.GTM.BASE });
-assert(motionTabHtml.includes('Sales-Assisted Hybrid'), 'Step 0 renders baseline motion');
-assert(motionTabHtml.includes('Product-Led Growth (PLG)'), 'Step 0 renders alternative PLG motion');
-assert(motionTabHtml.includes('Enterprise Account-Based Marketing'), 'Step 0 renders ABM motion');
-assert(motionTabHtml.includes('Key Operational Inputs'), 'Step 0 renders operational inputs');
-assert(motionTabHtml.includes('Target Business Outcomes'), 'Step 0 renders target business outcomes');
-console.log('PASS Step 0 GTM Motion Identification and Alignment verified');
+assert(motionTabHtml.includes('Sales-Assisted Adoption'), 'Step 0 renders baseline active motion');
+assert(motionTabHtml.includes('Product-Led Growth'), 'Step 0 renders alternative PLG motion');
+assert(motionTabHtml.includes('Strategic Account-Based Enterprise Outbound'), 'Step 0 renders ABM motion');
+assert(motionTabHtml.includes('Five Strategic GTM Motions in Progress'), 'Step 0 renders 5 motions list');
+assert(motionTabHtml.includes('Twin Brain System Overview: 5 Downstream Stages'), 'Step 0 renders 5 steps overview');
+console.log('PASS Step 0 Simplified GTM Motions and Workflow Overview verified');
 
 console.log('\nALL TWIN-BRAIN HTML INTEGRATION TESTS PASSED!');
