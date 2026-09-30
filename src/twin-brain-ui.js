@@ -288,59 +288,126 @@
       <section class="tb-panel">
         <div class="tb-row spread">
           <div>
-            <div class="tb-eyebrow">Dependency Graph</div>
-            <h3 class="tb-panel-title">Semantic Cascade Architecture</h3>
+            <div class="tb-eyebrow">Enterprise Dependency Architecture · DAG View</div>
+            <h3 class="tb-panel-title">Cross-Organizational Impact Cascade</h3>
           </div>
-          <div class="tb-legend">
-            <span class="tb-badge tb-badge-must">Must change</span>
-            <span class="tb-badge tb-badge-review">Owner review</span>
-            <span class="tb-badge tb-badge-no">Unaffected</span>
-            <span class="tb-badge tb-badge-subtle">Click node for details</span>
+          <div class="tb-graph-legend">
+            <span class="tb-legend-item"><span class="tb-legend-dot tb-dot-must"></span> 🔴 Must change (7)</span>
+            <span class="tb-legend-item"><span class="tb-legend-dot tb-dot-review"></span> 🟠 Owner review (4)</span>
+            <span class="tb-legend-item"><span class="tb-legend-dot tb-dot-no"></span> 🟢 Unaffected (2)</span>
+            <span class="tb-legend-item" style="color:#0284c7; font-weight:600;">🔵 Upstream cause</span>
+            <span class="tb-legend-item" style="color:#dc2626; font-weight:600;">🔴 Downstream blast</span>
           </div>
         </div>
-        <p class="tb-muted">
-          Directed dependency cascade from business change intent to execution deliverables and readiness gates.
+        <p class="tb-muted" style="margin-top: 2px; font-size: 13px;">
+          Clean departmental swimlane view mapping upstream strategy decisions down to team deliverables and readiness gates. Click any node to highlight its causal blast radius.
         </p>
 
         <div class="tb-graph-wrapper">
-          <svg viewBox="0 0 800 560" class="tb-graph-svg" id="tbGraphSvg">
+          <svg viewBox="0 0 980 620" class="tb-graph-svg" id="tbGraphSvg">
             <defs>
-              <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 9 5 L 0 9 z" fill="#94a3b8" />
+              <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#94a3b8" />
               </marker>
-              <marker id="arrow-must" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 9 5 L 0 9 z" fill="#ef4444" />
+              <marker id="arrow-must" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626" />
               </marker>
+              <marker id="arrow-upstream" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0284c7" />
+              </marker>
+              <marker id="arrow-downstream" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626" />
+              </marker>
+              <filter id="nodeShadow" x="-10%" y="-10%" width="120%" height="125%">
+                <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-opacity="0.06" />
+              </filter>
             </defs>
 
-            <!-- Render Edges -->
+            <!-- Departmental Swimlanes (Background) -->
+            <g class="tb-graph-lanes">
+              <rect x="25" y="155" width="220" height="310" rx="10" class="tb-lane-bg" />
+              <text x="135" y="176" text-anchor="middle" class="tb-lane-title">📊 ANALYTICS & INSIGHTS</text>
+
+              <rect x="260" y="155" width="220" height="310" rx="10" class="tb-lane-bg" />
+              <text x="370" y="176" text-anchor="middle" class="tb-lane-title">📢 GTM & STRATEGY</text>
+
+              <rect x="495" y="155" width="220" height="310" rx="10" class="tb-lane-bg" />
+              <text x="605" y="176" text-anchor="middle" class="tb-lane-title">🎓 FIELD ENABLEMENT</text>
+
+              <rect x="730" y="155" width="220" height="310" rx="10" class="tb-lane-bg" />
+              <text x="840" y="176" text-anchor="middle" class="tb-lane-title">🌍 LOCALIZATION SCOPE</text>
+
+              <!-- Gate lane background -->
+              <rect x="300" y="495" width="410" height="95" rx="10" class="tb-lane-bg-gate" />
+              <text x="505" y="513" text-anchor="middle" class="tb-lane-title-gate">🏁 CROSS-FUNCTIONAL READINESS RELEASE</text>
+            </g>
+
+            <!-- Render Smooth Curved Edges -->
             <g class="tb-graph-edges">
-              ${edges.map(e => {
+              ${edges.map((e, idx) => {
                 const src = nodes.find(n => n.id === e.from);
                 const tgt = nodes.find(n => n.id === e.to);
                 if (!src || !tgt) return '';
                 const isMust = tgt.status === 'must';
+
+                const srcH = src.height || 48;
+                const tgtH = tgt.height || 48;
+                const x1 = src.x;
+                const y1 = src.y + srcH / 2;
+                const x2 = tgt.x;
+                const y2 = tgt.y - tgtH / 2;
+
+                let d = '';
+                if (Math.abs(x1 - x2) < 4) {
+                  d = `M ${x1} ${y1} L ${x2} ${y2}`;
+                } else {
+                  const dy = Math.max(y2 - y1, 20);
+                  const cp1y = y1 + dy * 0.45;
+                  const cp2y = y2 - dy * 0.45;
+                  d = `M ${x1} ${y1} C ${x1} ${cp1y}, ${x2} ${cp2y}, ${x2} ${y2}`;
+                }
+
                 return `
-                  <line x1="${src.x}" y1="${src.y + 18}" x2="${tgt.x}" y2="${tgt.y - 18}"
+                  <path d="${d}"
                         class="tb-edge ${e.dashed ? 'tb-edge-dashed' : ''} ${isMust ? 'tb-edge-must' : ''}"
+                        data-edge-index="${idx}"
                         marker-end="${isMust ? 'url(#arrow-must)' : 'url(#arrow)'}" />
                 `;
               }).join('')}
             </g>
 
-            <!-- Render Nodes -->
+            <!-- Render Rich Card Nodes -->
             <g class="tb-graph-nodes">
               ${nodes.map(n => {
                 const isRoot = n.type === 'root';
+                const isFilter = n.type === 'filter';
                 const isMust = n.status === 'must';
                 const isReview = n.status === 'review';
                 const isNo = n.status === 'no';
-                const nodeClass = isRoot ? 'tb-node-root' : isMust ? 'tb-node-must' : isReview ? 'tb-node-review' : 'tb-node-no';
+                
+                const nodeClass = isRoot ? 'tb-node-root' :
+                                  isFilter ? 'tb-node-filter' :
+                                  isMust ? 'tb-node-must' :
+                                  isReview ? 'tb-node-review' : 'tb-node-no';
+
+                const w = n.width || 180;
+                const h = n.height || 48;
+                const halfW = w / 2;
+                const halfH = h / 2;
+
+                const statusTag = isRoot ? 'TRIGGER' :
+                                  isFilter ? 'SCOPE' :
+                                  isMust ? 'MUST CHANGE' :
+                                  isReview ? 'REVIEW' : 'UNAFFECTED';
 
                 return `
                   <g class="tb-graph-node ${nodeClass}" data-node-id="${n.id}" transform="translate(${n.x}, ${n.y})">
-                    <rect x="-75" y="-18" width="150" height="36" rx="6" />
-                    <text x="0" y="4" text-anchor="middle" class="tb-node-text">${esc(n.label)}</text>
+                    <rect x="${-halfW}" y="${-halfH}" width="${w}" height="${h}" rx="8" class="tb-node-rect" filter="url(#nodeShadow)" />
+                    <rect x="${-halfW}" y="${-halfH}" width="5" height="${h}" rx="2" class="tb-node-stripe" />
+                    
+                    <text x="${-halfW + 12}" y="${-halfH + 19}" class="tb-node-title">${esc(n.label)}</text>
+                    <text x="${-halfW + 12}" y="${-halfH + 34}" class="tb-node-subtitle">${esc(n.subtitle || n.team || '')}</text>
+                    <text x="${halfW - 8}" y="${-halfH + 18}" text-anchor="end" class="tb-node-tag">${statusTag}</text>
                   </g>
                 `;
               }).join('')}

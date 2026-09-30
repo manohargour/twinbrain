@@ -357,71 +357,182 @@
     .tb-row-review td { background: #fffcf0; }
     .tb-delta-sub { font-size: 11px; color: var(--subtle); margin-top: 2px; }
 
-    /* Dependency Graph SVG */
+    /* Dependency Graph SVG & Clean Swimlanes */
     .tb-graph-wrapper {
       background: #ffffff;
       border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 16px;
+      border-radius: 12px;
+      padding: 18px 12px;
       margin-top: 14px;
       overflow-x: auto;
       text-align: center;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
     }
-    .tb-graph-svg { max-width: 100%; height: auto; }
-    .tb-edge { stroke: #94a3b8; stroke-width: 1.5; }
-    .tb-edge-must { stroke: #ef4444; stroke-width: 2; }
-    .tb-edge-dashed { stroke-dasharray: 4, 4; }
-    .tb-graph-node rect {
+    .tb-graph-svg { max-width: 100%; height: auto; min-width: 820px; }
+    
+    /* Legend */
+    .tb-graph-legend {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 11.5px;
+    }
+    .tb-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--subtle);
+      font-weight: 500;
+    }
+    .tb-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .tb-dot-must { background: #dc2626; }
+    .tb-dot-review { background: #d97706; }
+    .tb-dot-no { background: #16a34a; }
+
+    /* Department Swimlanes */
+    .tb-lane-bg {
+      fill: #f8fafc;
+      stroke: #e2e8f0;
+      stroke-width: 1px;
+      stroke-dasharray: 4,4;
+    }
+    .tb-lane-title {
+      font-size: 9.5px;
+      font-weight: 700;
+      fill: #64748b;
+      letter-spacing: 0.6px;
+    }
+    .tb-lane-bg-gate {
+      fill: #f1f5f9;
+      stroke: #cbd5e1;
+      stroke-width: 1.2px;
+      stroke-dasharray: 3,3;
+    }
+    .tb-lane-title-gate {
+      font-size: 9.5px;
+      font-weight: 700;
+      fill: #475569;
+      letter-spacing: 0.8px;
+    }
+
+    /* Node Cards */
+    .tb-graph-node {
+      cursor: pointer;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .tb-graph-node:hover {
+      transform: scale(1.02);
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.12));
+    }
+    .tb-node-rect {
       fill: #ffffff;
       stroke: var(--line-dark);
-      stroke-width: 1.5;
-      cursor: pointer;
+      stroke-width: 1.2px;
       transition: all 0.2s ease;
     }
-    .tb-graph-node:hover rect {
-      stroke-width: 2.5;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    .tb-node-stripe {
+      fill: var(--line-dark);
+      pointer-events: none;
     }
-    .tb-node-root rect { fill: #0f172a; stroke: #0f172a; }
-    .tb-node-root text { fill: #ffffff; font-weight: 700; }
-    .tb-node-must rect { fill: var(--redbg); stroke: var(--red); }
-    .tb-node-review rect { fill: var(--amberbg); stroke: var(--amber); }
-    .tb-node-no rect { fill: var(--pale); stroke: var(--green); }
-    .tb-node-text { font-size: 11px; font-weight: 600; fill: var(--ink); pointer-events: none; }
+    .tb-node-title {
+      font-size: 11px;
+      font-weight: 700;
+      fill: #0f172a;
+      pointer-events: none;
+    }
+    .tb-node-subtitle {
+      font-size: 9px;
+      font-weight: 500;
+      fill: #64748b;
+      pointer-events: none;
+    }
+    .tb-node-tag {
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      pointer-events: none;
+    }
+
+    /* Node Archetypes */
+    .tb-node-root .tb-node-rect { fill: #0f172a; stroke: #0f172a; }
+    .tb-node-root .tb-node-stripe { fill: #6366f1; }
+    .tb-node-root .tb-node-title { fill: #ffffff; font-size: 11.5px; }
+    .tb-node-root .tb-node-subtitle { fill: #94a3b8; }
+    .tb-node-root .tb-node-tag { fill: #a5b4fc; }
+
+    .tb-node-filter .tb-node-rect { fill: #f8fafc; stroke: #cbd5e1; }
+    .tb-node-filter .tb-node-stripe { fill: #475569; }
+    .tb-node-filter .tb-node-title { fill: #1e293b; }
+    .tb-node-filter .tb-node-subtitle { fill: #64748b; }
+    .tb-node-filter .tb-node-tag { fill: #64748b; }
+
+    .tb-node-must .tb-node-rect { fill: #fff8f8; stroke: #fca5a5; }
+    .tb-node-must .tb-node-stripe { fill: #dc2626; }
+    .tb-node-must .tb-node-title { fill: #991b1b; }
+    .tb-node-must .tb-node-subtitle { fill: #b91c1c; }
+    .tb-node-must .tb-node-tag { fill: #dc2626; }
+
+    .tb-node-review .tb-node-rect { fill: #fffdf5; stroke: #fcd34d; }
+    .tb-node-review .tb-node-stripe { fill: #d97706; }
+    .tb-node-review .tb-node-title { fill: #92400e; }
+    .tb-node-review .tb-node-subtitle { fill: #b45309; }
+    .tb-node-review .tb-node-tag { fill: #d97706; }
+
+    .tb-node-no .tb-node-rect { fill: #f7fef9; stroke: #86efac; }
+    .tb-node-no .tb-node-stripe { fill: #16a34a; }
+    .tb-node-no .tb-node-title { fill: #166534; }
+    .tb-node-no .tb-node-subtitle { fill: #15803d; }
+    .tb-node-no .tb-node-tag { fill: #15803d; }
+
+    /* Edge Styling */
+    .tb-edge {
+      stroke: #94a3b8;
+      stroke-width: 1.5px;
+      fill: none;
+      transition: stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.2s ease;
+    }
+    .tb-edge-must { stroke: #f87171; stroke-width: 1.8px; fill: none; }
+    .tb-edge-dashed { stroke-dasharray: 4, 4; stroke: #10b981; }
 
     /* Graph Interactive Blast Radius */
-    .tb-graph-node.tb-node-selected rect {
+    .tb-graph-node.tb-node-selected .tb-node-rect {
       stroke: #4f46e5 !important;
-      stroke-width: 3.5px !important;
+      stroke-width: 3px !important;
       fill: #eef2ff !important;
-      filter: drop-shadow(0 0 10px rgba(79, 70, 229, 0.7)) !important;
+      filter: drop-shadow(0 0 10px rgba(79, 70, 229, 0.6)) !important;
     }
-    .tb-graph-node.tb-node-upstream rect {
+    .tb-graph-node.tb-node-upstream .tb-node-rect {
       stroke: #0284c7 !important;
       stroke-width: 2.5px !important;
       fill: #e0f2fe !important;
-      filter: drop-shadow(0 0 8px rgba(2, 132, 199, 0.5)) !important;
+      filter: drop-shadow(0 0 8px rgba(2, 132, 199, 0.45)) !important;
     }
-    .tb-graph-node.tb-node-downstream rect {
+    .tb-graph-node.tb-node-downstream .tb-node-rect {
       stroke: #dc2626 !important;
       stroke-width: 2.5px !important;
       fill: #fee2e2 !important;
-      filter: drop-shadow(0 0 8px rgba(220, 38, 38, 0.5)) !important;
+      filter: drop-shadow(0 0 8px rgba(220, 38, 38, 0.45)) !important;
     }
     .tb-graph-node.tb-node-dimmed {
-      opacity: 0.22;
+      opacity: 0.18;
       transition: opacity 0.2s ease;
     }
     .tb-edge.tb-edge-active-upstream {
       stroke: #0284c7 !important;
-      stroke-width: 3px !important;
+      stroke-width: 2.8px !important;
     }
     .tb-edge.tb-edge-active-downstream {
       stroke: #dc2626 !important;
-      stroke-width: 3px !important;
+      stroke-width: 2.8px !important;
     }
     .tb-edge.tb-edge-dimmed {
-      opacity: 0.12;
+      opacity: 0.10;
       transition: opacity 0.2s ease;
     }
     .tb-graph-selection-panel {
@@ -1632,31 +1743,38 @@
 
   // --- 6. DEPENDENCY GRAPH DATA (Prompt Section 13) ---
   function getGraphData(analysis) {
-    // Generate clean layered DAG nodes
+    // Generate clean layered DAG nodes structured into 4 clear enterprise swimlanes
     const nodes = [
-      { id: 'CHANGE', label: 'BUSINESS CHANGE', type: 'root', status: 'change', level: 0, x: 400, y: 30 },
+      // Level 0: Business Change Trigger
+      { id: 'CHANGE', label: 'BUSINESS CHANGE TRIGGER', subtitle: 'Launch narrowing requested', type: 'root', status: 'change', level: 0, x: 490, y: 35, width: 250, height: 42 },
 
-      { id: 'AUDIENCE_NODE', label: 'Audience Filter', type: 'filter', status: 'must', level: 1, x: 200, y: 120 },
-      { id: 'INACTIVITY_NODE', label: 'Inactivity Rule (90d)', type: 'filter', status: 'must', level: 1, x: 400, y: 120 },
-      { id: 'MARKET_NODE', label: 'Market Scope (Remove FR)', type: 'filter', status: 'must', level: 1, x: 600, y: 120 },
+      // Level 1: Scope Mutations
+      { id: 'AUDIENCE_NODE', label: 'Audience Filter', subtitle: 'Low adoption only (<20%)', type: 'filter', status: 'must', level: 1, x: 240, y: 100, width: 190, height: 38 },
+      { id: 'INACTIVITY_NODE', label: 'Inactivity Rule', subtitle: 'Exclude ≥90d inactive', type: 'filter', status: 'must', level: 1, x: 490, y: 100, width: 190, height: 38 },
+      { id: 'MARKET_NODE', label: 'Market Scope', subtitle: 'Remove France (FR)', type: 'filter', status: 'must', level: 1, x: 740, y: 100, width: 190, height: 38 },
 
-      { id: 'A1', label: 'A1 Audience Definition', team: 'Analytics', status: 'must', level: 2, x: 120, y: 220 },
-      { id: 'A2', label: 'A2 Measurement Plan', team: 'Analytics', status: 'review', level: 2, x: 260, y: 220 },
-      { id: 'A4', label: 'A4 Reporting Spec', team: 'Analytics', status: 'must', level: 2, x: 120, y: 310 },
+      // Lane 1: Analytics & Insights (x = 135)
+      { id: 'A1', label: 'A1 Audience Definition', subtitle: '96 ➔ 24 Accounts', team: 'Analytics', status: 'must', level: 2, x: 135, y: 205, width: 180, height: 48 },
+      { id: 'A2', label: 'A2 Measurement Plan', subtitle: 'Sample power review', team: 'Analytics', status: 'review', level: 3, x: 135, y: 305, width: 180, height: 48 },
+      { id: 'A4', label: 'A4 Reporting Spec', subtitle: 'v2 Funnel dashboard', team: 'Analytics', status: 'must', level: 4, x: 135, y: 405, width: 180, height: 48 },
       
-      { id: 'G1', label: 'G1 Segmentation Plan', team: 'GTM', status: 'review', level: 2, x: 380, y: 220 },
-      { id: 'G2', label: 'G2 Master Messaging', team: 'GTM', status: 'review', level: 2, x: 380, y: 310 },
-      { id: 'G3', label: 'G3 Manifest & Suppress', team: 'GTM', status: 'must', level: 2, x: 260, y: 310 },
+      // Lane 2: GTM Strategy & Messaging (x = 370)
+      { id: 'G1', label: 'G1 Segmentation Plan', subtitle: 'Barrier re-engagement', team: 'GTM', status: 'review', level: 2, x: 370, y: 205, width: 180, height: 48 },
+      { id: 'G2', label: 'G2 Master Messaging', subtitle: 'Value proposition v2', team: 'GTM', status: 'review', level: 3, x: 370, y: 305, width: 180, height: 48 },
+      { id: 'G3', label: 'G3 Campaign Manifest', subtitle: 'Suppress 72 accounts', team: 'GTM', status: 'must', level: 4, x: 370, y: 405, width: 180, height: 48 },
 
-      { id: 'E1', label: 'E1 Curriculum', team: 'Enablement', status: 'must', level: 2, x: 500, y: 220 },
-      { id: 'E2', label: 'E2 Call Guide', team: 'Enablement', status: 'review', level: 2, x: 500, y: 310 },
-      { id: 'E3', label: 'E3 Agent Roster', team: 'Enablement', status: 'must', level: 2, x: 500, y: 400 },
+      // Lane 3: Field Enablement (x = 605)
+      { id: 'E1', label: 'E1 Training Curriculum', subtitle: 'Target qualification', team: 'Enablement', status: 'must', level: 2, x: 605, y: 205, width: 180, height: 48 },
+      { id: 'E2', label: 'E2 Rep Call Guide', subtitle: 'Discovery script update', team: 'Enablement', status: 'review', level: 3, x: 605, y: 305, width: 180, height: 48 },
+      { id: 'E3', label: 'E3 Agent Roster', subtitle: '34 Reps stale / reassess', team: 'Enablement', status: 'must', level: 4, x: 605, y: 405, width: 180, height: 48 },
 
-      { id: 'L-FR', label: 'L-FR France Pack', team: 'Localization', status: 'must', level: 2, x: 680, y: 220, subtitle: 'RETIRE' },
-      { id: 'L-RETAINED', label: 'Retained Packs (US/UK/DE)', team: 'Localization', status: 'review', level: 2, x: 680, y: 310 },
+      // Lane 4: Localization & Markets (x = 840)
+      { id: 'L-FR', label: 'L-FR France Pack', subtitle: 'Retire & cancel 8 reps', team: 'Localization', status: 'must', level: 2, x: 840, y: 205, width: 180, height: 48 },
+      { id: 'L-RETAINED', label: 'Retained Packs', subtitle: 'US / UK / DE alignment', team: 'Localization', status: 'review', level: 3, x: 840, y: 305, width: 180, height: 48 },
 
-      { id: 'P1', label: 'P1 Launch Readiness Gate', team: 'Programme', status: 'must', level: 3, x: 400, y: 500 },
-      { id: 'P2', label: 'P2 Product & Security Contract', team: 'Programme', status: 'no', level: 3, x: 680, y: 500, subtitle: 'UNAFFECTED' }
+      // Level 5: Release Gates & Independent Prerequisite
+      { id: 'P1', label: 'P1 Launch Readiness Gate', subtitle: 'Reopened · Approvals invalidated', team: 'Programme', status: 'must', level: 5, x: 440, y: 535, width: 260, height: 50 },
+      { id: 'P2', label: 'P2 Product & Safety Contract', subtitle: 'Unaffected prerequisite boundary', team: 'Programme', status: 'no', level: 5, x: 770, y: 535, width: 240, height: 50 }
     ];
 
     const edges = [
@@ -1666,22 +1784,27 @@
 
       { from: 'AUDIENCE_NODE', to: 'A1' },
       { from: 'INACTIVITY_NODE', to: 'A1' },
+      
+      // Column 1 vertical flow
       { from: 'A1', to: 'A2' },
-      { from: 'A1', to: 'A4' },
+      { from: 'A2', to: 'A4' },
+      
+      // Cross-column cascade
       { from: 'A1', to: 'G1' },
-      { from: 'A1', to: 'G3' },
       { from: 'G1', to: 'G2' },
-      { from: 'G2', to: 'E2' },
-      { from: 'A1', to: 'E1' },
-      { from: 'E1', to: 'E3' },
+      { from: 'G2', to: 'G3' },
+      
+      { from: 'G2', to: 'E1' },
+      { from: 'E1', to: 'E2' },
       { from: 'E2', to: 'E3' },
 
+      // Market column flow
       { from: 'MARKET_NODE', to: 'L-FR' },
       { from: 'MARKET_NODE', to: 'L-RETAINED' },
       { from: 'L-RETAINED', to: 'E3' },
 
-      { from: 'A1', to: 'P1' },
-      { from: 'A2', to: 'P1' },
+      // Convergence into P1 Launch Readiness Gate
+      { from: 'A4', to: 'P1' },
       { from: 'G3', to: 'P1' },
       { from: 'E3', to: 'P1' },
       { from: 'L-FR', to: 'P1' },
@@ -2000,59 +2123,126 @@
       <section class="tb-panel">
         <div class="tb-row spread">
           <div>
-            <div class="tb-eyebrow">Dependency Graph</div>
-            <h3 class="tb-panel-title">Semantic Cascade Architecture</h3>
+            <div class="tb-eyebrow">Enterprise Dependency Architecture · DAG View</div>
+            <h3 class="tb-panel-title">Cross-Organizational Impact Cascade</h3>
           </div>
-          <div class="tb-legend">
-            <span class="tb-badge tb-badge-must">Must change</span>
-            <span class="tb-badge tb-badge-review">Owner review</span>
-            <span class="tb-badge tb-badge-no">Unaffected</span>
-            <span class="tb-badge tb-badge-subtle">Click node for details</span>
+          <div class="tb-graph-legend">
+            <span class="tb-legend-item"><span class="tb-legend-dot tb-dot-must"></span> 🔴 Must change (7)</span>
+            <span class="tb-legend-item"><span class="tb-legend-dot tb-dot-review"></span> 🟠 Owner review (4)</span>
+            <span class="tb-legend-item"><span class="tb-legend-dot tb-dot-no"></span> 🟢 Unaffected (2)</span>
+            <span class="tb-legend-item" style="color:#0284c7; font-weight:600;">🔵 Upstream cause</span>
+            <span class="tb-legend-item" style="color:#dc2626; font-weight:600;">🔴 Downstream blast</span>
           </div>
         </div>
-        <p class="tb-muted">
-          Directed dependency cascade from business change intent to execution deliverables and readiness gates.
+        <p class="tb-muted" style="margin-top: 2px; font-size: 13px;">
+          Clean departmental swimlane view mapping upstream strategy decisions down to team deliverables and readiness gates. Click any node to highlight its causal blast radius.
         </p>
 
         <div class="tb-graph-wrapper">
-          <svg viewBox="0 0 800 560" class="tb-graph-svg" id="tbGraphSvg">
+          <svg viewBox="0 0 980 620" class="tb-graph-svg" id="tbGraphSvg">
             <defs>
-              <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 9 5 L 0 9 z" fill="#94a3b8" />
+              <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#94a3b8" />
               </marker>
-              <marker id="arrow-must" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 9 5 L 0 9 z" fill="#ef4444" />
+              <marker id="arrow-must" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626" />
               </marker>
+              <marker id="arrow-upstream" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0284c7" />
+              </marker>
+              <marker id="arrow-downstream" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626" />
+              </marker>
+              <filter id="nodeShadow" x="-10%" y="-10%" width="120%" height="125%">
+                <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-opacity="0.06" />
+              </filter>
             </defs>
 
-            <!-- Render Edges -->
+            <!-- Departmental Swimlanes (Background) -->
+            <g class="tb-graph-lanes">
+              <rect x="25" y="155" width="220" height="310" rx="10" class="tb-lane-bg" />
+              <text x="135" y="176" text-anchor="middle" class="tb-lane-title">📊 ANALYTICS & INSIGHTS</text>
+
+              <rect x="260" y="155" width="220" height="310" rx="10" class="tb-lane-bg" />
+              <text x="370" y="176" text-anchor="middle" class="tb-lane-title">📢 GTM & STRATEGY</text>
+
+              <rect x="495" y="155" width="220" height="310" rx="10" class="tb-lane-bg" />
+              <text x="605" y="176" text-anchor="middle" class="tb-lane-title">🎓 FIELD ENABLEMENT</text>
+
+              <rect x="730" y="155" width="220" height="310" rx="10" class="tb-lane-bg" />
+              <text x="840" y="176" text-anchor="middle" class="tb-lane-title">🌍 LOCALIZATION SCOPE</text>
+
+              <!-- Gate lane background -->
+              <rect x="300" y="495" width="410" height="95" rx="10" class="tb-lane-bg-gate" />
+              <text x="505" y="513" text-anchor="middle" class="tb-lane-title-gate">🏁 CROSS-FUNCTIONAL READINESS RELEASE</text>
+            </g>
+
+            <!-- Render Smooth Curved Edges -->
             <g class="tb-graph-edges">
-              ${edges.map(e => {
+              ${edges.map((e, idx) => {
                 const src = nodes.find(n => n.id === e.from);
                 const tgt = nodes.find(n => n.id === e.to);
                 if (!src || !tgt) return '';
                 const isMust = tgt.status === 'must';
+
+                const srcH = src.height || 48;
+                const tgtH = tgt.height || 48;
+                const x1 = src.x;
+                const y1 = src.y + srcH / 2;
+                const x2 = tgt.x;
+                const y2 = tgt.y - tgtH / 2;
+
+                let d = '';
+                if (Math.abs(x1 - x2) < 4) {
+                  d = `M ${x1} ${y1} L ${x2} ${y2}`;
+                } else {
+                  const dy = Math.max(y2 - y1, 20);
+                  const cp1y = y1 + dy * 0.45;
+                  const cp2y = y2 - dy * 0.45;
+                  d = `M ${x1} ${y1} C ${x1} ${cp1y}, ${x2} ${cp2y}, ${x2} ${y2}`;
+                }
+
                 return `
-                  <line x1="${src.x}" y1="${src.y + 18}" x2="${tgt.x}" y2="${tgt.y - 18}"
+                  <path d="${d}"
                         class="tb-edge ${e.dashed ? 'tb-edge-dashed' : ''} ${isMust ? 'tb-edge-must' : ''}"
+                        data-edge-index="${idx}"
                         marker-end="${isMust ? 'url(#arrow-must)' : 'url(#arrow)'}" />
                 `;
               }).join('')}
             </g>
 
-            <!-- Render Nodes -->
+            <!-- Render Rich Card Nodes -->
             <g class="tb-graph-nodes">
               ${nodes.map(n => {
                 const isRoot = n.type === 'root';
+                const isFilter = n.type === 'filter';
                 const isMust = n.status === 'must';
                 const isReview = n.status === 'review';
                 const isNo = n.status === 'no';
-                const nodeClass = isRoot ? 'tb-node-root' : isMust ? 'tb-node-must' : isReview ? 'tb-node-review' : 'tb-node-no';
+                
+                const nodeClass = isRoot ? 'tb-node-root' :
+                                  isFilter ? 'tb-node-filter' :
+                                  isMust ? 'tb-node-must' :
+                                  isReview ? 'tb-node-review' : 'tb-node-no';
+
+                const w = n.width || 180;
+                const h = n.height || 48;
+                const halfW = w / 2;
+                const halfH = h / 2;
+
+                const statusTag = isRoot ? 'TRIGGER' :
+                                  isFilter ? 'SCOPE' :
+                                  isMust ? 'MUST CHANGE' :
+                                  isReview ? 'REVIEW' : 'UNAFFECTED';
 
                 return `
                   <g class="tb-graph-node ${nodeClass}" data-node-id="${n.id}" transform="translate(${n.x}, ${n.y})">
-                    <rect x="-75" y="-18" width="150" height="36" rx="6" />
-                    <text x="0" y="4" text-anchor="middle" class="tb-node-text">${esc(n.label)}</text>
+                    <rect x="${-halfW}" y="${-halfH}" width="${w}" height="${h}" rx="8" class="tb-node-rect" filter="url(#nodeShadow)" />
+                    <rect x="${-halfW}" y="${-halfH}" width="5" height="${h}" rx="2" class="tb-node-stripe" />
+                    
+                    <text x="${-halfW + 12}" y="${-halfH + 19}" class="tb-node-title">${esc(n.label)}</text>
+                    <text x="${-halfW + 12}" y="${-halfH + 34}" class="tb-node-subtitle">${esc(n.subtitle || n.team || '')}</text>
+                    <text x="${halfW - 8}" y="${-halfH + 18}" text-anchor="end" class="tb-node-tag">${statusTag}</text>
                   </g>
                 `;
               }).join('')}

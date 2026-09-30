@@ -810,31 +810,38 @@ window.GTM={MARKETS,ACCOUNTS,BASE,ARTIFACTS,policyText,population,counts,content
 
   // --- 6. DEPENDENCY GRAPH DATA (Prompt Section 13) ---
   function getGraphData(analysis) {
-    // Generate clean layered DAG nodes
+    // Generate clean layered DAG nodes structured into 4 clear enterprise swimlanes
     const nodes = [
-      { id: 'CHANGE', label: 'BUSINESS CHANGE', type: 'root', status: 'change', level: 0, x: 400, y: 30 },
+      // Level 0: Business Change Trigger
+      { id: 'CHANGE', label: 'BUSINESS CHANGE TRIGGER', subtitle: 'Launch narrowing requested', type: 'root', status: 'change', level: 0, x: 490, y: 35, width: 250, height: 42 },
 
-      { id: 'AUDIENCE_NODE', label: 'Audience Filter', type: 'filter', status: 'must', level: 1, x: 200, y: 120 },
-      { id: 'INACTIVITY_NODE', label: 'Inactivity Rule (90d)', type: 'filter', status: 'must', level: 1, x: 400, y: 120 },
-      { id: 'MARKET_NODE', label: 'Market Scope (Remove FR)', type: 'filter', status: 'must', level: 1, x: 600, y: 120 },
+      // Level 1: Scope Mutations
+      { id: 'AUDIENCE_NODE', label: 'Audience Filter', subtitle: 'Low adoption only (<20%)', type: 'filter', status: 'must', level: 1, x: 240, y: 100, width: 190, height: 38 },
+      { id: 'INACTIVITY_NODE', label: 'Inactivity Rule', subtitle: 'Exclude ≥90d inactive', type: 'filter', status: 'must', level: 1, x: 490, y: 100, width: 190, height: 38 },
+      { id: 'MARKET_NODE', label: 'Market Scope', subtitle: 'Remove France (FR)', type: 'filter', status: 'must', level: 1, x: 740, y: 100, width: 190, height: 38 },
 
-      { id: 'A1', label: 'A1 Audience Definition', team: 'Analytics', status: 'must', level: 2, x: 120, y: 220 },
-      { id: 'A2', label: 'A2 Measurement Plan', team: 'Analytics', status: 'review', level: 2, x: 260, y: 220 },
-      { id: 'A4', label: 'A4 Reporting Spec', team: 'Analytics', status: 'must', level: 2, x: 120, y: 310 },
+      // Lane 1: Analytics & Insights (x = 135)
+      { id: 'A1', label: 'A1 Audience Definition', subtitle: '96 ➔ 24 Accounts', team: 'Analytics', status: 'must', level: 2, x: 135, y: 205, width: 180, height: 48 },
+      { id: 'A2', label: 'A2 Measurement Plan', subtitle: 'Sample power review', team: 'Analytics', status: 'review', level: 3, x: 135, y: 305, width: 180, height: 48 },
+      { id: 'A4', label: 'A4 Reporting Spec', subtitle: 'v2 Funnel dashboard', team: 'Analytics', status: 'must', level: 4, x: 135, y: 405, width: 180, height: 48 },
       
-      { id: 'G1', label: 'G1 Segmentation Plan', team: 'GTM', status: 'review', level: 2, x: 380, y: 220 },
-      { id: 'G2', label: 'G2 Master Messaging', team: 'GTM', status: 'review', level: 2, x: 380, y: 310 },
-      { id: 'G3', label: 'G3 Manifest & Suppress', team: 'GTM', status: 'must', level: 2, x: 260, y: 310 },
+      // Lane 2: GTM Strategy & Messaging (x = 370)
+      { id: 'G1', label: 'G1 Segmentation Plan', subtitle: 'Barrier re-engagement', team: 'GTM', status: 'review', level: 2, x: 370, y: 205, width: 180, height: 48 },
+      { id: 'G2', label: 'G2 Master Messaging', subtitle: 'Value proposition v2', team: 'GTM', status: 'review', level: 3, x: 370, y: 305, width: 180, height: 48 },
+      { id: 'G3', label: 'G3 Campaign Manifest', subtitle: 'Suppress 72 accounts', team: 'GTM', status: 'must', level: 4, x: 370, y: 405, width: 180, height: 48 },
 
-      { id: 'E1', label: 'E1 Curriculum', team: 'Enablement', status: 'must', level: 2, x: 500, y: 220 },
-      { id: 'E2', label: 'E2 Call Guide', team: 'Enablement', status: 'review', level: 2, x: 500, y: 310 },
-      { id: 'E3', label: 'E3 Agent Roster', team: 'Enablement', status: 'must', level: 2, x: 500, y: 400 },
+      // Lane 3: Field Enablement (x = 605)
+      { id: 'E1', label: 'E1 Training Curriculum', subtitle: 'Target qualification', team: 'Enablement', status: 'must', level: 2, x: 605, y: 205, width: 180, height: 48 },
+      { id: 'E2', label: 'E2 Rep Call Guide', subtitle: 'Discovery script update', team: 'Enablement', status: 'review', level: 3, x: 605, y: 305, width: 180, height: 48 },
+      { id: 'E3', label: 'E3 Agent Roster', subtitle: '34 Reps stale / reassess', team: 'Enablement', status: 'must', level: 4, x: 605, y: 405, width: 180, height: 48 },
 
-      { id: 'L-FR', label: 'L-FR France Pack', team: 'Localization', status: 'must', level: 2, x: 680, y: 220, subtitle: 'RETIRE' },
-      { id: 'L-RETAINED', label: 'Retained Packs (US/UK/DE)', team: 'Localization', status: 'review', level: 2, x: 680, y: 310 },
+      // Lane 4: Localization & Markets (x = 840)
+      { id: 'L-FR', label: 'L-FR France Pack', subtitle: 'Retire & cancel 8 reps', team: 'Localization', status: 'must', level: 2, x: 840, y: 205, width: 180, height: 48 },
+      { id: 'L-RETAINED', label: 'Retained Packs', subtitle: 'US / UK / DE alignment', team: 'Localization', status: 'review', level: 3, x: 840, y: 305, width: 180, height: 48 },
 
-      { id: 'P1', label: 'P1 Launch Readiness Gate', team: 'Programme', status: 'must', level: 3, x: 400, y: 500 },
-      { id: 'P2', label: 'P2 Product & Security Contract', team: 'Programme', status: 'no', level: 3, x: 680, y: 500, subtitle: 'UNAFFECTED' }
+      // Level 5: Release Gates & Independent Prerequisite
+      { id: 'P1', label: 'P1 Launch Readiness Gate', subtitle: 'Reopened · Approvals invalidated', team: 'Programme', status: 'must', level: 5, x: 440, y: 535, width: 260, height: 50 },
+      { id: 'P2', label: 'P2 Product & Safety Contract', subtitle: 'Unaffected prerequisite boundary', team: 'Programme', status: 'no', level: 5, x: 770, y: 535, width: 240, height: 50 }
     ];
 
     const edges = [
@@ -844,22 +851,27 @@ window.GTM={MARKETS,ACCOUNTS,BASE,ARTIFACTS,policyText,population,counts,content
 
       { from: 'AUDIENCE_NODE', to: 'A1' },
       { from: 'INACTIVITY_NODE', to: 'A1' },
+      
+      // Column 1 vertical flow
       { from: 'A1', to: 'A2' },
-      { from: 'A1', to: 'A4' },
+      { from: 'A2', to: 'A4' },
+      
+      // Cross-column cascade
       { from: 'A1', to: 'G1' },
-      { from: 'A1', to: 'G3' },
       { from: 'G1', to: 'G2' },
-      { from: 'G2', to: 'E2' },
-      { from: 'A1', to: 'E1' },
-      { from: 'E1', to: 'E3' },
+      { from: 'G2', to: 'G3' },
+      
+      { from: 'G2', to: 'E1' },
+      { from: 'E1', to: 'E2' },
       { from: 'E2', to: 'E3' },
 
+      // Market column flow
       { from: 'MARKET_NODE', to: 'L-FR' },
       { from: 'MARKET_NODE', to: 'L-RETAINED' },
       { from: 'L-RETAINED', to: 'E3' },
 
-      { from: 'A1', to: 'P1' },
-      { from: 'A2', to: 'P1' },
+      // Convergence into P1 Launch Readiness Gate
+      { from: 'A4', to: 'P1' },
       { from: 'G3', to: 'P1' },
       { from: 'E3', to: 'P1' },
       { from: 'L-FR', to: 'P1' },
